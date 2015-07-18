@@ -1,22 +1,21 @@
-package me.ilinskiy.ChessBoard;
+package me.ilinskiy.chessBoard;
 
 import com.sun.istack.internal.NotNull;
+import me.ilinskiy.game.Move;
 
 import java.util.Arrays;
 
-import static me.ilinskiy.ChessBoard.PieceType.*;
+import static me.ilinskiy.chessBoard.PieceType.Pawn;
 
 /**
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */
-public class Board {
+public class ImmutableBoard {
     public static final int BOARD_SIZE = 8;
-    public static final PieceType[] backRowPieceTypes = new PieceType[]{Rook, Knight, Bishop, Queen, King, Bishop,
-            Knight, Rook};
     private ChessElement[][] board;
 
-    public Board() {
+    public ImmutableBoard() {
         reset();
     }
 
@@ -25,7 +24,7 @@ public class Board {
         int currRow = 0;
         //we have black pieces at the top
         for (int i = 0; i < board[0].length; i++) {
-            board[currRow][i] = new Piece(PieceColor.Black, backRowPieceTypes[i]);
+            board[currRow][i] = new Piece(PieceColor.Black, ChessBoardUtil.backRowPieceTypes[i]);
         }
         currRow++;
         Arrays.fill(board[currRow], new Piece(PieceColor.Black, Pawn));
@@ -39,33 +38,40 @@ public class Board {
         currRow++;
         assert (currRow == (BOARD_SIZE - 1)) : "Wrong current row: " + currRow;
         for (int i = 0; i < board[currRow].length; i++) {
-            board[currRow][i] = new Piece(PieceColor.White, backRowPieceTypes[i]);
+            board[currRow][i] = new Piece(PieceColor.White, ChessBoardUtil.backRowPieceTypes[i]);
         }
     }
 
     @NotNull
-    public ChessElement getPieceAt(int x, int y) {
-        checkBounds(x, y);
-        return board[x][y];
+    public ChessElement getPieceAt(@NotNull Coordinates c) {
+        checkBounds(c);
+        return board[c.getX()][c.getY()];
     }
 
     /**
      * Method that lets you change position of a piece on the board
-     * NOTE! This will overwrite anything at the position (x1, y1)
+     * NOTE! This will overwrite anything at the position move.getNewPosition !!!
      *
-     * @param x0 initial x
-     * @param y0 initial y
-     * @param x1 new x
-     * @param y1 new y
+     * @param move move that was made
      */
-    public void movePiece(int x0, int y0, int x1, int y1) {
-        checkBounds(x0, y0);
-        checkBounds(x1, y1);
-        if (board[x0][y0] instanceof EmptyCell) {
+    void movePiece(@NotNull Move move) {
+        checkBounds(move);
+        Coordinates initialPosition = move.getInitialPosition();
+        ChessElement initialPositionPiece = board[initialPosition.getX()][initialPosition.getY()];
+        if (initialPositionPiece instanceof EmptyCell) {
             throw new IllegalStateException("Cannot move an empty cell!");
         }
-        board[x1][y1] = board[x0][y0];
-        board[x0][y0] = EmptyCell.INSTANCE;
+        board[move.getNewPosition().getX()][move.getNewPosition().getY()] = initialPositionPiece;
+        board[initialPosition.getX()][initialPosition.getY()] = EmptyCell.INSTANCE;
+    }
+
+    private void checkBounds(@NotNull Move m) {
+        checkBounds(m.getInitialPosition());
+        checkBounds(m.getNewPosition());
+    }
+
+    private void checkBounds(@NotNull Coordinates c) {
+        checkBounds(c.getX(), c.getY());
     }
 
     private void checkBounds(int x, int y) {
