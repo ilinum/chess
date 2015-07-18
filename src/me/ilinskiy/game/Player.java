@@ -2,6 +2,7 @@ package me.ilinskiy.game;
 
 import me.ilinskiy.chessBoard.ImmutableBoard;
 import me.ilinskiy.chessBoard.PieceColor;
+import me.ilinskiy.chessBoard.PieceType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,4 +16,6 @@ public interface Player {
 
     @NotNull
     PieceColor getPlayerColor();
+
+    @NotNull PieceType getPieceTypeForPromotedPawn();
 }

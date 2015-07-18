@@ -27,6 +27,10 @@ public class Board {
         return inner.getPieceAt(c);
     }
 
+    public void setPieceAt(@NotNull Coordinates pos, @NotNull ChessElement element) {
+        inner.setPieceAt(pos, element);
+    }
+
     public void movePiece(@NotNull Move m) {
         inner.movePiece(m);
     }

@@ -65,6 +65,11 @@ public class ImmutableBoard {
         board[initialPosition.getX()][initialPosition.getY()] = EmptyCell.INSTANCE;
     }
 
+    void setPieceAt(@NotNull Coordinates pos, @NotNull ChessElement element) {
+        checkBounds(pos);
+        board[pos.getX()][pos.getY()] = element;
+    }
+
     private void checkBounds(@NotNull Move m) {
         checkBounds(m.getInitialPosition());
         checkBounds(m.getNewPosition());

@@ -1,7 +1,6 @@
 package me.ilinskiy.game;
 
-import me.ilinskiy.chessBoard.Board;
-import me.ilinskiy.chessBoard.PieceColor;
+import me.ilinskiy.chessBoard.*;
 import org.jetbrains.annotations.NotNull;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -16,11 +15,11 @@ import java.util.Optional;
 public class Game {
     @NotNull
     private final Board board;
-    public Player turn;
-    public Optional<PieceColor> winner;
-    private List<Move> movesMade;
-    private Player player1;
-    private Player player2;
+    private Player turn;
+    private Optional<PieceColor> winner;
+    private final List<Move> movesMade;
+    private final Player player1;
+    private final Player player2;
 
     public Game(@NotNull Player p1, @NotNull Player p2) {
         board = new Board();
@@ -36,14 +35,35 @@ public class Game {
             throw new RuntimeException("Game is over! Cannot make more moves!");
         }
         Move m = turn.makeMove(board.getInner());
-        board.movePiece(m);
         if (!GameUtil.getAvailableMovesForPiece(m.getInitialPosition(), board.getInner()).contains(m)) {
             throw new RuntimeException("Illegal move: " + m);
         }
+        board.movePiece(m);
+        //if reverting moves will ever be implemented, will have trouble reverting pawn promotion
+        checkPawnPromoted(m, turn);
         movesMade.add(m);
-        turn = turn == player1 ? player2 : player1;
+        turn = ChessBoardUtil.inverse(turn, player1, player2);
         checkGameOver(turn);
         throw new NotImplementedException();
+    }
+
+    /**
+     * NOTE: THIS METHOD MUST BE CALLED AFTER BOARD IS UPDATED!!!
+     *
+     * @param move that has been made
+     */
+    private void checkPawnPromoted(@NotNull Move move, @NotNull Player madeLastMove) {
+        Coordinates newPosition = move.getNewPosition();
+        ChessElement piece = board.getPieceAt(newPosition);
+        if (piece.getType() == PieceType.Pawn) {
+            boolean isWhitePromoted = piece.getColor() == PieceColor.White && newPosition.getY() == 0;
+            boolean isBlackPromoted = piece.getColor() == PieceColor.Black &&
+                    newPosition.getY() == (ImmutableBoard.BOARD_SIZE - 1);
+            if (isBlackPromoted || isWhitePromoted) {
+                Piece promotedTo = new Piece(madeLastMove.getPlayerColor(), madeLastMove.getPieceTypeForPromotedPawn());
+                board.setPieceAt(newPosition, promotedTo);
+            }
+        }
     }
 
     @NotNull
@@ -56,10 +76,10 @@ public class Game {
     }
 
     private void checkGameOver(@NotNull Player nextToMove) {
-        if (GameUtil.getAvailableMoves(nextToMove, board.getInner()).size() == 0) {
+        if (GameUtil.getAvailableMoves(nextToMove.getPlayerColor(), board.getInner()).size() == 0) {
             //game is over
             if (GameUtil.kingIsAttacked(nextToMove.getPlayerColor(), board.getInner())) {
-                winner = Optional.of((nextToMove == player1 ? player2 : player1).getPlayerColor());
+                winner = Optional.of((ChessBoardUtil.inverse(nextToMove, player1, player2)).getPlayerColor());
             } else {
                 //it's a draw
                 winner = Optional.of(PieceColor.Empty);

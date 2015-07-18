@@ -19,6 +19,7 @@ public class BoardTest {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 Coordinates c = new Coordinates(i, j);
+                //noinspection ConstantConditions
                 assertTrue("Element at (" + c + ") is null!", b.getPieceAt(c) != null);
             }
         }
