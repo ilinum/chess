@@ -1,6 +1,7 @@
 package me.ilinskiy.chessBoard;
 
-import com.sun.istack.internal.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -31,6 +32,7 @@ public class Coordinates {
     }
 
     @Override
+    @NotNull
     public String toString() {
         return "(" + myX + ", " + myY + ")";
     }

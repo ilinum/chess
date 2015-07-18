@@ -1,8 +1,8 @@
 package me.ilinskiy.game;
 
-import com.sun.istack.internal.NotNull;
 import me.ilinskiy.chessBoard.ImmutableBoard;
 import me.ilinskiy.chessBoard.PieceColor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: Svyatoslav Ilinskiy

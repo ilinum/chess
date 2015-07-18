@@ -1,8 +1,8 @@
 package me.ilinskiy.game;
 
-import com.sun.istack.internal.NotNull;
 import me.ilinskiy.chessBoard.Board;
 import me.ilinskiy.chessBoard.PieceColor;
+import org.jetbrains.annotations.NotNull;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import java.util.Optional;
  * Date: 7/16/15
  */
 public class Game {
+    @NotNull
     private final Board board;
     public Player turn;
     public Optional<PieceColor> winner;
@@ -35,7 +36,10 @@ public class Game {
             throw new RuntimeException("Game is over! Cannot make more moves!");
         }
         Move m = turn.makeMove(board.getInner());
-        board.movePiece(m); //todo: check if move is valid
+        board.movePiece(m);
+        if (!GameUtil.getAvailableMovesForPiece(m.getInitialPosition(), board.getInner()).contains(m)) {
+            throw new RuntimeException("Illegal move: " + m);
+        }
         movesMade.add(m);
         turn = turn == player1 ? player2 : player1;
         checkGameOver(turn);

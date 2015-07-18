@@ -1,7 +1,7 @@
 package me.ilinskiy.chessBoard;
 
-import com.sun.istack.internal.NotNull;
 import me.ilinskiy.game.Move;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -14,6 +14,10 @@ public class Board {
         inner = new ImmutableBoard();
     }
 
+    Board(ImmutableBoard b) {
+        inner = b;
+    }
+
     public void reset() {
         inner.reset();
     }
@@ -23,7 +27,7 @@ public class Board {
         return inner.getPieceAt(c);
     }
 
-    public void movePiece(Move m) {
+    public void movePiece(@NotNull Move m) {
         inner.movePiece(m);
     }
 

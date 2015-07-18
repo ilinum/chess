@@ -1,5 +1,7 @@
 package me.ilinskiy.chessBoard;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
@@ -24,6 +26,7 @@ public class Piece implements ChessElement {
     }
 
     @Override
+    @NotNull
     public String toString() {
         return "Chess piece: " + getColor() + " " + getType();
     }
