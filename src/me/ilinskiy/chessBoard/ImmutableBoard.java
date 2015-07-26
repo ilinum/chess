@@ -1,11 +1,14 @@
 package me.ilinskiy.chessBoard;
 
+import me.ilinskiy.game.GameUtil;
 import me.ilinskiy.game.Move;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static me.ilinskiy.chessBoard.PieceType.Pawn;
@@ -20,6 +23,7 @@ public class ImmutableBoard extends JPanel {
     private Optional<Coordinates> selected;
     public static final int WHITE_DIRECTION = -1;
     public static final int BLACK_DIRECTION = 1;
+    private List<Move> movesMade;
 
     public ImmutableBoard() {
         ChessBoardUtil.initIcons();
@@ -63,6 +67,7 @@ public class ImmutableBoard extends JPanel {
         for (int i = 0; i < board[currRow].length; i++) {
             board[currRow][i] = new Piece(bottomPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
         }
+        movesMade = new ArrayList<>();
     }
 
     @NotNull
@@ -84,6 +89,7 @@ public class ImmutableBoard extends JPanel {
         if (initialPositionPiece instanceof EmptyCell) {
             throw new IllegalStateException("Cannot move an empty cell!");
         }
+        movesMade.add(move);
         selected = Optional.empty();
         board[move.getNewPosition().getY()][move.getNewPosition().getX()] = initialPositionPiece;
         board[initialPosition.getY()][initialPosition.getX()] = EmptyCell.INSTANCE;
@@ -151,9 +157,6 @@ public class ImmutableBoard extends JPanel {
             for (int col = brownStart; col < BOARD_SIZE; col += 2) {
                 graphics.setColor(BLACK_BG);
                 drawCell(new Coordinates(col, row), graphics);
-//                int initX = col * cellSize;
-//                int initY = row * cellSize;
-//                graphics.fillRect(initX, initY, cellSize, cellSize);
             }
             brownStart = brownStart == 0 ? 1 : 0;
         }
@@ -162,16 +165,17 @@ public class ImmutableBoard extends JPanel {
         if (selected.isPresent()) {
             graphics.setColor(Color.RED);
             Coordinates c = selected.get();
-//            drawCell(c.inverse(), graphics);
-            int initX = c.getX() * cellSize;
-            int initY = c.getY() * cellSize;
-            graphics.fillRect(initX, initY, cellSize, cellSize);
-//            List<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(c, this);
-//            for (Move move : availableMovesForPiece) {
-//                if (getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
-//                    graphics.setColor(Color.BLUE);
-//                }
-//            }
+            drawCell(c, graphics);
+            List<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(c, this);
+            for (Move move : availableMovesForPiece) {
+                if (getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
+                    graphics.setColor(Color.BLUE);
+                    drawCell(move.getNewPosition(), graphics);
+                } else if (getPieceAt(move.getNewPosition()).getColor() != getPieceAt(selected.get()).getColor()) {
+                    graphics.setColor(Color.GREEN);
+                    drawCell(move.getNewPosition(), graphics);
+                }
+            }
         }
 
         graphics.setColor(Color.RED);
@@ -202,10 +206,12 @@ public class ImmutableBoard extends JPanel {
     }
 
     public Dimension getFrameSize() {
-        Optional<Window> frame = Optional.of(SwingUtilities.windowForComponent(this));
+        return getSize();
+
+        //comment the following code back in, when you allow the user to resize the JPanel
+        /*Optional<Window> frame = Optional.of(SwingUtilities.windowForComponent(this));
         Dimension res = getFrameSize(frame);
 
-        //todo: maybe don't change the size of the frame? Instead just adjust the size of JPanel to fit. Not as pretty
         //but works better when in full-screen
         if ((res.getHeight() != res.getWidth()) || ((res.getHeight() % ImmutableBoard.BOARD_SIZE) != 0)) {
             double average = (res.getHeight() + res.getWidth()) / 2;
@@ -218,27 +224,30 @@ public class ImmutableBoard extends JPanel {
         }
         assert (res.getHeight() == res.getWidth()) : "height: " + res.getHeight() + ", width: " + res.getWidth();
         assert ((res.getHeight() % ImmutableBoard.BOARD_SIZE) == 0) : "Height: " + res.getHeight();
-        return res;
+        return res;*/
     }
 
-    @NotNull
+    /*@NotNull
     private Dimension getFrameSize(Optional<Window> frame) {
         Dimension res;
         Dimension minSize;
-        if (frame.isPresent()) {
-            res = frame.get().getSize();
-            minSize = frame.get().getMinimumSize();
-            if (res.getHeight() < minSize.getHeight() || res.getWidth() < minSize.getWidth()) {
+        res = getSize();
+        minSize = getMinimumSize();
+        if (res.getHeight() < minSize.getHeight() || res.getWidth() < minSize.getWidth()) {
+            setSize(minSize);
+            res = minSize;
+            if (frame.isPresent()) {
                 frame.get().setSize(minSize);
-                res = minSize;
             }
-        } else {
-            res = getSize();
-            minSize = getMinimumSize();
-            if (res.getHeight() < minSize.getHeight() || res.getWidth() < minSize.getWidth()) {
-                setSize(minSize);
-                res = minSize;
-            }
+        }
+
+        return res;
+    }*/
+
+    public List<Move> getMovesMade() {
+        List<Move> res = new ArrayList<>();
+        for (Move m : movesMade) {
+            res.add(m);
         }
         return res;
     }

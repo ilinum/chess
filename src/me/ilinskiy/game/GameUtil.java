@@ -105,7 +105,7 @@ public class GameUtil {
                 int[] yChange = new int[]{2, 2, 1, -1, 1, -1, -2, -2};
                 assert xChange.length == yChange.length;
                 for (int c = 0; c < xChange.length; c++) {
-                    Coordinates newPos = new Coordinates(xChange[c], yChange[c]);
+                    Coordinates newPos = new Coordinates(pos.getX() + xChange[c], pos.getY() + yChange[c]);
                     if (!ChessBoardUtil.isOutOfBounds(newPos) && board.getPieceAt(newPos).getColor() != color) {
                         result.add(new Move(pos, newPos));
                     }
@@ -119,6 +119,7 @@ public class GameUtil {
             case Queen:
                 break;
             case King:
+                //don't forget to add castling!
                 break;
             case Empty:
                 break;
