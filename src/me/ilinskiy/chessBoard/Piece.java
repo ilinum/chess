@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
  * Date: 7/16/15
  */
 public class Piece implements ChessElement {
-    public final PieceColor color;
-    public final PieceType type;
+    private final PieceColor color;
+    private final PieceType type;
 
     public Piece(PieceColor pColor, PieceType pType) {
         color = pColor;

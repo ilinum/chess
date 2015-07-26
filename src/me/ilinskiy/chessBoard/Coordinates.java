@@ -37,6 +37,14 @@ public class Coordinates {
         return "(" + myX + ", " + myY + ")";
     }
 
+    /**
+     * @return a deep copy of this coordinates
+     */
+    @NotNull
+    public Coordinates copy() {
+        return new Coordinates(myX, myY);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Coordinates) {
@@ -44,6 +52,15 @@ public class Coordinates {
         } else {
             return false;
         }
+    }
+
+    /**
+     * @return a new instance of coordinates with x and y switched
+     */
+    @NotNull
+    public Coordinates inverse() {
+        //noinspection SuspiciousNameCombination
+        return new Coordinates(myY, myX);
     }
 
     @Override

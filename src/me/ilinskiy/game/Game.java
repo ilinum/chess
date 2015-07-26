@@ -2,8 +2,9 @@ package me.ilinskiy.game;
 
 import me.ilinskiy.chessBoard.*;
 import org.jetbrains.annotations.NotNull;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +22,15 @@ public class Game {
     private final Player player1;
     private final Player player2;
 
-    public Game(@NotNull Player p1, @NotNull Player p2) {
+    public Game(@NotNull Player p1, @NotNull Player p2, JFrame frame) {
         board = new Board();
         movesMade = new ArrayList<>();
         player1 = p1;
         player2 = p2;
         turn = p1;
         winner = Optional.empty();
+        ImmutableBoard inner = board.getInner();
+        frame.add(inner, BorderLayout.CENTER);
     }
 
     public void makeMove() {
@@ -44,7 +47,6 @@ public class Game {
         movesMade.add(m);
         turn = ChessBoardUtil.inverse(turn, player1, player2);
         checkGameOver(turn);
-        throw new NotImplementedException();
     }
 
     /**
@@ -56,12 +58,22 @@ public class Game {
         Coordinates newPosition = move.getNewPosition();
         ChessElement piece = board.getPieceAt(newPosition);
         if (piece.getType() == PieceType.Pawn) {
-            boolean isWhitePromoted = piece.getColor() == PieceColor.White && newPosition.getY() == 0;
-            boolean isBlackPromoted = piece.getColor() == PieceColor.Black &&
-                    newPosition.getY() == (ImmutableBoard.BOARD_SIZE - 1);
-            if (isBlackPromoted || isWhitePromoted) {
-                Piece promotedTo = new Piece(madeLastMove.getPlayerColor(), madeLastMove.getPieceTypeForPromotedPawn());
-                board.setPieceAt(newPosition, promotedTo);
+            PieceColor pieceColor = madeLastMove.getPlayerColor();
+            int x = move.getNewPosition().getX();
+            int y = move.getNewPosition().getY();
+            Coordinates nextAdvance = new Coordinates(x, y + GameUtil.getDirectionForPlayer(pieceColor));
+            if (ChessBoardUtil.isOutOfBounds(nextAdvance)) {
+                ArrayList<PieceType> canBePromotedTo = new ArrayList<>(4);
+                canBePromotedTo.add(PieceType.Queen);
+                canBePromotedTo.add(PieceType.Rook);
+                canBePromotedTo.add(PieceType.Bishop);
+                canBePromotedTo.add(PieceType.Knight);
+                PieceType promotedTo = PieceType.Empty;
+                while (!canBePromotedTo.contains(promotedTo)) {
+                    promotedTo = madeLastMove.getPieceTypeForPromotedPawn();
+                }
+                Piece promoted = new Piece(pieceColor, promotedTo);
+                board.setPieceAt(newPosition, promoted);
             }
         }
     }

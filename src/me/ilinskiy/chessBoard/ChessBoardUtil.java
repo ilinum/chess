@@ -4,6 +4,9 @@ import me.ilinskiy.game.Move;
 import me.ilinskiy.game.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+import java.util.HashMap;
+
 import static me.ilinskiy.chessBoard.PieceType.*;
 
 /**
@@ -14,7 +17,8 @@ public class ChessBoardUtil {
     public static final PieceType[] backRowPieceTypes = new PieceType[]{Rook, Knight, Bishop, Queen, King, Bishop,
             Knight, Rook};
 
-    public static synchronized boolean makeMoveAndEvaluate(@NotNull ImmutableBoard b, @NotNull Move m, @NotNull BoardOperation op) {
+    public static synchronized boolean makeMoveAndEvaluate(@NotNull ImmutableBoard b, @NotNull Move m,
+                                                           @NotNull BoardOperation op) {
         Board board = new Board(b);
         board.movePiece(m);
         boolean result = op.run(board.getInner());
@@ -36,5 +40,20 @@ public class ChessBoardUtil {
             throw new IllegalArgumentException("Color may not be empty!");
         }
         return inverseOf == p1 ? p2 : p1;
+    }
+
+    public static HashMap<Piece, Image> icons = new HashMap<>();
+
+    public static void initIcons() {
+        /*try {
+            BufferedImage bf = ImageIO.read(new File("resources/ChessPieceIcons/white_pawn.jpg"));
+            icons.put(new Piece(PieceColor.White, Pawn), new ImageIcon(bf).getImage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+    public static boolean isOutOfBounds(@NotNull Coordinates c) {
+        return c.getX() < 0 || c.getX() >= ImmutableBoard.BOARD_SIZE || c.getY() < 0 || c.getY() >= ImmutableBoard.BOARD_SIZE;
     }
 }

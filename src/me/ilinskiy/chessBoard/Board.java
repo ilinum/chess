@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/18/15
  */
-public class Board {
+public final class Board {
     private final ImmutableBoard inner;
 
     public Board() {

@@ -2,18 +2,19 @@ package me.ilinskiy.game;
 
 import me.ilinskiy.chessBoard.*;
 import org.jetbrains.annotations.NotNull;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static me.ilinskiy.chessBoard.ImmutableBoard.BOARD_SIZE;
+import static me.ilinskiy.chessBoard.ImmutableBoard.*;
+import static me.ilinskiy.chessBoard.PieceColor.Black;
+import static me.ilinskiy.chessBoard.PieceColor.White;
 
 /**
  * TODO: cache everything in this class
- *
+ * <p>
  * Author: Svyatoslav Ilinskiy
  * Date: 7/18/15
  */
@@ -21,24 +22,18 @@ public class GameUtil {
 
     @NotNull
     public static List<Move> getAvailableMoves(@NotNull PieceColor color, @NotNull ImmutableBoard board) {
-        List<Move> result = new LinkedList<>();
+        List<Move> result = new ArrayList<>();
         List<Coordinates> allPiecesOfCorrectColor = getAllPieces(color, board);
 
         for (Coordinates pos : allPiecesOfCorrectColor) {
             result.addAll(getAvailableMovesForPiece(pos, board));
         }
 
-        Iterator<Move> moveIterator = result.iterator();
-        while (moveIterator.hasNext()) {
-            if (kingIsAttackedAfterMove(color, board, moveIterator.next())) {
-                moveIterator.remove();
-            }
-        }
         return result;
     }
 
     @NotNull
-    private static List<Coordinates> getAllPieces(PieceColor color, @NotNull ImmutableBoard board) {
+    public static List<Coordinates> getAllPieces(PieceColor color, @NotNull ImmutableBoard board) {
         ArrayList<Coordinates> allPiecesOfCorrectColor = new ArrayList<>(BOARD_SIZE * 2); //should use default instead?
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
@@ -51,8 +46,85 @@ public class GameUtil {
         return allPiecesOfCorrectColor;
     }
 
+    public static int getDirectionForPlayer(@NotNull PieceColor color) {
+        if (color == PieceColor.White) {
+            return WHITE_DIRECTION;
+        } else {
+            assert color == PieceColor.Black;
+            return BLACK_DIRECTION;
+        }
+    }
+
+    /**
+     * If board.getPieceAt(pos) is EmptyCell returns an empty list
+     * <p>
+     * todo: move this to ImmutableBoard class???
+     */
+    @NotNull
     public static List<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
-        throw new NotImplementedException(); //todo: implement this method
+
+        List<Move> result = getAvailableMovesForPieceWithoutKingAttacked(pos, board);
+
+        //filter out the ones when king is attacked
+        Iterator<Move> moveIterator = result.iterator();
+        while (moveIterator.hasNext()) {
+            if (kingIsAttackedAfterMove(board.getPieceAt(pos).getColor(), board, moveIterator.next())) {
+                moveIterator.remove();
+            }
+        }
+        return result;
+    }
+
+    @NotNull
+    private static List<Move> getAvailableMovesForPieceWithoutKingAttacked(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+        ChessElement element = board.getPieceAt(pos);
+        List<Move> result = new LinkedList<>();
+        PieceColor color = element.getColor();
+        switch (element.getType()) {
+            case Pawn:
+                assert (color == White || color == Black);
+                int dir = getDirectionForPlayer(color);
+                assert !ChessBoardUtil.isOutOfBounds(new Coordinates(pos.getX(), pos.getY() + dir)); //should've been promoted
+                result.add(new Move(pos, new Coordinates(pos.getX(), pos.getY() + dir)));
+                boolean hasNotMoved = ChessBoardUtil.isOutOfBounds(new Coordinates(pos.getX(), pos.getY() - 2 * dir));
+                if (hasNotMoved) {
+                    result.add(new Move(pos, new Coordinates(pos.getX(), pos.getY() + 2 * dir)));
+                }
+                Coordinates[] eatLocations = new Coordinates[]{new Coordinates(pos.getX() + 1, pos.getY() + dir),
+                        new Coordinates(pos.getX() - 1, pos.getY() + dir)};
+                for (Coordinates eatLocation : eatLocations) {
+                    boolean outOfBounds = ChessBoardUtil.isOutOfBounds(eatLocation);
+                    if (!outOfBounds && board.getPieceAt(eatLocation).getColor() == ChessBoardUtil.inverse(color)) {
+                        result.add(new Move(pos, eatLocation));
+                    }
+                }
+                //todo: allow En passant
+                break;
+            case Knight:
+                int[] xChange = new int[]{1, -1, 2, 2, -2, -2, 1, -1};
+                int[] yChange = new int[]{2, 2, 1, -1, 1, -1, -2, -2};
+                assert xChange.length == yChange.length;
+                for (int c = 0; c < xChange.length; c++) {
+                    Coordinates newPos = new Coordinates(xChange[c], yChange[c]);
+                    if (!ChessBoardUtil.isOutOfBounds(newPos) && board.getPieceAt(newPos).getColor() != color) {
+                        result.add(new Move(pos, newPos));
+                    }
+                }
+                break;
+            case Bishop:
+                //xChange = new int[]{};
+                break;
+            case Rook:
+                break;
+            case Queen:
+                break;
+            case King:
+                break;
+            case Empty:
+                break;
+        }
+        return result;
+        //        throw new NotImplementedException(); //todo: implement this method
     }
 
     public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull ImmutableBoard board) {
@@ -60,7 +132,7 @@ public class GameUtil {
         Coordinates kingPos = findKing(kingColor, board);
 
         for (Coordinates pos : allOpponentPieces) {
-            List<Move> availableMovesForPiece = getAvailableMovesForPiece(pos, board);
+            List<Move> availableMovesForPiece = getAvailableMovesForPieceWithoutKingAttacked(pos, board);
             for (Move m : availableMovesForPiece) {
                 if (m.getNewPosition().equals(kingPos)) {
                     return true;
@@ -78,10 +150,7 @@ public class GameUtil {
     @NotNull
     private static Coordinates findKing(@NotNull PieceColor kingColor, @NotNull ImmutableBoard board) {
         List<Coordinates> kingLocation = findPiecesByTypeAndColor(PieceType.King, kingColor, board);
-        if (kingLocation.size() != 1) {
-            String message = "Wrong number of " + kingColor.toString() + " on the board: " + kingLocation.size();
-            throw new RuntimeException(message);
-        }
+        assert kingLocation.size() == 1 : "Wrong number of kings on the board: " + kingLocation;
         return kingLocation.get(0);
     }
 
