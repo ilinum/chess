@@ -12,7 +12,7 @@ import me.ilinskiy.chessAI.chessBoard.PieceType;
 public interface Player {
 
     @NotNull
-    Move makeMove(@NotNull ImmutableBoard b);
+    Move makeMove(@NotNull ImmutableBoard b) throws InterruptedException;
 
     @NotNull
     PieceColor getPlayerColor();

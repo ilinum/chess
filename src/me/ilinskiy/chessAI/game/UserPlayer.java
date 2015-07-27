@@ -19,10 +19,10 @@ import java.util.concurrent.locks.ReentrantLock;
  * Date: 7/20/15
  */
 public class UserPlayer implements Player {
-    private volatile Optional<Move> moveMade = Optional.empty();
-    private volatile Lock mouseLock;
+    private Optional<Move> moveMade = Optional.empty();
+    private final Lock mouseLock;
     private final Condition moveIsMade;
-    private PieceColor myColor;
+    private final PieceColor myColor;
 
     public UserPlayer(PieceColor color) {
         myColor = color;
@@ -32,8 +32,8 @@ public class UserPlayer implements Player {
 
     @NotNull
     @Override
-    public synchronized Move makeMove(@NotNull ImmutableBoard board) {
-        board.addMouseListener(new MouseListener() {
+    public Move makeMove(@NotNull ImmutableBoard board) throws InterruptedException {
+        MouseListener mouseListener = new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -58,13 +58,13 @@ public class UserPlayer implements Player {
                     if (availableMovesForPiece.contains(m)) {
                         moveMade = Optional.of(m);
                         moveIsMade.signal();
-                        mouseLock.unlock();
                     } else {
                         board.setSelected(location);
                     }
                 } else {
                     board.setSelected(location);
                 }
+                mouseLock.unlock();
             }
 
             @Override
@@ -74,27 +74,22 @@ public class UserPlayer implements Player {
             @Override
             public void mouseExited(MouseEvent mouseEvent) {
             }
-        });
+        };
+        board.addMouseListener(mouseListener);
 
         try {
-            mouseLock.lock(); //todo: this doesn't work
-            while (!moveMade.isPresent()) {
+            mouseLock.lock();
+            while (!moveMade.isPresent()) { //"You shall always wait in a while loop," - Alison Norman
                 moveIsMade.await();
             }
             Move move = moveMade.get();
+            assert move != null;
             moveMade = Optional.empty();
-            if (move == null) {
-                throw new IllegalArgumentException("Move is null! Concurrency problems!");
-            }
-            return move;
-        } catch (Exception e) {
-            Move move = moveMade.get();
-            moveMade = Optional.empty();
-            if (move == null) {
-                throw new IllegalArgumentException("Move is null! Concurrency problems!");
-            }
             return move;
         } finally {
+            assert board.getMouseListeners().length > 0;
+            board.removeMouseListener(mouseListener);
+            assert board.getMouseListeners().length == 0;
             mouseLock.unlock();
         }
     }
