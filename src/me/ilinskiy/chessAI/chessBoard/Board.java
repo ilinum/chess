@@ -18,10 +18,6 @@ public final class Board {
         inner = b;
     }
 
-    public void reset() {
-        inner.reset();
-    }
-
     @NotNull
     public ChessElement getPieceAt(@NotNull Coordinates c) {
         return inner.getPieceAt(c);
@@ -35,7 +31,16 @@ public final class Board {
         inner.movePiece(m);
     }
 
+    public void paint() {
+        inner.paint(inner.getGraphics());
+    }
+
     public ImmutableBoard getInner() {
         return inner;
+    }
+
+    @Override
+    public String toString() {
+        return inner.toString();
     }
 }

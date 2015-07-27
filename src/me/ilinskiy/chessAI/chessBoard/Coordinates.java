@@ -2,6 +2,7 @@ package me.ilinskiy.chessAI.chessBoard;
 
 
 import me.ilinskiy.chessAI.annotations.NotNull;
+import me.ilinskiy.chessAI.game.Copyable;
 
 import java.util.Arrays;
 
@@ -9,7 +10,7 @@ import java.util.Arrays;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/17/15
  */
-public class Coordinates {
+public class Coordinates implements Copyable {
     private final int myX;
     private final int myY;
 
@@ -41,6 +42,7 @@ public class Coordinates {
      * @return a deep copy of this coordinates
      */
     @NotNull
+    @Override
     public Coordinates copy() {
         return new Coordinates(myX, myY);
     }

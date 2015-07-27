@@ -14,7 +14,6 @@ import java.util.Optional;
  * Date: 7/16/15
  */
 public class Game {
-    @NotNull
     private final Board board;
     private Player turn;
     private Optional<PieceColor> winner;
@@ -23,11 +22,14 @@ public class Game {
     private final Player player2;
 
     public Game(@NotNull Player p1, @NotNull Player p2, JFrame frame) {
+        if (ChessBoardUtil.inverse(p1.getPlayerColor()) != p2.getPlayerColor()) {
+            throw new IllegalArgumentException("Wrong colors for players!");
+        }
         board = new Board();
         movesMade = new ArrayList<>();
         player1 = p1;
         player2 = p2;
-        turn = p1;
+        turn = p1.getPlayerColor() == PieceColor.White ? p1 : p2;
         winner = Optional.empty();
         ImmutableBoard inner = board.getInner();
         frame.add(inner, BorderLayout.CENTER);
@@ -37,7 +39,14 @@ public class Game {
         if (isGameOver()) {
             throw new RuntimeException("Game is over! Cannot make more moves!");
         }
-        Move m = turn.makeMove(board.getInner());
+        Move m = null;
+        while (m == null) {
+            try {
+                m = turn.makeMove(board.getInner());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         if (!GameUtil.getAvailableMovesForPiece(m.getInitialPosition(), board.getInner()).contains(m)) {
             throw new RuntimeException("Illegal move: " + m);
         }
@@ -46,6 +55,7 @@ public class Game {
         checkPawnPromoted(m, turn);
         movesMade.add(m);
         turn = ChessBoardUtil.inverse(turn, player1, player2);
+        board.paint();
         checkGameOver(turn);
     }
 

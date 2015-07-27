@@ -12,7 +12,7 @@ import java.awt.*;
 public class Main {
 
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * ImmutableBoard.BOARD_SIZE; //approx 500
-    public static final int MIN_HEIGHT_AND_WIDTH = 30 * ImmutableBoard.BOARD_SIZE;
+    //public static final int MIN_HEIGHT_AND_WIDTH = 30 * ImmutableBoard.BOARD_SIZE;
 
     public static void main(String[] args) {
         JFrame game = new JFrame();
@@ -31,8 +31,8 @@ public class Main {
         while (!g.isGameOver()) {
             try {
                 g.makeMove();
-            } catch (Exception ignored) {
-
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

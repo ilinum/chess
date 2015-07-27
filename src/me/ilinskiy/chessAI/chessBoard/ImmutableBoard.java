@@ -1,6 +1,8 @@
 package me.ilinskiy.chessAI.chessBoard;
 
 import me.ilinskiy.chessAI.annotations.NotNull;
+import me.ilinskiy.chessAI.annotations.Nullable;
+import me.ilinskiy.chessAI.game.Copyable;
 import me.ilinskiy.chessAI.game.GameUtil;
 import me.ilinskiy.chessAI.game.Move;
 
@@ -16,7 +18,7 @@ import static me.ilinskiy.chessAI.chessBoard.PieceType.Pawn;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */
-public class ImmutableBoard extends JPanel {
+public class ImmutableBoard extends JPanel implements Copyable {
     public static final int BOARD_SIZE = 8;
     private ChessElement[][] board;
     private Optional<Coordinates> selected;
@@ -25,6 +27,7 @@ public class ImmutableBoard extends JPanel {
     public PieceColor turn;
 
     public ImmutableBoard() {
+        super();
         ChessBoardUtil.initIcons();
         reset();
     }
@@ -67,6 +70,7 @@ public class ImmutableBoard extends JPanel {
         for (int i = 0; i < board[currRow].length; i++) {
             board[currRow][i] = new Piece(bottomPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
         }
+        paint(getGraphics());
     }
 
     @NotNull
@@ -143,14 +147,21 @@ public class ImmutableBoard extends JPanel {
         return turn;
     }
 
-    public static final Color WHITE_BG = new Color(0xcdc1b4);
+    //public static final Color WHITE_BG = new Color(0xFFF3E4);
     public static final Color BLACK_BG = new Color(0x53280C);
 
     @Override
-    public void paint(Graphics graphics) {
+    public void paint(@Nullable Graphics graphics) {
+        if (graphics == null) {
+            graphics = getGraphics();
+            if (graphics == null) {
+                return;
+            }
+        }
+
         super.paint(graphics);
         int heightAndWidth = getFrameSize().width;
-        graphics.setColor(WHITE_BG);
+        graphics.setColor(Color.BLACK);
         graphics.drawRect(0, 0, heightAndWidth, heightAndWidth);
 
         //draw black squares
@@ -206,6 +217,10 @@ public class ImmutableBoard extends JPanel {
         int initX = pos.getX() * cellSize;
         int initY = pos.getY() * cellSize;
         graphics.fillRect(initX, initY, cellSize, cellSize);
+        Color oldColor = graphics.getColor();
+        graphics.setColor(Color.BLACK);
+        graphics.drawRect(initX, initY, cellSize, cellSize);
+        graphics.setColor(oldColor);
     }
 
     public Dimension getFrameSize() {
@@ -249,12 +264,18 @@ public class ImmutableBoard extends JPanel {
 
     @Override
     public String toString() {
-        return Arrays.toString(board);
+        StringBuilder res = new StringBuilder();
+        for (ChessElement[] row : board) {
+            res.append(Arrays.toString(row));
+            res.append("\n");
+        }
+        return res.toString();
     }
 
     /**
      * @return a deep copy of this immutable board
      */
+    @Override
     public ImmutableBoard copy() {
         ImmutableBoard result = new ImmutableBoard();
         result.selected = this.selected;
