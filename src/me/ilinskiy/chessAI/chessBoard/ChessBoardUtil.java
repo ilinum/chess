@@ -1,13 +1,13 @@
-package me.ilinskiy.chessBoard;
+package me.ilinskiy.chessAI.chessBoard;
 
-import me.ilinskiy.game.Move;
-import me.ilinskiy.game.Player;
-import org.jetbrains.annotations.NotNull;
+import me.ilinskiy.chessAI.annotations.NotNull;
+import me.ilinskiy.chessAI.game.Move;
+import me.ilinskiy.chessAI.game.Player;
 
 import java.awt.*;
 import java.util.HashMap;
 
-import static me.ilinskiy.chessBoard.PieceType.*;
+import static me.ilinskiy.chessAI.chessBoard.PieceType.*;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -19,7 +19,7 @@ public class ChessBoardUtil {
 
     public static synchronized boolean makeMoveAndEvaluate(@NotNull ImmutableBoard b, @NotNull Move m,
                                                            @NotNull BoardOperation op) {
-        Board board = new Board(b);
+        Board board = new Board(b.copy());
         board.movePiece(m);
         boolean result = op.run(board.getInner());
         board.movePiece(m.inverse());

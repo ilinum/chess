@@ -1,7 +1,7 @@
-package me.ilinskiy.chessBoard;
+package me.ilinskiy.chessAI.chessBoard;
 
-import me.ilinskiy.game.Move;
-import org.jetbrains.annotations.NotNull;
+import me.ilinskiy.chessAI.annotations.NotNull;
+import me.ilinskiy.chessAI.game.Move;
 
 /**
  * Author: Svyatoslav Ilinskiy

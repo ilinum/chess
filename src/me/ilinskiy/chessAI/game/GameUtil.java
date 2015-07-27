@@ -1,16 +1,16 @@
-package me.ilinskiy.game;
+package me.ilinskiy.chessAI.game;
 
-import me.ilinskiy.chessBoard.*;
-import org.jetbrains.annotations.NotNull;
+import me.ilinskiy.chessAI.annotations.NotNull;
+import me.ilinskiy.chessAI.chessBoard.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static me.ilinskiy.chessBoard.ImmutableBoard.*;
-import static me.ilinskiy.chessBoard.PieceColor.Black;
-import static me.ilinskiy.chessBoard.PieceColor.White;
+import static me.ilinskiy.chessAI.chessBoard.ImmutableBoard.*;
+import static me.ilinskiy.chessAI.chessBoard.PieceColor.Black;
+import static me.ilinskiy.chessAI.chessBoard.PieceColor.White;
 
 /**
  * TODO: cache everything in this class
@@ -62,7 +62,7 @@ public class GameUtil {
      */
     @NotNull
     public static List<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
-
+        //todo: use set instead of list?
         List<Move> result = getAvailableMovesForPieceWithoutKingAttacked(pos, board);
 
         //filter out the ones when king is attacked
@@ -112,20 +112,107 @@ public class GameUtil {
                 }
                 break;
             case Bishop:
-                //xChange = new int[]{};
+                result = getBishopMoves(pos, board);
                 break;
             case Rook:
+                result = getRookMoves(pos, board);
                 break;
             case Queen:
+                result = getRookMoves(pos, board);
+                result.addAll(getBishopMoves(pos, board));
                 break;
             case King:
-                //don't forget to add castling!
+                result = getKingMoves(pos, board);
                 break;
             case Empty:
                 break;
         }
         return result;
-        //        throw new NotImplementedException(); //todo: implement this method
+    }
+
+    /**
+     * todo: combine getRookMoves and getBishopMoves
+     */
+    @NotNull
+    private static List<Move> getRookMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+        int[] xChange = new int[]{-1, -1, 1, 1};
+        int[] yChange = new int[]{1, -1, 1, -1};
+        assert xChange.length == yChange.length;
+        List<Move> result = new ArrayList<>();
+        assert board.getPieceAt(pos) instanceof Piece;
+        Piece p = (Piece) board.getPieceAt(pos);
+        for (int i = 0; i < xChange.length; i++) {
+            Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
+            while (!ChessBoardUtil.isOutOfBounds(c) && board.getPieceAt(c) instanceof EmptyCell) {
+                result.add(new Move(pos, c));
+            }
+            if (!ChessBoardUtil.isOutOfBounds(c)) {
+                PieceColor color = board.getPieceAt(c).getColor();
+                if (!ChessBoardUtil.isOutOfBounds(c) && color == ChessBoardUtil.inverse(p.getColor())) {
+                    result.add(new Move(pos, c));
+                }
+            }
+        }
+        return result;
+    }
+
+    @NotNull
+    private static List<Move> getBishopMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+        int[] xChange = new int[]{0, 0, 1, -1};
+        int[] yChange = new int[]{1, -1, 0, 0};
+        assert xChange.length == yChange.length;
+        List<Move> result = new ArrayList<>();
+        assert board.getPieceAt(pos) instanceof Piece;
+        Piece p = (Piece) board.getPieceAt(pos);
+        for (int i = 0; i < xChange.length; i++) {
+            Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
+            while (!ChessBoardUtil.isOutOfBounds(c) && board.getPieceAt(c) instanceof EmptyCell) {
+                result.add(new Move(pos, c));
+            }
+            if (!ChessBoardUtil.isOutOfBounds(c)) {
+                PieceColor color = board.getPieceAt(c).getColor();
+                if (!ChessBoardUtil.isOutOfBounds(c) && color == ChessBoardUtil.inverse(p.getColor())) {
+                    result.add(new Move(pos, c));
+                }
+            }
+        }
+        return result;
+    }
+
+    private static List<Move> getKingMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+        int[] xChange = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
+        int[] yChange = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        List<Move> result = new ArrayList<>();
+        assert xChange.length == yChange.length;
+        assert board.getPieceAt(pos) instanceof Piece;
+        PieceColor kingColor = board.getPieceAt(pos).getColor();
+        for (int i = 0; i < xChange.length; i++) {
+            Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
+            if (!ChessBoardUtil.isOutOfBounds(c)) {
+                boolean correctColor = board.getPieceAt(c).getColor() != kingColor;
+                if (correctColor && !kingAround(c, board, ChessBoardUtil.inverse(kingColor))) { //todo: add castling
+                    result.add(new Move(pos, c)); //all the situation when king is attacked will be filtered out later
+                }
+            }
+
+        }
+        return result;
+    }
+
+    private static boolean kingAround(@NotNull Coordinates pos, @NotNull ImmutableBoard board, PieceColor opposingKingColor) {
+        int[] xChange = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
+        int[] yChange = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        assert xChange.length == yChange.length;
+        for (int i = 0; i < xChange.length; i++) {
+            Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
+            if (!ChessBoardUtil.isOutOfBounds(c)) {
+                ChessElement elem = board.getPieceAt(c);
+                if (elem.getType() == PieceType.King && elem.getColor() == opposingKingColor) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull ImmutableBoard board) {

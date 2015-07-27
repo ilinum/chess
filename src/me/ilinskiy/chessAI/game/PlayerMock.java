@@ -1,10 +1,10 @@
-package me.ilinskiy.game;
+package me.ilinskiy.chessAI.game;
 
-import me.ilinskiy.chessBoard.Coordinates;
-import me.ilinskiy.chessBoard.ImmutableBoard;
-import me.ilinskiy.chessBoard.PieceColor;
-import me.ilinskiy.chessBoard.PieceType;
-import org.jetbrains.annotations.NotNull;
+import me.ilinskiy.chessAI.annotations.NotNull;
+import me.ilinskiy.chessAI.chessBoard.Coordinates;
+import me.ilinskiy.chessAI.chessBoard.ImmutableBoard;
+import me.ilinskiy.chessAI.chessBoard.PieceColor;
+import me.ilinskiy.chessAI.chessBoard.PieceType;
 
 /**
  * Author: Svyatoslav Ilinskiy

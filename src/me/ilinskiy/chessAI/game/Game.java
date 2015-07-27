@@ -1,7 +1,7 @@
-package me.ilinskiy.game;
+package me.ilinskiy.chessAI.game;
 
-import me.ilinskiy.chessBoard.*;
-import org.jetbrains.annotations.NotNull;
+import me.ilinskiy.chessAI.annotations.NotNull;
+import me.ilinskiy.chessAI.chessBoard.*;
 
 import javax.swing.*;
 import java.awt.*;

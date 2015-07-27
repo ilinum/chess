@@ -1,10 +1,10 @@
-package me.ilinskiy.chessBoard;
+package me.ilinskiy.chessAI.chessBoard;
 
-import me.ilinskiy.game.Move;
+import me.ilinskiy.chessAI.game.Move;
 import org.junit.Test;
 
-import static me.ilinskiy.chessBoard.ImmutableBoard.BOARD_SIZE;
-import static me.ilinskiy.chessBoard.PieceType.*;
+import static me.ilinskiy.chessAI.chessBoard.ImmutableBoard.BOARD_SIZE;
+import static me.ilinskiy.chessAI.chessBoard.PieceType.*;
 import static org.junit.Assert.assertTrue;
 
 /**

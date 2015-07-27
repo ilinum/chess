@@ -1,10 +1,10 @@
-package me.ilinskiy;
+package me.ilinskiy.chessAI;
 
-import me.ilinskiy.chessBoard.ImmutableBoard;
-import me.ilinskiy.game.Game;
-import me.ilinskiy.game.Player;
-import me.ilinskiy.game.PlayerMock;
-import me.ilinskiy.game.UserPlayer;
+import me.ilinskiy.chessAI.chessBoard.ImmutableBoard;
+import me.ilinskiy.chessAI.chessBoard.PieceColor;
+import me.ilinskiy.chessAI.game.Game;
+import me.ilinskiy.chessAI.game.Player;
+import me.ilinskiy.chessAI.game.UserPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +18,8 @@ public class Main {
         JFrame game = new JFrame();
         game.setTitle("Chess");
         game.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        Player p1 = new UserPlayer();
-        Player p2 = new PlayerMock();
+        Player p1 = new UserPlayer(PieceColor.White);
+        Player p2 = new UserPlayer(PieceColor.Black);
         game.setLayout(new BorderLayout());
         game.setSize(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH);
 //        game.setMinimumSize(new Dimension(MIN_HEIGHT_AND_WIDTH, MIN_HEIGHT_AND_WIDTH));
@@ -28,7 +28,7 @@ public class Main {
         Game g = new Game(p1, p2, game);
         game.setLocationRelativeTo(null);
         game.setVisible(true);
-        while (true) {
+        while (!g.isGameOver()) {
             try {
                 g.makeMove();
             } catch (Exception ignored) {

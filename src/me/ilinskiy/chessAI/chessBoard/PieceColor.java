@@ -1,4 +1,4 @@
-package me.ilinskiy.chessBoard;
+package me.ilinskiy.chessAI.chessBoard;
 
 /**
  * Author: Svyatoslav Ilinskiy

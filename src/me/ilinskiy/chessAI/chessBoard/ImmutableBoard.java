@@ -1,17 +1,16 @@
-package me.ilinskiy.chessBoard;
+package me.ilinskiy.chessAI.chessBoard;
 
-import me.ilinskiy.game.GameUtil;
-import me.ilinskiy.game.Move;
-import org.jetbrains.annotations.NotNull;
+import me.ilinskiy.chessAI.annotations.NotNull;
+import me.ilinskiy.chessAI.game.GameUtil;
+import me.ilinskiy.chessAI.game.Move;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static me.ilinskiy.chessBoard.PieceType.Pawn;
+import static me.ilinskiy.chessAI.chessBoard.PieceType.Pawn;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -23,7 +22,7 @@ public class ImmutableBoard extends JPanel {
     private Optional<Coordinates> selected;
     public static final int WHITE_DIRECTION = -1;
     public static final int BLACK_DIRECTION = 1;
-    private List<Move> movesMade;
+    public PieceColor turn;
 
     public ImmutableBoard() {
         ChessBoardUtil.initIcons();
@@ -32,6 +31,7 @@ public class ImmutableBoard extends JPanel {
 
     @SuppressWarnings("ConstantConditions")
     public void reset() {
+        turn = PieceColor.White;
         board = new ChessElement[BOARD_SIZE][BOARD_SIZE];
         selected = Optional.empty();
         int currRow = 0;
@@ -67,7 +67,6 @@ public class ImmutableBoard extends JPanel {
         for (int i = 0; i < board[currRow].length; i++) {
             board[currRow][i] = new Piece(bottomPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
         }
-        movesMade = new ArrayList<>();
     }
 
     @NotNull
@@ -89,7 +88,7 @@ public class ImmutableBoard extends JPanel {
         if (initialPositionPiece instanceof EmptyCell) {
             throw new IllegalStateException("Cannot move an empty cell!");
         }
-        movesMade.add(move);
+        turn = ChessBoardUtil.inverse(turn);
         selected = Optional.empty();
         board[move.getNewPosition().getY()][move.getNewPosition().getX()] = initialPositionPiece;
         board[initialPosition.getY()][initialPosition.getX()] = EmptyCell.INSTANCE;
@@ -125,19 +124,23 @@ public class ImmutableBoard extends JPanel {
     }
 
     /**
-     * //todo add unset method?
      * set the cell at c selected
      *
      * @return true if a piece is there. False if it's an empty cell and nothing is done
      */
     public boolean setSelected(@NotNull Coordinates c) {
         checkBounds(c);
-        if (board[c.getY()][c.getX()] instanceof EmptyCell) {
+        if (board[c.getY()][c.getX()] instanceof EmptyCell || getPieceAt(c).getColor() != whoseTurnIsIt()) {
             return false;
         }
         selected = Optional.of(c);
         paint(getGraphics());
         return true;
+    }
+
+    @NotNull
+    public PieceColor whoseTurnIsIt() {
+        return turn;
     }
 
     public static final Color WHITE_BG = new Color(0xcdc1b4);
@@ -244,16 +247,21 @@ public class ImmutableBoard extends JPanel {
         return res;
     }*/
 
-    public List<Move> getMovesMade() {
-        List<Move> res = new ArrayList<>();
-        for (Move m : movesMade) {
-            res.add(m);
-        }
-        return res;
-    }
-
     @Override
     public String toString() {
         return Arrays.toString(board);
+    }
+
+    /**
+     * @return a deep copy of this immutable board
+     */
+    public ImmutableBoard copy() {
+        ImmutableBoard result = new ImmutableBoard();
+        result.selected = this.selected;
+        result.turn = this.turn;
+        for (int row = 0; row < board.length; row++) {
+            System.arraycopy(this.board[row], 0, result.board[row], 0, board.length);
+        }
+        return result;
     }
 }
