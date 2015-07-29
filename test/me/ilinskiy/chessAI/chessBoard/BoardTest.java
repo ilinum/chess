@@ -1,10 +1,16 @@
 package me.ilinskiy.chessAI.chessBoard;
 
+import me.ilinskiy.chessAI.game.GameUtil;
 import me.ilinskiy.chessAI.game.Move;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import static me.ilinskiy.chessAI.chessBoard.ImmutableBoard.BOARD_SIZE;
 import static me.ilinskiy.chessAI.chessBoard.PieceType.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -28,14 +34,16 @@ public class BoardTest {
     @Test
     public void testInitialSetup() {
         ImmutableBoard b = new ImmutableBoard();
+        List<Coordinates> allElements = new ArrayList<>();
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                Coordinates coordinates = new Coordinates(row, col);
+                Coordinates coordinates = new Coordinates(col, row);
                 if (row == 1 || row == (BOARD_SIZE - 2)) {
                     String message = "A pawn should be here: " + coordinates;
+                    allElements.add(coordinates);
                     assertTrue(message, b.getPieceAt(coordinates).getType() == Pawn);
                 } else if (row > 1 && row < BOARD_SIZE - 2) {
-                    assertTrue("Should be an empty cell", b.getPieceAt(coordinates) instanceof EmptyCell);
+                    assertTrue("Should be an empty cell: ", b.getPieceAt(coordinates) instanceof EmptyCell);
                 } else {
                     switch (col) {
                         case 0:
@@ -64,6 +72,7 @@ public class BoardTest {
                         default:
                             throw new IllegalStateException("Column is wrong: " + col);
                     }
+                    allElements.add(coordinates);
                 }
 
                 //check color
@@ -82,18 +91,24 @@ public class BoardTest {
                 }
             }
         }
+        List<Coordinates> gameUtilAllPieces = GameUtil.getAllPieces(PieceColor.White, b);
+        gameUtilAllPieces.addAll(GameUtil.getAllPieces(PieceColor.Black, b));
+        Collections.sort(gameUtilAllPieces);
+        Collections.sort(allElements);
+        assertEquals(allElements, gameUtilAllPieces);
     }
 
     @Test
     public void testPieceMove() {
         Board b = new Board();
-        Coordinates knightPos = new Coordinates(0, 1);
+        Coordinates knightPos = new Coordinates(1, 0);
         Coordinates newPos = new Coordinates(3, 4);
         ChessElement element = b.getPieceAt(knightPos);
-        assertTrue("Should not be empty cell " + knightPos, element instanceof Piece);
+        assertTrue("Should be a knight " + knightPos, element.getType() == Knight);
+        assertTrue("Should be black " + knightPos, element.getColor() == PieceColor.Black);
         b.movePiece(new Move(knightPos, newPos));
         assertTrue("Just moved piece from here! Should be empty!", b.getPieceAt(knightPos) instanceof EmptyCell);
-        assertTrue("Just moved a knight here: (3, 4)", b.getPieceAt(newPos).getType() == Knight);
+        assertTrue("Just moved a knight here: " + newPos, b.getPieceAt(newPos).getType() == Knight);
     }
 
     @Test(expected = IllegalStateException.class)

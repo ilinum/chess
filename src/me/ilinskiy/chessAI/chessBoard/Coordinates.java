@@ -10,7 +10,7 @@ import java.util.Arrays;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/17/15
  */
-public class Coordinates implements Copyable {
+public class Coordinates implements Copyable, Comparable<Coordinates> {
     private final int myX;
     private final int myY;
 
@@ -68,5 +68,15 @@ public class Coordinates implements Copyable {
     @Override
     public int hashCode() {
         return Arrays.hashCode(toArray());
+    }
+
+    @Override
+    public int compareTo(@NotNull Coordinates coordinates) {
+        int xDiff = myX - coordinates.myX;
+        if (xDiff != 0) {
+            return xDiff;
+        } else {
+            return myY - coordinates.myY;
+        }
     }
 }
