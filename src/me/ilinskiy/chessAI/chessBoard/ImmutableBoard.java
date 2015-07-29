@@ -291,4 +291,26 @@ public class ImmutableBoard extends JPanel implements Copyable {
         }
         return result;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof ImmutableBoard) {
+            ImmutableBoard other = ((ImmutableBoard) o);
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                for (int j = 0; j < BOARD_SIZE; j++) {
+                    if (!this.board[i][j].equals(other.board[i][j])) {
+                        return false;
+                    }
+                }
+            }
+            return turn == other.turn && selected.equals(other.selected);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(board) * 31 + selected.hashCode() + turn.hashCode();
+    }
 }

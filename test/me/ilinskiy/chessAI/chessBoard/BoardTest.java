@@ -136,6 +136,5 @@ public class BoardTest {
         b.movePiece(new Coordinates(0, 0), new Coordinates(4, 4));
         assertTrue(b.setSelected(newCoordinates));
         assertTrue(b.getSelected().get().equals(newCoordinates));
-
     }
 }

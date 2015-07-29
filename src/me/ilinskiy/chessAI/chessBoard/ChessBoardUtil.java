@@ -22,7 +22,7 @@ public class ChessBoardUtil {
         Board board = new Board(b.copy());
         board.movePiece(m);
         boolean result = op.run(board.getInner());
-        board.movePiece(m.inverse());
+        board.movePiece(m.inverse()); //roll back
         return result;
     }
 
