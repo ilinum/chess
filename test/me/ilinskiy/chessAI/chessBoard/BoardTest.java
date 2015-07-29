@@ -118,4 +118,24 @@ public class BoardTest {
         Coordinates newPos = new Coordinates(0, 0);
         b.movePiece(new Move(initPos, newPos));
     }
+
+    @Test
+    public void testSelected() {
+        ImmutableBoard b = new ImmutableBoard();
+        assertTrue("selected should be empty!", !b.getSelected().isPresent());
+        Coordinates coordinates = new Coordinates(7, 7);
+        assertTrue(b.setSelected(coordinates));
+        assertTrue(b.getSelected().get().equals(coordinates));
+        Coordinates newCoordinates = new Coordinates(5, 5);
+        assertTrue(!b.setSelected(newCoordinates));
+        assertTrue(b.getSelected().get().equals(coordinates));
+        b.movePiece(new Move(coordinates, newCoordinates));
+        assertTrue("selected should be empty!", !b.getSelected().isPresent());
+        assertTrue(!b.setSelected(newCoordinates));
+        assertTrue(!b.getSelected().isPresent());
+        b.movePiece(new Coordinates(0, 0), new Coordinates(4, 4));
+        assertTrue(b.setSelected(newCoordinates));
+        assertTrue(b.getSelected().get().equals(newCoordinates));
+
+    }
 }

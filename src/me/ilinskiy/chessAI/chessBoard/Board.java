@@ -31,6 +31,10 @@ public final class Board {
         inner.movePiece(m);
     }
 
+    public void movePiece(@NotNull Coordinates initPos, @NotNull Coordinates newPos) {
+        inner.movePiece(initPos, newPos);
+    }
+
     public void paint() {
         inner.paint(inner.getGraphics());
     }

@@ -98,6 +98,10 @@ public class ImmutableBoard extends JPanel implements Copyable {
         board[initialPosition.getY()][initialPosition.getX()] = EmptyCell.INSTANCE;
     }
 
+    void movePiece(@NotNull Coordinates initPos, @NotNull Coordinates newPos) {
+        movePiece(new Move(initPos, newPos));
+    }
+
 
     /**
      * @return copy of selected coordinates
