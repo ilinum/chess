@@ -42,6 +42,7 @@ public class ChessBoardUtil {
         return inverseOf == p1 ? p2 : p1;
     }
 
+    @NotNull
     public static HashMap<Piece, Image> icons = new HashMap<>();
 
     public static void initIcons() {

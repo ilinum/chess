@@ -21,4 +21,9 @@ public final class EmptyCell implements ChessElement {
     public PieceColor getColor() {
         return PieceColor.Empty;
     }
+
+    @Override
+    public String toString() {
+        return "Empty cell";
+    }
 }

@@ -14,14 +14,18 @@ import java.util.Optional;
  * Date: 7/16/15
  */
 public class Game {
+    @NotNull
     private final Board board;
     private Player turn;
     private Optional<PieceColor> winner;
+    @NotNull
     private final List<Move> movesMade;
+    @NotNull
     private final Player player1;
+    @NotNull
     private final Player player2;
 
-    public Game(@NotNull Player p1, @NotNull Player p2, JFrame frame) {
+    public Game(@NotNull Player p1, @NotNull Player p2, @NotNull JFrame frame) {
         if (ChessBoardUtil.inverse(p1.getPlayerColor()) != p2.getPlayerColor()) {
             throw new IllegalArgumentException("Wrong colors for players!");
         }

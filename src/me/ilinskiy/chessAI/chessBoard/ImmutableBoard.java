@@ -20,11 +20,11 @@ import static me.ilinskiy.chessAI.chessBoard.PieceType.Pawn;
  */
 public class ImmutableBoard extends JPanel implements Copyable {
     public static final int BOARD_SIZE = 8;
-    private ChessElement[][] board;
-    private Optional<Coordinates> selected;
     public static final int WHITE_DIRECTION = -1;
     public static final int BLACK_DIRECTION = 1;
-    public PieceColor turn;
+    private ChessElement[][] board;
+    private Optional<Coordinates> selected;
+    private PieceColor turn;
 
     public ImmutableBoard() {
         super();
@@ -211,7 +211,7 @@ public class ImmutableBoard extends JPanel implements Copyable {
         }
     }
 
-    private void drawCell(Coordinates pos, Graphics graphics) {
+    private void drawCell(@NotNull Coordinates pos, @NotNull Graphics graphics) {
         int heightAndWidth = getFrameSize().width;
         int cellSize = heightAndWidth / BOARD_SIZE;
         int initX = pos.getX() * cellSize;
@@ -262,6 +262,7 @@ public class ImmutableBoard extends JPanel implements Copyable {
         return res;
     }*/
 
+    @NotNull
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
@@ -275,6 +276,7 @@ public class ImmutableBoard extends JPanel implements Copyable {
     /**
      * @return a deep copy of this immutable board
      */
+    @NotNull
     @Override
     public ImmutableBoard copy() {
         ImmutableBoard result = new ImmutableBoard();

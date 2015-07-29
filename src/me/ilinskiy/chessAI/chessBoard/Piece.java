@@ -16,11 +16,13 @@ public class Piece implements ChessElement {
         type = pType;
     }
 
+    @NotNull
     @Override
     public PieceType getType() {
         return type;
     }
 
+    @NotNull
     @Override
     public PieceColor getColor() {
         return color;

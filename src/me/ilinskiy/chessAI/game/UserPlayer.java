@@ -20,7 +20,9 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class UserPlayer implements Player {
     private Optional<Move> moveMade = Optional.empty();
+    @NotNull
     private final Lock mouseLock;
+    @NotNull
     private final Condition moveIsMade;
     private final PieceColor myColor;
 
@@ -44,7 +46,7 @@ public class UserPlayer implements Player {
             }
 
             @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
+            public void mouseReleased(@NotNull MouseEvent mouseEvent) {
                 mouseLock.lock();
                 double x = mouseEvent.getX();
                 double y = mouseEvent.getY();

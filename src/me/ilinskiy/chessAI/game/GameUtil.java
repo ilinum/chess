@@ -63,7 +63,7 @@ public class GameUtil {
     @NotNull
     public static List<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
         //todo: use set instead of list?
-        List<Move> result = getAvailableMovesForPieceWithoutKingAttacked(pos, board);
+        List<Move> result = getAllMovesForPiece(pos, board);
 
         //filter out the ones when king is attacked
         Iterator<Move> moveIterator = result.iterator();
@@ -75,8 +75,11 @@ public class GameUtil {
         return result;
     }
 
+    /**
+     * Get all available moves for piece without considering if the king will be attacked
+     */
     @NotNull
-    private static List<Move> getAvailableMovesForPieceWithoutKingAttacked(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+    private static List<Move> getAllMovesForPiece(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
         ChessElement element = board.getPieceAt(pos);
         List<Move> result = new LinkedList<>();
         PieceColor color = element.getColor();
@@ -179,6 +182,7 @@ public class GameUtil {
         return result;
     }
 
+    @NotNull
     private static List<Move> getKingMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
         int[] xChange = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
         int[] yChange = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
@@ -220,7 +224,7 @@ public class GameUtil {
         Coordinates kingPos = findKing(kingColor, board);
 
         for (Coordinates pos : allOpponentPieces) {
-            List<Move> availableMovesForPiece = getAvailableMovesForPieceWithoutKingAttacked(pos, board);
+            List<Move> availableMovesForPiece = getAllMovesForPiece(pos, board);
             for (Move m : availableMovesForPiece) {
                 if (m.getNewPosition().equals(kingPos)) {
                     return true;
