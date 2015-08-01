@@ -85,11 +85,16 @@ public class GameUtil {
             case Pawn:
                 assert (color == White || color == Black);
                 int dir = getDirectionForPlayer(color);
-                assert !ChessBoardUtil.isOutOfBounds(new Coordinates(pos.getX(), pos.getY() + dir)); //should've been promoted
-                result.add(new Move(pos, new Coordinates(pos.getX(), pos.getY() + dir)));
+                Coordinates newC = new Coordinates(pos.getX(), pos.getY() + dir);
+                assert !ChessBoardUtil.isOutOfBounds(newC); //should've been promoted
+                if (board.getPieceAt(newC) instanceof EmptyCell) {
+                    result.add(new Move(pos, newC));
+                }
                 boolean hasNotMoved = ChessBoardUtil.isOutOfBounds(new Coordinates(pos.getX(), pos.getY() - 2 * dir));
-                if (hasNotMoved) {
-                    result.add(new Move(pos, new Coordinates(pos.getX(), pos.getY() + 2 * dir)));
+                Coordinates longMove = new Coordinates(pos.getX(), pos.getY() + 2 * dir);
+                if (hasNotMoved && (board.getPieceAt(longMove) instanceof EmptyCell)) {
+
+                    result.add(new Move(pos, longMove));
                 }
                 Coordinates[] eatLocations = new Coordinates[]{new Coordinates(pos.getX() + 1, pos.getY() + dir),
                         new Coordinates(pos.getX() - 1, pos.getY() + dir)};
@@ -152,9 +157,15 @@ public class GameUtil {
         Piece p = (Piece) board.getPieceAt(pos);
         for (int i = 0; i < xChange.length; i++) {
             Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
-            while (!ChessBoardUtil.isOutOfBounds(c) && board.getPieceAt(c) instanceof EmptyCell) {
+            Coordinates copy = c.copy();
+            int j = i;
+            while (!ChessBoardUtil.isOutOfBounds(c) && board.getPieceAt(c) instanceof EmptyCell && j < xChange.length) {
                 result.add(new Move(pos, c));
+                c = new Coordinates(c.getX() + xChange[j], c.getY() + yChange[j]);
+                j++;
             }
+
+            c = copy; //restore
             if (!ChessBoardUtil.isOutOfBounds(c)) {
                 PieceColor color = board.getPieceAt(c).getColor();
                 if (!ChessBoardUtil.isOutOfBounds(c) && color == ChessBoardUtil.inverse(p.getColor())) {
