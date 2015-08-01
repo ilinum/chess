@@ -130,36 +130,22 @@ public class GameUtil {
         return result;
     }
 
-    /**
-     * todo: combine getRookMoves and getBishopMoves
-     */
     @NotNull
     private static List<Move> getRookMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
         int[] xChange = new int[]{-1, -1, 1, 1};
         int[] yChange = new int[]{1, -1, 1, -1};
-        assert xChange.length == yChange.length;
-        List<Move> result = new ArrayList<>();
-        assert board.getPieceAt(pos) instanceof Piece;
-        Piece p = (Piece) board.getPieceAt(pos);
-        for (int i = 0; i < xChange.length; i++) {
-            Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
-            while (!ChessBoardUtil.isOutOfBounds(c) && board.getPieceAt(c) instanceof EmptyCell) {
-                result.add(new Move(pos, c));
-            }
-            if (!ChessBoardUtil.isOutOfBounds(c)) {
-                PieceColor color = board.getPieceAt(c).getColor();
-                if (!ChessBoardUtil.isOutOfBounds(c) && color == ChessBoardUtil.inverse(p.getColor())) {
-                    result.add(new Move(pos, c));
-                }
-            }
-        }
-        return result;
+        return getBishopOrRookMoves(pos, board, xChange, yChange);
     }
 
     @NotNull
     private static List<Move> getBishopMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
         int[] xChange = new int[]{0, 0, 1, -1};
         int[] yChange = new int[]{1, -1, 0, 0};
+        return getBishopOrRookMoves(pos, board, xChange, yChange);
+    }
+
+    private static List<Move> getBishopOrRookMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board,
+                                                   @NotNull int[] xChange, @NotNull int[] yChange) {
         assert xChange.length == yChange.length;
         List<Move> result = new ArrayList<>();
         assert board.getPieceAt(pos) instanceof Piece;

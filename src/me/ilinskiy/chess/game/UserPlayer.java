@@ -105,7 +105,7 @@ public class UserPlayer implements Player {
     @Override
     @NotNull
     public PieceType getPieceTypeForPromotedPawn() {
-        return PieceType.Queen; //todo: ask for piece type
+        return PieceType.Queen;
     }
 
     @Override
