@@ -1,14 +1,14 @@
-package me.ilinskiy.chessAI.game;
+package me.ilinskiy.chess.game;
 
-import me.ilinskiy.chessAI.annotations.NotNull;
-import me.ilinskiy.chessAI.chessBoard.Coordinates;
-import me.ilinskiy.chessAI.chessBoard.ImmutableBoard;
-import me.ilinskiy.chessAI.chessBoard.PieceColor;
+import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.chessBoard.Coordinates;
+import me.ilinskiy.chess.chessBoard.ImmutableBoard;
+import me.ilinskiy.chess.chessBoard.PieceColor;
 import org.junit.Test;
 
 import javax.swing.*;
 
-import static me.ilinskiy.chessAI.chessBoard.ImmutableBoard.BOARD_SIZE;
+import static me.ilinskiy.chess.chessBoard.ImmutableBoard.BOARD_SIZE;
 import static org.junit.Assert.assertTrue;
 
 /**

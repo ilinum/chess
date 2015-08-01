@@ -1,13 +1,13 @@
-package me.ilinskiy.chessAI.chessBoard;
+package me.ilinskiy.chess.chessBoard;
 
-import me.ilinskiy.chessAI.annotations.NotNull;
-import me.ilinskiy.chessAI.game.Move;
-import me.ilinskiy.chessAI.game.Player;
+import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.game.Move;
+import me.ilinskiy.chess.game.Player;
 
 import java.awt.*;
 import java.util.HashMap;
 
-import static me.ilinskiy.chessAI.chessBoard.PieceType.*;
+import static me.ilinskiy.chess.chessBoard.PieceType.*;
 
 /**
  * Author: Svyatoslav Ilinskiy

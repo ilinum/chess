@@ -1,10 +1,10 @@
-package me.ilinskiy.chessAI.chessBoard;
+package me.ilinskiy.chess.chessBoard;
 
-import me.ilinskiy.chessAI.annotations.NotNull;
-import me.ilinskiy.chessAI.annotations.Nullable;
-import me.ilinskiy.chessAI.game.Copyable;
-import me.ilinskiy.chessAI.game.GameUtil;
-import me.ilinskiy.chessAI.game.Move;
+import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.annotations.Nullable;
+import me.ilinskiy.chess.game.Copyable;
+import me.ilinskiy.chess.game.GameUtil;
+import me.ilinskiy.chess.game.Move;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static me.ilinskiy.chessAI.chessBoard.PieceType.Pawn;
+import static me.ilinskiy.chess.chessBoard.PieceType.Pawn;
 
 /**
  * Author: Svyatoslav Ilinskiy

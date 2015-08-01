@@ -1,10 +1,10 @@
-package me.ilinskiy.chessAI;
+package me.ilinskiy.chess;
 
-import me.ilinskiy.chessAI.chessBoard.ImmutableBoard;
-import me.ilinskiy.chessAI.chessBoard.PieceColor;
-import me.ilinskiy.chessAI.game.Game;
-import me.ilinskiy.chessAI.game.Player;
-import me.ilinskiy.chessAI.game.UserPlayer;
+import me.ilinskiy.chess.chessBoard.ImmutableBoard;
+import me.ilinskiy.chess.chessBoard.PieceColor;
+import me.ilinskiy.chess.game.Game;
+import me.ilinskiy.chess.game.Player;
+import me.ilinskiy.chess.game.UserPlayer;
 
 import javax.swing.*;
 import java.awt.*;

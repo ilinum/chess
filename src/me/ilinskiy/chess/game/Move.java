@@ -1,7 +1,7 @@
-package me.ilinskiy.chessAI.game;
+package me.ilinskiy.chess.game;
 
-import me.ilinskiy.chessAI.annotations.NotNull;
-import me.ilinskiy.chessAI.chessBoard.Coordinates;
+import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.chessBoard.Coordinates;
 
 import java.util.Arrays;
 

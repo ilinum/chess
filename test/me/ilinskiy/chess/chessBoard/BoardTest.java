@@ -1,15 +1,15 @@
-package me.ilinskiy.chessAI.chessBoard;
+package me.ilinskiy.chess.chessBoard;
 
-import me.ilinskiy.chessAI.game.GameUtil;
-import me.ilinskiy.chessAI.game.Move;
+import me.ilinskiy.chess.game.GameUtil;
+import me.ilinskiy.chess.game.Move;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static me.ilinskiy.chessAI.chessBoard.ImmutableBoard.BOARD_SIZE;
-import static me.ilinskiy.chessAI.chessBoard.PieceType.*;
+import static me.ilinskiy.chess.chessBoard.ImmutableBoard.BOARD_SIZE;
+import static me.ilinskiy.chess.chessBoard.PieceType.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

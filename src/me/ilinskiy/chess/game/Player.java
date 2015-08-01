@@ -1,9 +1,9 @@
-package me.ilinskiy.chessAI.game;
+package me.ilinskiy.chess.game;
 
-import me.ilinskiy.chessAI.annotations.NotNull;
-import me.ilinskiy.chessAI.chessBoard.ImmutableBoard;
-import me.ilinskiy.chessAI.chessBoard.PieceColor;
-import me.ilinskiy.chessAI.chessBoard.PieceType;
+import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.chessBoard.ImmutableBoard;
+import me.ilinskiy.chess.chessBoard.PieceColor;
+import me.ilinskiy.chess.chessBoard.PieceType;
 
 /**
  * Author: Svyatoslav Ilinskiy

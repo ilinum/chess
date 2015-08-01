@@ -1,4 +1,4 @@
-package me.ilinskiy.chessAI.annotations;
+package me.ilinskiy.chess.annotations;
 
 /**
  * Author: Svyatoslav Ilinskiy

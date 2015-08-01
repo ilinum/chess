@@ -1,16 +1,16 @@
-package me.ilinskiy.chessAI.game;
+package me.ilinskiy.chess.game;
 
-import me.ilinskiy.chessAI.annotations.NotNull;
-import me.ilinskiy.chessAI.chessBoard.*;
+import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.chessBoard.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static me.ilinskiy.chessAI.chessBoard.ImmutableBoard.*;
-import static me.ilinskiy.chessAI.chessBoard.PieceColor.Black;
-import static me.ilinskiy.chessAI.chessBoard.PieceColor.White;
+import static me.ilinskiy.chess.chessBoard.ImmutableBoard.*;
+import static me.ilinskiy.chess.chessBoard.PieceColor.Black;
+import static me.ilinskiy.chess.chessBoard.PieceColor.White;
 
 /**
  * TODO: cache everything in this class

@@ -1,6 +1,6 @@
-package me.ilinskiy.chessAI.game;
+package me.ilinskiy.chess.game;
 
-import me.ilinskiy.chessAI.chessBoard.*;
+import me.ilinskiy.chess.chessBoard.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static me.ilinskiy.chessAI.chessBoard.ImmutableBoard.*;
-import static org.hamcrest.core.Is.is;
+import static me.ilinskiy.chess.chessBoard.ImmutableBoard.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
