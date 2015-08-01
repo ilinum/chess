@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/17/15
  */
-public class Move {
+public class Move implements Copyable, Comparable<Move> {
     @NotNull
     private final Coordinates initialPosition;
     @NotNull
@@ -68,5 +68,21 @@ public class Move {
     @NotNull
     public Move inverse() {
         return new Move(newPosition, initialPosition);
+    }
+
+    @Override
+    public int compareTo(Move move) {
+        int initDiff = initialPosition.compareTo(move.getInitialPosition());
+        if (initDiff != 0) {
+            return initDiff;
+        } else {
+            return newPosition.compareTo(move.getNewPosition());
+        }
+    }
+
+    @Override
+    @NotNull
+    public Move copy() {
+        return new Move(initialPosition.copy(), newPosition.copy());
     }
 }

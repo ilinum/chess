@@ -11,6 +11,17 @@ import me.ilinskiy.chessAI.chessBoard.PieceType;
  * Date: 7/19/15
  */
 public class PlayerMock implements Player {
+    public final PieceColor myColor;
+
+
+    public PlayerMock() {
+        this(PieceColor.Empty);
+    }
+
+    public PlayerMock(PieceColor color) {
+        myColor = color;
+    }
+
     @Override
     @NotNull
     public Move makeMove(@NotNull ImmutableBoard b) {
@@ -21,12 +32,18 @@ public class PlayerMock implements Player {
     @Override
     @NotNull
     public PieceColor getPlayerColor() {
-        return PieceColor.Empty;
+        return myColor;
     }
 
     @Override
     @NotNull
     public PieceType getPieceTypeForPromotedPawn() {
         return PieceType.Empty;
+    }
+
+    @Override
+    @NotNull
+    public PlayerMock copy() {
+        return new PlayerMock();
     }
 }

@@ -107,4 +107,9 @@ public class UserPlayer implements Player {
     public PieceType getPieceTypeForPromotedPawn() {
         return PieceType.Queen; //todo: ask for piece type
     }
+
+    @Override
+    public UserPlayer copy() {
+        return new UserPlayer(myColor);
+    }
 }

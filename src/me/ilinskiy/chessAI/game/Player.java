@@ -9,7 +9,7 @@ import me.ilinskiy.chessAI.chessBoard.PieceType;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/17/15
  */
-public interface Player {
+public interface Player extends Copyable {
 
     @NotNull
     Move makeMove(@NotNull ImmutableBoard b) throws InterruptedException;
@@ -19,4 +19,8 @@ public interface Player {
 
     @NotNull
     PieceType getPieceTypeForPromotedPawn();
+
+    @NotNull
+    @Override
+    Player copy();
 }

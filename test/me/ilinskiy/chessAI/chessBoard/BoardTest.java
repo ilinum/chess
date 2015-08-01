@@ -14,6 +14,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
+ * Tests for Board and ImmutableBoard classes
+ *
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */

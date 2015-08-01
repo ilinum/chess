@@ -21,7 +21,7 @@ import static me.ilinskiy.chessAI.chessBoard.PieceColor.White;
 public class GameUtil {
 
     @NotNull
-    public static List<Move> getAvailableMoves(@NotNull PieceColor color, @NotNull ImmutableBoard board) {
+    public static synchronized List<Move> getAvailableMoves(@NotNull PieceColor color, @NotNull ImmutableBoard board) {
         List<Move> result = new ArrayList<>();
         List<Coordinates> allPiecesOfCorrectColor = getAllPieces(color, board);
 
@@ -57,8 +57,6 @@ public class GameUtil {
 
     /**
      * If board.getPieceAt(pos) is EmptyCell returns an empty list
-     * <p>
-     * todo: move this to ImmutableBoard class???
      */
     @NotNull
     public static List<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
