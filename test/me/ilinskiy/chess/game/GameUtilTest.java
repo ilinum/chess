@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static me.ilinskiy.chess.chessBoard.ImmutableBoard.*;
@@ -75,7 +76,18 @@ public class GameUtilTest {
         Coordinates initPos = new Coordinates(1, BOARD_SIZE - 1);
         Assert.assertEquals(knight, b.getPieceAt(initPos));
         b.setPieceAt(initPos, EmptyCell.INSTANCE);
-        //GameUtil.getAvailableMoves(PieceColor.White, b.getInner());
+        GameUtil.getAvailableMoves(PieceColor.White, b.getInner());
         GameUtil.getAvailableMoves(PieceColor.Black, b.getInner());
+    }
+
+    @Test
+    public void testPawnNonEmptyCell() {
+        Board b = new Board();
+        Coordinates blackLoc = new Coordinates(3, 3);
+        Coordinates whiteLoc = new Coordinates(3, 4);
+        b.setPieceAt(blackLoc, new Piece(PieceColor.Black, PieceType.Pawn));
+        b.setPieceAt(whiteLoc, new Piece(PieceColor.White, PieceType.Pawn));
+        assertThat(new LinkedList<>(), is(GameUtil.getAvailableMovesForPiece(whiteLoc, b.getInner())));
+        assertThat(new LinkedList<>(), is(GameUtil.getAvailableMovesForPiece(blackLoc, b.getInner())));
     }
 }

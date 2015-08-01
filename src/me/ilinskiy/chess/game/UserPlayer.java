@@ -34,7 +34,7 @@ public class UserPlayer implements Player {
 
     @NotNull
     @Override
-    public Move makeMove(@NotNull ImmutableBoard board) throws InterruptedException {
+    public Move getMove(@NotNull ImmutableBoard board) throws InterruptedException {
         MouseListener mouseListener = new MouseListener() {
 
             @Override

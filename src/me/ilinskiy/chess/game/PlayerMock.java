@@ -24,7 +24,7 @@ public class PlayerMock implements Player {
 
     @Override
     @NotNull
-    public Move makeMove(@NotNull ImmutableBoard b) {
+    public Move getMove(@NotNull ImmutableBoard b) {
         Coordinates c = new Coordinates(0, 0);
         return new Move(c, c);
     }

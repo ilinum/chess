@@ -21,7 +21,7 @@ public class GameTest {
     public void testGameInit() {
         Player p1 = new PlayerMock(PieceColor.White);
         Player p2 = new PlayerMock(PieceColor.Black);
-        Game g = new Game(p1, p2, new JFrame());
+        Game g = new Game(p1, p2, null);
         assertTrue(!g.isGameOver());
         assertTrue(!g.getWinner().isPresent());
         assertTrue(g.getMovesMade().isEmpty());
@@ -35,12 +35,12 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move makeMove(@NotNull ImmutableBoard b) {
+            public Move getMove(@NotNull ImmutableBoard b) {
                 return move;
             }
         };
         Player p2 = new PlayerMock(PieceColor.Black);
-        Game g = new Game(p1, p2, new JFrame());
+        Game g = new Game(p1, p2, null);
         g.makeMove();
         assertTrue(!g.isGameOver());
         assertTrue(!g.getWinner().isPresent());
@@ -48,5 +48,18 @@ public class GameTest {
         assertTrue(g.getMovesMade().get(0).equals(move));
         assertTrue(g.numberOfMovesMade() == 1);
         assertTrue(g.whoseTurnIsIt() == p2.getPlayerColor());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testIllegalMove() {
+        Player p1 = new PlayerMock(PieceColor.White) {
+            @Override
+            public Move getMove(@NotNull ImmutableBoard b) {
+                return new Move(new Coordinates(8, 8), new Coordinates(1, 1));
+            }
+        };
+        Player p2 = new PlayerMock(PieceColor.Black);
+        Game g = new Game(p1, p2, null);
+        g.makeMove();
     }
 }

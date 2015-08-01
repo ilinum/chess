@@ -1,6 +1,7 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.annotations.Nullable;
 import me.ilinskiy.chess.chessBoard.*;
 
 import javax.swing.*;
@@ -25,7 +26,7 @@ public class Game {
     @NotNull
     private final Player player2;
 
-    public Game(@NotNull Player p1, @NotNull Player p2, @NotNull JFrame frame) {
+    public Game(@NotNull Player p1, @NotNull Player p2, @Nullable JFrame frame) {
         if (ChessBoardUtil.inverse(p1.getPlayerColor()) != p2.getPlayerColor()) {
             throw new IllegalArgumentException("Wrong colors for players!");
         }
@@ -36,7 +37,9 @@ public class Game {
         turn = p1.getPlayerColor() == PieceColor.White ? p1 : p2;
         winner = Optional.empty();
         ImmutableBoard inner = board.getInner();
-        frame.add(inner, BorderLayout.CENTER);
+        if (frame != null) {
+            frame.add(inner, BorderLayout.CENTER);
+        }
     }
 
     public void makeMove() {
@@ -46,7 +49,7 @@ public class Game {
         Move m = null;
         while (m == null) {
             try {
-                m = turn.makeMove(board.getInner());
+                m = turn.getMove(board.getInner());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
