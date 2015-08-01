@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static me.ilinskiy.chess.chessBoard.ImmutableBoard.*;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
