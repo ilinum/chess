@@ -99,7 +99,6 @@ public class GameUtil {
                         result.add(new Move(pos, eatLocation));
                     }
                 }
-                //todo: allow En passant
                 break;
             case Knight:
                 int[] xChange = new int[]{1, -1, 2, 2, -2, -2, 1, -1};
@@ -192,7 +191,7 @@ public class GameUtil {
             Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
             if (!ChessBoardUtil.isOutOfBounds(c)) {
                 boolean correctColor = board.getPieceAt(c).getColor() != kingColor;
-                if (correctColor && !kingAround(c, board, ChessBoardUtil.inverse(kingColor))) { //todo: add castling
+                if (correctColor && !kingAround(c, board, ChessBoardUtil.inverse(kingColor))) {
                     result.add(new Move(pos, c)); //all the situation when king is attacked will be filtered out later
                 }
             }

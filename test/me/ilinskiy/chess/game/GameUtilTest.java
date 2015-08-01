@@ -63,7 +63,7 @@ public class GameUtilTest {
         assertThat(expected, is(actual));
     }
 
-    @Test
+    @Test(timeout = 1000)
     public void testAvailableMovesAfterMove() {
         Board b = new Board();
 

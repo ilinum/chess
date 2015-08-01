@@ -24,7 +24,7 @@ public class Main {
         game.setSize(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH);
 //        game.setMinimumSize(new Dimension(MIN_HEIGHT_AND_WIDTH, MIN_HEIGHT_AND_WIDTH));
 //        game.setPreferredSize(new Dimension(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH));
-        game.setResizable(false); //todo: allow resizing
+        game.setResizable(false);
         Game g = new Game(p1, p2, game);
         game.setLocationRelativeTo(null);
         game.setVisible(true);
