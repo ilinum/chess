@@ -27,6 +27,15 @@ public final class Board {
         inner.setPieceAt(pos, element);
     }
 
+    public void setPieceAccordingToMove(@NotNull Move move) {
+        ChessElement initPosPiece = inner.getPieceAt(move.getInitialPosition());
+        if (initPosPiece instanceof EmptyCell) {
+            throw new IllegalArgumentException("Cannot move an empty cell!");
+        }
+        inner.setPieceAt(move.getInitialPosition(), EmptyCell.INSTANCE);
+        inner.setPieceAt(move.getNewPosition(), initPosPiece);
+    }
+
     public void movePiece(@NotNull Move m) {
         inner.movePiece(m);
     }

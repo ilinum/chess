@@ -176,22 +176,52 @@ public class GameUtil {
     }
 
     @NotNull
-    private static List<Move> getKingMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+    private static List<Move> getKingMoves(@NotNull Coordinates kingPos, @NotNull ImmutableBoard board) {
         int[] xChange = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
         int[] yChange = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
         List<Move> result = new ArrayList<>();
         assert xChange.length == yChange.length;
-        assert board.getPieceAt(pos) instanceof Piece;
-        PieceColor kingColor = board.getPieceAt(pos).getColor();
+        assert board.getPieceAt(kingPos) instanceof Piece;
+        PieceColor kingColor = board.getPieceAt(kingPos).getColor();
         for (int i = 0; i < xChange.length; i++) {
-            Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
+            Coordinates c = new Coordinates(kingPos.getX() + xChange[i], kingPos.getY() + yChange[i]);
             if (!ChessBoardUtil.isOutOfBounds(c)) {
                 boolean correctColor = board.getPieceAt(c).getColor() != kingColor;
                 if (correctColor && !kingAround(c, board, ChessBoardUtil.inverse(kingColor))) {
-                    result.add(new Move(pos, c)); //all the situation when king is attacked will be filtered out later
+                    result.add(new Move(kingPos, c)); //all the situation when king is attacked will be filtered out later
                 }
             }
+        }
+        if (!board.pieceHasMovedSinceStartOfGame(kingPos)) {
+            //check for castling
+            List<Coordinates> rooks = findPiecesByTypeAndColor(PieceType.Rook, kingColor, board);
+            assert rooks.size() <= 2;
+            for (Coordinates rookPos : rooks) {
+                if (!board.pieceHasMovedSinceStartOfGame(rookPos)) {
+                    assert rookPos.getY() == kingPos.getY();
+                    int direction;
+                    if (rookPos.getX() > kingPos.getX()) {
+                        direction = 1;
+                    } else {
+                        assert rookPos.getX() < kingPos.getX();
+                        direction = -1;
+                    }
 
+                    boolean canCastle = true;
+                    Coordinates castleCells = kingPos;
+                    while (!castleCells.equals(rookPos) && canCastle) {
+                        if (!(board.getPieceAt(castleCells) instanceof EmptyCell)) {
+                            canCastle = false;
+                        } else if (kingIsAttackedAfterMove(kingColor, board, new Move(kingPos, castleCells))) {
+                            canCastle = false;
+                        }
+                        castleCells = new Coordinates(castleCells.getX() + direction, castleCells.getY());
+                    }
+                    if (canCastle) {
+                        result.add(new Move(kingPos, new Coordinates(rookPos.getX() - direction, rookPos.getY())));
+                    }
+                }
+            }
         }
         return result;
     }

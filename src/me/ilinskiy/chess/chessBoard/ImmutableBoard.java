@@ -8,6 +8,7 @@ import me.ilinskiy.chess.game.Move;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class ImmutableBoard extends JPanel implements Copyable {
     private ChessElement[][] board;
     private Optional<Coordinates> selected;
     private PieceColor turn;
+    private List<Coordinates> piecesMoved;
 
     public ImmutableBoard() {
         super();
@@ -70,7 +72,8 @@ public class ImmutableBoard extends JPanel implements Copyable {
         for (int i = 0; i < board[currRow].length; i++) {
             board[currRow][i] = new Piece(bottomPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
         }
-        paint(getGraphics());
+        piecesMoved = new ArrayList<>();
+        paint();
     }
 
     @NotNull
@@ -96,12 +99,17 @@ public class ImmutableBoard extends JPanel implements Copyable {
         selected = Optional.empty();
         board[move.getNewPosition().getY()][move.getNewPosition().getX()] = initialPositionPiece;
         board[initialPosition.getY()][initialPosition.getX()] = EmptyCell.INSTANCE;
+        piecesMoved.remove(move.getInitialPosition());
+        piecesMoved.add(move.getNewPosition());
     }
 
     void movePiece(@NotNull Coordinates initPos, @NotNull Coordinates newPos) {
         movePiece(new Move(initPos, newPos));
     }
 
+    public boolean pieceHasMovedSinceStartOfGame(@NotNull Coordinates pos) {
+        return piecesMoved.contains(pos);
+    }
 
     /**
      * @return copy of selected coordinates
@@ -142,7 +150,7 @@ public class ImmutableBoard extends JPanel implements Copyable {
             return false;
         }
         selected = Optional.of(c);
-        paint(getGraphics());
+        paint();
         return true;
     }
 
@@ -153,6 +161,10 @@ public class ImmutableBoard extends JPanel implements Copyable {
 
     //public static final Color WHITE_BG = new Color(0xFFF3E4);
     public static final Color BLACK_BG = new Color(0x53280C);
+
+    public void paint() {
+        paint(getGraphics());
+    }
 
     @Override
     public void paint(@Nullable Graphics graphics) {

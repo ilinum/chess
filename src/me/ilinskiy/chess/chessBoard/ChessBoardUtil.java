@@ -20,9 +20,9 @@ public class ChessBoardUtil {
     public static synchronized boolean makeMoveAndEvaluate(@NotNull ImmutableBoard b, @NotNull Move m,
                                                            @NotNull BoardOperation op) {
         Board board = new Board(b.copy());
-        board.movePiece(m);
+        board.setPieceAccordingToMove(m);
         boolean result = op.run(board.getInner());
-        board.movePiece(m.inverse()); //roll back
+        board.setPieceAccordingToMove(m.inverse()); //roll back
         return result;
     }
 
