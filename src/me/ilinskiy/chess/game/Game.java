@@ -48,11 +48,7 @@ public class Game {
         }
         Move m = null;
         while (m == null) {
-            try {
-                m = turn.getMove(board.getInner());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            m = turn.getMove(board.getInner());
         }
         if (!GameUtil.getAvailableMovesForPiece(m.getInitialPosition(), board.getInner()).contains(m)) {
             throw new RuntimeException("Illegal move: " + m);

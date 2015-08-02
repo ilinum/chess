@@ -89,12 +89,11 @@ public class GameUtil {
                 assert !ChessBoardUtil.isOutOfBounds(newC); //should've been promoted
                 if (board.getPieceAt(newC) instanceof EmptyCell) {
                     result.add(new Move(pos, newC));
-                }
-                boolean hasNotMoved = ChessBoardUtil.isOutOfBounds(new Coordinates(pos.getX(), pos.getY() - 2 * dir));
-                Coordinates longMove = new Coordinates(pos.getX(), pos.getY() + 2 * dir);
-                if (hasNotMoved && (board.getPieceAt(longMove) instanceof EmptyCell)) {
-
-                    result.add(new Move(pos, longMove));
+                    boolean hasNotMoved = ChessBoardUtil.isOutOfBounds(new Coordinates(pos.getX(), pos.getY() - 2 * dir));
+                    Coordinates longMove = new Coordinates(pos.getX(), pos.getY() + 2 * dir);
+                    if (hasNotMoved && (board.getPieceAt(longMove) instanceof EmptyCell)) {
+                        result.add(new Move(pos, longMove));
+                    }
                 }
                 Coordinates[] eatLocations = new Coordinates[]{new Coordinates(pos.getX() + 1, pos.getY() + dir),
                         new Coordinates(pos.getX() - 1, pos.getY() + dir)};

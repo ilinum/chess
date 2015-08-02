@@ -12,7 +12,7 @@ import me.ilinskiy.chess.chessBoard.PieceType;
 public interface Player extends Copyable {
 
     @NotNull
-    Move getMove(@NotNull ImmutableBoard b) throws InterruptedException;
+    Move getMove(@NotNull ImmutableBoard b);
 
     @NotNull
     PieceColor getPlayerColor();

@@ -34,7 +34,7 @@ public class UserPlayer implements Player {
 
     @NotNull
     @Override
-    public Move getMove(@NotNull ImmutableBoard board) throws InterruptedException {
+    public Move getMove(@NotNull ImmutableBoard board) {
         MouseListener mouseListener = new MouseListener() {
 
             @Override
@@ -82,7 +82,11 @@ public class UserPlayer implements Player {
         try {
             mouseLock.lock();
             while (!moveMade.isPresent()) { //"You shall always wait in a while loop," - Alison Norman
-                moveIsMade.await();
+                try {
+                    moveIsMade.await();
+                } catch (InterruptedException ignored) {
+
+                }
             }
             Move move = moveMade.get();
             assert move != null;
