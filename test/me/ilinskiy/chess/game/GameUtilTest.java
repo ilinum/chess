@@ -90,4 +90,26 @@ public class GameUtilTest {
         assertThat(new LinkedList<>(), is(GameUtil.getAvailableMovesForPiece(whiteLoc, b.getInner())));
         assertThat(new LinkedList<>(), is(GameUtil.getAvailableMovesForPiece(blackLoc, b.getInner())));
     }
+
+    @Test
+    public void testCastling() {
+        Board b = new Board();
+        List<Coordinates> blackKings = GameUtil.findPiecesByTypeAndColor(PieceType.King, PieceColor.Black, b.getInner());
+        assertTrue(blackKings.size() == 1);
+        Coordinates kingPos = blackKings.get(0);
+
+        assertThat(GameUtil.getAvailableMovesForPiece(kingPos, b.getInner()), is(new LinkedList<>()));
+        b.setPieceAt(new Coordinates(BOARD_SIZE - 2, 0), EmptyCell.INSTANCE);
+        b.setPieceAt(new Coordinates(BOARD_SIZE - 3, 0), EmptyCell.INSTANCE);
+        LinkedList<Move> expected = new LinkedList<>();
+        Coordinates rookInitPos = new Coordinates(BOARD_SIZE - 1, 0);
+        assertTrue(b.getPieceAt(rookInitPos).getType() == PieceType.Rook);
+        Coordinates rookNewPos = new Coordinates(BOARD_SIZE - 3, 0);
+        expected.add(new Castling(kingPos, new Coordinates(BOARD_SIZE - 2, 0), rookInitPos, rookNewPos));
+        expected.add(new Move(kingPos, new Coordinates(BOARD_SIZE - 3, 0)));
+        List<Move> actual = GameUtil.getAvailableMovesForPiece(kingPos, b.getInner());
+        Collections.sort(actual);
+        Collections.sort(expected);
+        assertThat(actual, is(expected));
+    }
 }

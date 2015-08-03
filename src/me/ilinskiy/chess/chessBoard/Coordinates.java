@@ -49,11 +49,7 @@ public class Coordinates implements Copyable, Comparable<Coordinates> {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Coordinates) {
-            return getX() == ((Coordinates) o).getX() && getY() == ((Coordinates) o).getY();
-        } else {
-            return false;
-        }
+        return o instanceof Coordinates && getX() == ((Coordinates) o).getX() && getY() == ((Coordinates) o).getY();
     }
 
     /**

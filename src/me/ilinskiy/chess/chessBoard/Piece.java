@@ -31,16 +31,12 @@ public class Piece implements ChessElement {
     @Override
     @NotNull
     public String toString() {
-        return "Chess piece: " + getColor() + " " + getType();
+        return getColor() + " " + getType();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Piece) {
-            return getColor() == ((Piece) o).getColor() && getType() == ((Piece) o).getType();
-        } else {
-            return false;
-        }
+        return o instanceof Piece && getColor() == ((Piece) o).getColor() && getType() == ((Piece) o).getType();
     }
 
     @Override

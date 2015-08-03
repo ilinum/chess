@@ -43,7 +43,7 @@ public class ChessBoardUtil {
     }
 
     @NotNull
-    public static HashMap<Piece, Image> icons = new HashMap<>();
+    public static final HashMap<Piece, Image> icons = new HashMap<>();
 
     public static void initIcons() {
         /*try {

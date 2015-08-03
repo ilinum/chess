@@ -6,8 +6,6 @@ import me.ilinskiy.chess.chessBoard.ImmutableBoard;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import org.junit.Test;
 
-import javax.swing.*;
-
 import static me.ilinskiy.chess.chessBoard.ImmutableBoard.BOARD_SIZE;
 import static org.junit.Assert.assertTrue;
 

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class ChessBoardUtilTest {
 
     @Test
-    public void testMoveAndEvalute() {
+    public void testMoveAndEvaluate() {
         ImmutableBoard b = new ImmutableBoard();
         assertTrue(b.whoseTurnIsIt() == PieceColor.White);
         ImmutableBoard copy = b.copy();

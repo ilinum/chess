@@ -33,12 +33,10 @@ public class Move implements Copyable, Comparable<Move> {
     @NotNull
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder();
-        res.append("Move: ");
-        res.append(initialPosition);
-        res.append(" -> ");
-        res.append(newPosition);
-        return res.toString();
+        return "Move: " +
+                initialPosition +
+                " -> " +
+                newPosition;
     }
 
     @Override

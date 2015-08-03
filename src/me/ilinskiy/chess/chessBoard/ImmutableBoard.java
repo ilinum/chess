@@ -2,6 +2,7 @@ package me.ilinskiy.chess.chessBoard;
 
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
+import me.ilinskiy.chess.game.Castling;
 import me.ilinskiy.chess.game.Copyable;
 import me.ilinskiy.chess.game.GameUtil;
 import me.ilinskiy.chess.game.Move;
@@ -35,7 +36,7 @@ public class ImmutableBoard extends JPanel implements Copyable {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void reset() {
+    private void reset() {
         turn = PieceColor.White;
         board = new ChessElement[BOARD_SIZE][BOARD_SIZE];
         selected = Optional.empty();
@@ -89,18 +90,28 @@ public class ImmutableBoard extends JPanel implements Copyable {
      * @param move move that was made
      */
     void movePiece(@NotNull Move move) {
-        checkBounds(move);
-        Coordinates initialPosition = move.getInitialPosition();
+        if (move instanceof Castling) {
+            Castling c = (Castling) move;
+            makeActualMove(c.getKingInitialPosition(), c.getKingNewPosition());
+            makeActualMove(c.getRookInitialPosition(), c.getRookNewPosition());
+        } else {
+            makeActualMove(move.getInitialPosition(), move.getNewPosition());
+        }
+        turn = ChessBoardUtil.inverse(turn);
+        selected = Optional.empty();
+        piecesMoved.remove(move.getInitialPosition());
+        piecesMoved.add(move.getNewPosition());
+    }
+
+    private void makeActualMove(@NotNull Coordinates initialPosition, @NotNull Coordinates newPosition) {
+        checkBounds(initialPosition);
+        checkBounds(newPosition);
         ChessElement initialPositionPiece = board[initialPosition.getY()][initialPosition.getX()];
         if (initialPositionPiece instanceof EmptyCell) {
             throw new IllegalStateException("Cannot move an empty cell!");
         }
-        turn = ChessBoardUtil.inverse(turn);
-        selected = Optional.empty();
-        board[move.getNewPosition().getY()][move.getNewPosition().getX()] = initialPositionPiece;
+        board[newPosition.getY()][newPosition.getX()] = initialPositionPiece;
         board[initialPosition.getY()][initialPosition.getX()] = EmptyCell.INSTANCE;
-        piecesMoved.remove(move.getInitialPosition());
-        piecesMoved.add(move.getNewPosition());
     }
 
     void movePiece(@NotNull Coordinates initPos, @NotNull Coordinates newPos) {
@@ -160,9 +171,9 @@ public class ImmutableBoard extends JPanel implements Copyable {
     }
 
     //public static final Color WHITE_BG = new Color(0xFFF3E4);
-    public static final Color BLACK_BG = new Color(0x53280C);
+    private static final Color BLACK_BG = new Color(0x53280C);
 
-    public void paint() {
+    private void paint() {
         paint(getGraphics());
     }
 

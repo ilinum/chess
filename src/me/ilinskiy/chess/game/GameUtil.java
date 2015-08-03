@@ -210,15 +210,17 @@ public class GameUtil {
                     boolean canCastle = true;
                     Coordinates castleCells = kingPos;
                     while (!castleCells.equals(rookPos) && canCastle) {
-                        if (!(board.getPieceAt(castleCells) instanceof EmptyCell)) {
-                            canCastle = false;
-                        } else if (kingIsAttackedAfterMove(kingColor, board, new Move(kingPos, castleCells))) {
+                        ChessElement piece = board.getPieceAt(castleCells);
+                        if (!(piece instanceof EmptyCell) && piece != board.getPieceAt(kingPos)) {
                             canCastle = false;
                         }
                         castleCells = new Coordinates(castleCells.getX() + direction, castleCells.getY());
                     }
                     if (canCastle) {
-                        result.add(new Move(kingPos, new Coordinates(rookPos.getX() - direction, rookPos.getY())));
+                        Coordinates kingNewPos = new Coordinates(kingPos.getX() + direction * 2, rookPos.getY());
+                        Coordinates rookNewPos = new Coordinates(kingPos.getX() + direction, rookPos.getY());
+                        Castling move = new Castling(kingPos, kingNewPos, rookPos, rookNewPos);
+                        result.add(move);
                     }
                 }
             }
@@ -259,7 +261,27 @@ public class GameUtil {
 
     private static boolean kingIsAttackedAfterMove(@NotNull PieceColor color, @NotNull ImmutableBoard b,
                                                    @NotNull Move m) {
-        return ChessBoardUtil.makeMoveAndEvaluate(b, m, board -> kingIsAttacked(color, board));
+        if (m instanceof Castling) {
+            Castling castling = (Castling) m;
+            Coordinates kingInitialPosition = castling.getKingInitialPosition();
+            Coordinates rookInitialPosition = castling.getRookInitialPosition();
+            int dir;
+            if (kingInitialPosition.getX() < rookInitialPosition.getX()) {
+                dir = 1;
+            } else {
+                assert kingInitialPosition.getX() > rookInitialPosition.getX();
+                dir = -1;
+            }
+            assert kingInitialPosition.getY() == rookInitialPosition.getY();
+            for (Coordinates c = kingInitialPosition; c.getX() != rookInitialPosition.getX(); c = new Coordinates(c.getX() + dir, c.getY())) {
+                if (ChessBoardUtil.makeMoveAndEvaluate(b, m, board -> kingIsAttacked(color, board))) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return ChessBoardUtil.makeMoveAndEvaluate(b, m, board -> kingIsAttacked(color, board));
+        }
     }
 
     @NotNull

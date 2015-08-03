@@ -39,4 +39,36 @@ public class Castling extends Move {
     public Castling copy() {
         return new Castling(getKingInitialPosition(), getKingNewPosition(), getRookInitialPosition(), getRookNewPosition());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Castling) {
+            Castling other = (Castling) o;
+            boolean kingInitPosEqual = other.getKingInitialPosition().equals(getKingInitialPosition());
+            boolean kingNewPosEqual = other.getKingNewPosition().equals(getKingNewPosition());
+            boolean rookInitPosEqual = other.rookInitPosition.equals(rookInitPosition);
+            boolean rookNewPosEqual = other.rookNewPosition.equals(rookNewPosition);
+            return kingInitPosEqual && kingNewPosEqual && rookInitPosEqual && rookNewPosEqual;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += getKingInitialPosition().hashCode() * 31;
+        hash += getKingNewPosition().hashCode() * 15;
+        hash += rookInitPosition.hashCode() * 63;
+        hash += rookNewPosition.hashCode() * 127;
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "Castling: " +
+                "King " + getKingInitialPosition() + " -> " + getKingNewPosition() +
+                ", Rook " + getRookInitialPosition() + " -> " + getRookNewPosition();
+    }
+
 }
