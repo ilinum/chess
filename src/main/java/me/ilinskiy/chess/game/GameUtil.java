@@ -136,15 +136,15 @@ public class GameUtil {
 
     @NotNull
     private static List<Move> getRookMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
-        int[] xChange = new int[]{-1, -1, 1, 1};
-        int[] yChange = new int[]{1, -1, 1, -1};
+        int[] xChange = new int[]{0, 0, 1, -1};
+        int[] yChange = new int[]{1, -1, 0, 0};
         return getBishopOrRookMoves(pos, board, xChange, yChange);
     }
 
     @NotNull
     private static List<Move> getBishopMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
-        int[] xChange = new int[]{0, 0, 1, -1};
-        int[] yChange = new int[]{1, -1, 0, 0};
+        int[] xChange = new int[]{-1, -1, 1, 1};
+        int[] yChange = new int[]{1, -1, 1, -1};
         return getBishopOrRookMoves(pos, board, xChange, yChange);
     }
 
@@ -157,11 +157,9 @@ public class GameUtil {
         for (int i = 0; i < xChange.length; i++) {
             Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
             Coordinates copy = c.copy();
-            int j = i;
-            while (!ChessBoardUtil.isOutOfBounds(c) && board.getPieceAt(c) instanceof EmptyCell && j < xChange.length) {
+            while (!ChessBoardUtil.isOutOfBounds(c) && board.getPieceAt(c) instanceof EmptyCell) {
                 result.add(new Move(pos, c));
-                c = new Coordinates(c.getX() + xChange[j], c.getY() + yChange[j]);
-                j++;
+                c = new Coordinates(c.getX() + xChange[i], c.getY() + yChange[i]);
             }
 
             c = copy; //restore
