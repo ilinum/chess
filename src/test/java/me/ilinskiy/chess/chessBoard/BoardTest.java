@@ -1,5 +1,6 @@
 package me.ilinskiy.chess.chessBoard;
 
+import me.ilinskiy.chess.chessBoard.*;
 import me.ilinskiy.chess.game.GameUtil;
 import me.ilinskiy.chess.game.Move;
 import org.junit.Test;

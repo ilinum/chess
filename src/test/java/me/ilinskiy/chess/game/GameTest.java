@@ -4,6 +4,10 @@ import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.chessBoard.Coordinates;
 import me.ilinskiy.chess.chessBoard.ImmutableBoard;
 import me.ilinskiy.chess.chessBoard.PieceColor;
+import me.ilinskiy.chess.game.Game;
+import me.ilinskiy.chess.game.Move;
+import me.ilinskiy.chess.game.Player;
+import me.ilinskiy.chess.game.PlayerMock;
 import org.junit.Test;
 
 import static me.ilinskiy.chess.chessBoard.ImmutableBoard.BOARD_SIZE;

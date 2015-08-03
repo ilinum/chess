@@ -11,6 +11,7 @@ public final class Board {
     private final ImmutableBoard inner;
 
     public Board() {
+
         inner = new ImmutableBoard();
     }
 
