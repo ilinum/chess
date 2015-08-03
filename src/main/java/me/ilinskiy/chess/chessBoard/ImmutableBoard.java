@@ -177,6 +177,25 @@ public class ImmutableBoard extends JPanel implements Copyable {
         paint(getGraphics());
     }
 
+    private void paintSelected() {
+        Graphics graphics = getGraphics();
+        if (selected.isPresent()) {
+            graphics.setColor(Color.RED);
+            Coordinates c = selected.get();
+            drawCell(c, graphics);
+            List<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(c, this);
+            for (Move move : availableMovesForPiece) {
+                if (getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
+                    graphics.setColor(Color.BLUE);
+                    drawCell(move.getNewPosition(), graphics);
+                } else if (getPieceAt(move.getNewPosition()).getColor() != getPieceAt(selected.get()).getColor()) {
+                    graphics.setColor(Color.GREEN);
+                    drawCell(move.getNewPosition(), graphics);
+                }
+            }
+        }
+    }
+
     @Override
     public void paint(@Nullable Graphics graphics) {
         if (graphics == null) {
@@ -202,22 +221,7 @@ public class ImmutableBoard extends JPanel implements Copyable {
             brownStart = brownStart == 0 ? 1 : 0;
         }
 
-        //set selected
-        if (selected.isPresent()) {
-            graphics.setColor(Color.RED);
-            Coordinates c = selected.get();
-            drawCell(c, graphics);
-            List<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(c, this);
-            for (Move move : availableMovesForPiece) {
-                if (getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
-                    graphics.setColor(Color.BLUE);
-                    drawCell(move.getNewPosition(), graphics);
-                } else if (getPieceAt(move.getNewPosition()).getColor() != getPieceAt(selected.get()).getColor()) {
-                    graphics.setColor(Color.GREEN);
-                    drawCell(move.getNewPosition(), graphics);
-                }
-            }
-        }
+        paintSelected();
 
         graphics.setColor(Color.RED);
         for (int row = 0; row < BOARD_SIZE; row++) {
@@ -229,9 +233,9 @@ public class ImmutableBoard extends JPanel implements Copyable {
                     graphics.setColor(c);
                     Image image = ChessBoardUtil.icons.get(piece);
                     if (image != null) {
-                        int initX = col * cellSize;
-                        int initY = row * cellSize;
-                        graphics.drawImage(image, initX, initY, cellSize / 2, cellSize / 2, this);
+                        int initX = row * cellSize;
+                        int initY = col * cellSize;
+                        graphics.drawImage(image, initX, initY, cellSize, cellSize, null);
                     }
                 }
             }
