@@ -9,10 +9,8 @@ import me.ilinskiy.chess.game.Move;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 import static me.ilinskiy.chess.chessBoard.PieceType.Pawn;
 
@@ -183,7 +181,7 @@ public class ImmutableBoard extends JPanel implements Copyable {
             graphics.setColor(Color.RED);
             Coordinates c = selected.get();
             drawCell(c, graphics);
-            List<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(c, this);
+            Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(c, this);
             for (Move move : availableMovesForPiece) {
                 if (getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
                     graphics.setColor(Color.BLUE);

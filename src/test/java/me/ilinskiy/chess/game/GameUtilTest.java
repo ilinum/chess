@@ -1,16 +1,10 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.chessBoard.*;
-import me.ilinskiy.chess.game.Castling;
-import me.ilinskiy.chess.game.GameUtil;
-import me.ilinskiy.chess.game.Move;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static me.ilinskiy.chess.chessBoard.ImmutableBoard.*;
 import static org.hamcrest.core.Is.is;
@@ -90,8 +84,8 @@ public class GameUtilTest {
         Coordinates whiteLoc = new Coordinates(3, 4);
         b.setPieceAt(blackLoc, new Piece(PieceColor.Black, PieceType.Pawn));
         b.setPieceAt(whiteLoc, new Piece(PieceColor.White, PieceType.Pawn));
-        assertThat(new LinkedList<>(), is(GameUtil.getAvailableMovesForPiece(whiteLoc, b.getInner())));
-        assertThat(new LinkedList<>(), is(GameUtil.getAvailableMovesForPiece(blackLoc, b.getInner())));
+        assertThat(new HashSet<>(), is(GameUtil.getAvailableMovesForPiece(whiteLoc, b.getInner())));
+        assertThat(new HashSet<>(), is(GameUtil.getAvailableMovesForPiece(blackLoc, b.getInner())));
     }
 
     @Test
@@ -101,7 +95,7 @@ public class GameUtilTest {
         assertTrue(blackKings.size() == 1);
         Coordinates kingPos = blackKings.get(0);
 
-        assertThat(GameUtil.getAvailableMovesForPiece(kingPos, b.getInner()), is(new LinkedList<>()));
+        assertThat(GameUtil.getAvailableMovesForPiece(kingPos, b.getInner()), is(new HashSet<>()));
         b.setPieceAt(new Coordinates(BOARD_SIZE - 2, 0), EmptyCell.INSTANCE);
         b.setPieceAt(new Coordinates(BOARD_SIZE - 3, 0), EmptyCell.INSTANCE);
         LinkedList<Move> expected = new LinkedList<>();
@@ -110,7 +104,7 @@ public class GameUtilTest {
         Coordinates rookNewPos = new Coordinates(BOARD_SIZE - 3, 0);
         expected.add(new Castling(kingPos, new Coordinates(BOARD_SIZE - 2, 0), rookInitPos, rookNewPos));
         expected.add(new Move(kingPos, new Coordinates(BOARD_SIZE - 3, 0)));
-        List<Move> actual = GameUtil.getAvailableMovesForPiece(kingPos, b.getInner());
+        LinkedList<Move> actual = new LinkedList<>(GameUtil.getAvailableMovesForPiece(kingPos, b.getInner()));
         Collections.sort(actual);
         Collections.sort(expected);
         assertThat(actual, is(expected));

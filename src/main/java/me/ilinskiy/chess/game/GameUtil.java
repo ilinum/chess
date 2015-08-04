@@ -3,18 +3,13 @@ package me.ilinskiy.chess.game;
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.chessBoard.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static me.ilinskiy.chess.chessBoard.ImmutableBoard.*;
 import static me.ilinskiy.chess.chessBoard.PieceColor.Black;
 import static me.ilinskiy.chess.chessBoard.PieceColor.White;
 
 /**
- * TODO: cache everything in this class
- * <p>
  * Author: Svyatoslav Ilinskiy
  * Date: 7/18/15
  */
@@ -59,9 +54,8 @@ public class GameUtil {
      * If board.getPieceAt(pos) is EmptyCell returns an empty list
      */
     @NotNull
-    public static List<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
-        //todo: use set instead of list?
-        List<Move> result = getAllMovesForPiece(pos, board);
+    public static Set<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+        Set<Move> result = getAllMovesForPiece(pos, board);
 
         //filter out the ones when king is attacked
         Iterator<Move> moveIterator = result.iterator();
@@ -77,9 +71,9 @@ public class GameUtil {
      * Get all available moves for piece without considering if the king will be attacked
      */
     @NotNull
-    private static List<Move> getAllMovesForPiece(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+    private static Set<Move> getAllMovesForPiece(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
         ChessElement element = board.getPieceAt(pos);
-        List<Move> result = new LinkedList<>();
+        Set<Move> result = new HashSet<>();
         PieceColor color = element.getColor();
         switch (element.getType()) {
             case Pawn:
@@ -135,23 +129,23 @@ public class GameUtil {
     }
 
     @NotNull
-    private static List<Move> getRookMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+    private static Set<Move> getRookMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
         int[] xChange = new int[]{0, 0, 1, -1};
         int[] yChange = new int[]{1, -1, 0, 0};
         return getBishopOrRookMoves(pos, board, xChange, yChange);
     }
 
     @NotNull
-    private static List<Move> getBishopMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
+    private static Set<Move> getBishopMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board) {
         int[] xChange = new int[]{-1, -1, 1, 1};
         int[] yChange = new int[]{1, -1, 1, -1};
         return getBishopOrRookMoves(pos, board, xChange, yChange);
     }
 
-    private static List<Move> getBishopOrRookMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board,
+    private static Set<Move> getBishopOrRookMoves(@NotNull Coordinates pos, @NotNull ImmutableBoard board,
                                                    @NotNull int[] xChange, @NotNull int[] yChange) {
         assert xChange.length == yChange.length;
-        List<Move> result = new ArrayList<>();
+        Set<Move> result = new HashSet<>();
         assert board.getPieceAt(pos) instanceof Piece;
         Piece p = (Piece) board.getPieceAt(pos);
         for (int i = 0; i < xChange.length; i++) {
@@ -174,10 +168,10 @@ public class GameUtil {
     }
 
     @NotNull
-    private static List<Move> getKingMoves(@NotNull Coordinates kingPos, @NotNull ImmutableBoard board) {
+    private static Set<Move> getKingMoves(@NotNull Coordinates kingPos, @NotNull ImmutableBoard board) {
         int[] xChange = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
         int[] yChange = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
-        List<Move> result = new ArrayList<>();
+        Set<Move> result = new HashSet<>();
         assert xChange.length == yChange.length;
         assert board.getPieceAt(kingPos) instanceof Piece;
         PieceColor kingColor = board.getPieceAt(kingPos).getColor();
@@ -247,7 +241,7 @@ public class GameUtil {
         Coordinates kingPos = findKing(kingColor, board);
 
         for (Coordinates pos : allOpponentPieces) {
-            List<Move> availableMovesForPiece = getAllMovesForPiece(pos, board);
+            Set<Move> availableMovesForPiece = getAllMovesForPiece(pos, board);
             for (Move m : availableMovesForPiece) {
                 if (m.getNewPosition().equals(kingPos)) {
                     return true;

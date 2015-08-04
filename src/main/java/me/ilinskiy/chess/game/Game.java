@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -50,7 +51,8 @@ public class Game {
         while (m == null) {
             m = turn.getMove(board.getInner());
         }
-        if (!GameUtil.getAvailableMovesForPiece(m.getInitialPosition(), board.getInner()).contains(m)) {
+        Set<Move> availableMoves = GameUtil.getAvailableMovesForPiece(m.getInitialPosition(), board.getInner());
+        if (!availableMoves.contains(m)) {
             throw new RuntimeException("Illegal move: " + m);
         }
         board.movePiece(m);

@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -55,7 +56,7 @@ public class UserPlayer implements Player {
                 Coordinates location = new Coordinates((int) x / cellSize, (int) y / cellSize);
                 Optional<Coordinates> selected = board.getSelected();
                 if (selected.isPresent()) {
-                    List<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(selected.get(), board);
+                    Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(selected.get(), board);
                     Move m = new Move(selected.get(), location);
                     if (availableMovesForPiece.contains(m)) {
                         moveMade = Optional.of(m);
