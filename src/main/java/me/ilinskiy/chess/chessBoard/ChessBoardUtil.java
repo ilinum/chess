@@ -8,8 +8,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 import static me.ilinskiy.chess.chessBoard.PieceType.*;
@@ -51,48 +51,44 @@ public class ChessBoardUtil {
     public static final HashMap<Piece, Image> icons = new HashMap<>();
 
     public static void initIcons() {
-        File[] images = new File[] {
-                new File("src/main/resources/ChessPieces/white-pawn.png"),
-                new File("src/main/resources/ChessPieces/white-knight.png"),
-                new File("src/main/resources/ChessPieces/white-bishop.png"),
-                new File("src/main/resources/ChessPieces/white-rook.png"),
-                new File("src/main/resources/ChessPieces/white-queen.png"),
-                new File("src/main/resources/ChessPieces/white-king.png"),
-                new File("src/main/resources/ChessPieces/black-pawn.png"),
-                new File("src/main/resources/ChessPieces/black-knight.png"),
-                new File("src/main/resources/ChessPieces/black-bishop.png"),
-                new File("src/main/resources/ChessPieces/black-rook.png"),
-                new File("src/main/resources/ChessPieces/black-queen.png"),
-                new File("src/main/resources/ChessPieces/black-king.png")
-        };
-        Piece[] pieces = new Piece[] {
-                new Piece(PieceColor.White, Pawn),
-                new Piece(PieceColor.White, Knight),
-                new Piece(PieceColor.White, Bishop),
-                new Piece(PieceColor.White, Rook),
-                new Piece(PieceColor.White, Queen),
-                new Piece(PieceColor.White, King),
-                new Piece(PieceColor.Black, Pawn),
-                new Piece(PieceColor.Black, Knight),
-                new Piece(PieceColor.Black, Bishop),
-                new Piece(PieceColor.Black, Rook),
-                new Piece(PieceColor.Black, Queen),
-                new Piece(PieceColor.Black, King)
-        };
-        assert pieces.length == images.length;
-        for (int i = 0; i < pieces.length; i++) {
-            File img = images[i];
-            if (img.exists()) {
+            InputStream[] images = new InputStream[]{
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/white-pawn.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/white-knight.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/white-bishop.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/white-rook.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/white-queen.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/white-king.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/black-pawn.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/black-knight.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/black-bishop.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/black-rook.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/black-queen.png"),
+                    ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/black-king.png")
+            };
+            Piece[] pieces = new Piece[]{
+                    new Piece(PieceColor.White, Pawn),
+                    new Piece(PieceColor.White, Knight),
+                    new Piece(PieceColor.White, Bishop),
+                    new Piece(PieceColor.White, Rook),
+                    new Piece(PieceColor.White, Queen),
+                    new Piece(PieceColor.White, King),
+                    new Piece(PieceColor.Black, Pawn),
+                    new Piece(PieceColor.Black, Knight),
+                    new Piece(PieceColor.Black, Bishop),
+                    new Piece(PieceColor.Black, Rook),
+                    new Piece(PieceColor.Black, Queen),
+                    new Piece(PieceColor.Black, King)
+            };
+            assert pieces.length == images.length;
+            for (int i = 0; i < pieces.length; i++) {
+                InputStream img = images[i];
                 try {
                     BufferedImage bf = ImageIO.read(img);
                     icons.put(pieces[i], new ImageIcon(bf).getImage());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                System.out.println("File not found: " + img.getAbsolutePath());
             }
-        }
     }
 
     public static boolean isOutOfBounds(@NotNull Coordinates c) {
