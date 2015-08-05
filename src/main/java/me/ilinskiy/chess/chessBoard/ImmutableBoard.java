@@ -9,8 +9,10 @@ import me.ilinskiy.chess.game.Move;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static me.ilinskiy.chess.chessBoard.PieceType.Pawn;
 
@@ -137,11 +139,6 @@ public class ImmutableBoard extends JPanel implements Copyable {
         board[pos.getY()][pos.getX()] = element;
     }
 
-    private void checkBounds(@NotNull Move m) {
-        checkBounds(m.getInitialPosition());
-        checkBounds(m.getNewPosition());
-    }
-
     private void checkBounds(@NotNull Coordinates c) {
         if (ChessBoardUtil.isOutOfBounds(c)) {
             throw new IllegalArgumentException("Index out of bounds: " + c);
@@ -168,30 +165,8 @@ public class ImmutableBoard extends JPanel implements Copyable {
         return turn;
     }
 
-    //public static final Color WHITE_BG = new Color(0xFFF3E4);
-    private static final Color BLACK_BG = new Color(0x53280C);
-
     private void paint() {
         paint(getGraphics());
-    }
-
-    private void paintSelected() {
-        Graphics graphics = getGraphics();
-        if (selected.isPresent()) {
-            graphics.setColor(Color.RED);
-            Coordinates c = selected.get();
-            drawCell(c, graphics);
-            Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(c, this);
-            for (Move move : availableMovesForPiece) {
-                if (getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
-                    graphics.setColor(Color.BLUE);
-                    drawCell(move.getNewPosition(), graphics);
-                } else if (getPieceAt(move.getNewPosition()).getColor() != getPieceAt(selected.get()).getColor()) {
-                    graphics.setColor(Color.GREEN);
-                    drawCell(move.getNewPosition(), graphics);
-                }
-            }
-        }
     }
 
     @Override
@@ -202,94 +177,10 @@ public class ImmutableBoard extends JPanel implements Copyable {
                 return;
             }
         }
-
-        super.paint(graphics);
-        int heightAndWidth = getFrameSize().width;
-        graphics.setColor(Color.BLACK);
-        graphics.drawRect(0, 0, heightAndWidth, heightAndWidth);
-
-        //draw black squares
-        int cellSize = heightAndWidth / BOARD_SIZE;
-        int brownStart = 1;
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = brownStart; col < BOARD_SIZE; col += 2) {
-                graphics.setColor(BLACK_BG);
-                drawCell(new Coordinates(col, row), graphics);
-            }
-            brownStart = brownStart == 0 ? 1 : 0;
-        }
-
-        paintSelected();
-
-        graphics.setColor(Color.RED);
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                ChessElement element = getPieceAt(new Coordinates(row, col));
-                if (element instanceof Piece) {
-                    Piece piece = (Piece) element;
-                    Color c = piece.getColor() == PieceColor.Black ? Color.BLACK : Color.WHITE;
-                    graphics.setColor(c);
-                    Image image = ChessBoardUtil.icons.get(piece);
-                    if (image != null) {
-                        int initX = row * cellSize;
-                        int initY = col * cellSize;
-                        graphics.drawImage(image, initX, initY, cellSize, cellSize, null);
-                    }
-                }
-            }
-        }
+        super.paint(graphics); //this line is necessary for some reason. I have no idea why.
+        Painter.paint(graphics, this);
     }
 
-    private void drawCell(@NotNull Coordinates pos, @NotNull Graphics graphics) {
-        int heightAndWidth = getFrameSize().width;
-        int cellSize = heightAndWidth / BOARD_SIZE;
-        int initX = pos.getX() * cellSize;
-        int initY = pos.getY() * cellSize;
-        graphics.fillRect(initX, initY, cellSize, cellSize);
-        Color oldColor = graphics.getColor();
-        graphics.setColor(Color.BLACK);
-        graphics.drawRect(initX, initY, cellSize, cellSize);
-        graphics.setColor(oldColor);
-    }
-
-    public Dimension getFrameSize() {
-        return getSize();
-
-        //comment the following code back in, when you allow the user to resize the JPanel
-        /*Optional<Window> frame = Optional.of(SwingUtilities.windowForComponent(this));
-        Dimension res = getFrameSize(frame);
-
-        //but works better when in full-screen
-        if ((res.getHeight() != res.getWidth()) || ((res.getHeight() % ImmutableBoard.BOARD_SIZE) != 0)) {
-            double average = (res.getHeight() + res.getWidth()) / 2;
-            int newSize = ((int) (average / ImmutableBoard.BOARD_SIZE)) * ImmutableBoard.BOARD_SIZE; //so it's divisible by 8
-            if (Optional.of(frame).isPresent()) {
-                frame.get().setSize(newSize, newSize);
-            }
-            setSize(newSize, newSize);
-            res = getSize();
-        }
-        assert (res.getHeight() == res.getWidth()) : "height: " + res.getHeight() + ", width: " + res.getWidth();
-        assert ((res.getHeight() % ImmutableBoard.BOARD_SIZE) == 0) : "Height: " + res.getHeight();
-        return res;*/
-    }
-
-    /*@NotNull
-    private Dimension getFrameSize(Optional<Window> frame) {
-        Dimension res;
-        Dimension minSize;
-        res = getSize();
-        minSize = getMinimumSize();
-        if (res.getHeight() < minSize.getHeight() || res.getWidth() < minSize.getWidth()) {
-            setSize(minSize);
-            res = minSize;
-            if (frame.isPresent()) {
-                frame.get().setSize(minSize);
-            }
-        }
-
-        return res;
-    }*/
 
     @NotNull
     @Override
@@ -333,6 +224,10 @@ public class ImmutableBoard extends JPanel implements Copyable {
         } else {
             return false;
         }
+    }
+
+    public Dimension getFrameSize() {
+        return Painter.getFrameSize(this);
     }
 
     @Override
