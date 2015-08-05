@@ -188,7 +188,7 @@ public class GameUtil {
                 }
             }
         }
-        if (!board.pieceHasMovedSinceStartOfGame(kingPos)) {
+        if (!board.pieceHasMovedSinceStartOfGame(kingPos) && !kingIsAttacked(kingColor, board, false)) {
             //check for castling
             List<Coordinates> rooks = findPiecesByTypeAndColor(PieceType.Rook, kingColor, board);
             assert rooks.size() <= 2;
@@ -240,19 +240,25 @@ public class GameUtil {
         return false;
     }
 
-    public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull ImmutableBoard board) {
+    public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull ImmutableBoard board, boolean checkKing) {
         List<Coordinates> allOpponentPieces = getAllPieces(ChessBoardUtil.inverse(kingColor), board);
         Coordinates kingPos = findKing(kingColor, board);
 
         for (Coordinates pos : allOpponentPieces) {
-            Set<Move> availableMovesForPiece = getAllMovesForPiece(pos, board);
-            for (Move m : availableMovesForPiece) {
-                if (m.getNewPosition().equals(kingPos)) {
-                    return true;
+            if (checkKing || board.getPieceAt(pos).getType() != PieceType.King) {
+                Set<Move> availableMovesForPiece = getAllMovesForPiece(pos, board);
+                for (Move m : availableMovesForPiece) {
+                    if (m.getNewPosition().equals(kingPos)) {
+                        return true;
+                    }
                 }
             }
         }
         return false;
+    }
+
+    public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull ImmutableBoard board) {
+        return kingIsAttacked(kingColor, board, true);
     }
 
     private static boolean kingIsAttackedAfterMove(@NotNull PieceColor color, @NotNull ImmutableBoard b,
