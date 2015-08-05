@@ -60,7 +60,7 @@ public class Game {
         checkPawnPromoted(m, turn);
         movesMade.add(m);
         turn = ChessBoardUtil.inverse(turn, player1, player2);
-        board.paint();
+        //board.paint();
         checkGameOver(turn);
     }
 

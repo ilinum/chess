@@ -92,13 +92,16 @@ public class ImmutableBoard extends JPanel implements Copyable {
     void movePiece(@NotNull Move move) {
         if (move instanceof Castling) {
             Castling c = (Castling) move;
+            Painter.unPaintSelected(getGraphics(), this);
             makeActualMove(c.getKingInitialPosition(), c.getKingNewPosition());
             makeActualMove(c.getRookInitialPosition(), c.getRookNewPosition());
         } else {
+            Painter.unPaintSelected(getGraphics(), this);
             makeActualMove(move.getInitialPosition(), move.getNewPosition());
         }
         turn = ChessBoardUtil.inverse(turn);
         selected = Optional.empty();
+        Painter.paint(getGraphics(), this, move);
     }
 
     private void makeActualMove(@NotNull Coordinates initialPosition, @NotNull Coordinates newPosition) {
@@ -155,8 +158,11 @@ public class ImmutableBoard extends JPanel implements Copyable {
         if (board[c.getY()][c.getX()] instanceof EmptyCell || getPieceAt(c).getColor() != whoseTurnIsIt()) {
             return false;
         }
+        if (selected.isPresent()) {
+            Painter.unPaintSelected(getGraphics(), this);
+        }
         selected = Optional.of(c);
-        paint();
+        Painter.paintSelected(getGraphics(), this);
         return true;
     }
 
