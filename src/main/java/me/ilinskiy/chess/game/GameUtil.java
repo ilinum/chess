@@ -290,7 +290,7 @@ public class GameUtil {
     @NotNull
     public static List<Coordinates> findPiecesByTypeAndColor(@NotNull PieceType type, @NotNull PieceColor color,
                                                              @NotNull ImmutableBoard board) {
-        ChessElement elemToFind = new Piece(color, type);
+        ChessElement elemToFind = Piece.getPiece(color, type);
         List<Coordinates> result = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {

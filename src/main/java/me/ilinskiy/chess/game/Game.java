@@ -87,7 +87,7 @@ public class Game {
                 while (!canBePromotedTo.contains(promotedTo)) {
                     promotedTo = madeLastMove.getPieceTypeForPromotedPawn();
                 }
-                Piece promoted = new Piece(pieceColor, promotedTo);
+                Piece promoted = Piece.getPiece(pieceColor, promotedTo);
                 board.setPieceAt(newPosition, promoted);
             }
         }

@@ -3,6 +3,8 @@ package me.ilinskiy.chess.chessBoard;
 
 import me.ilinskiy.chess.annotations.NotNull;
 
+import java.util.HashMap;
+
 /**
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
@@ -11,7 +13,40 @@ public class Piece implements ChessElement {
     private final PieceColor color;
     private final PieceType type;
 
-    public Piece(PieceColor pColor, PieceType pType) {
+    public static final HashMap<PieceType, Piece> whitePieces;
+    public static final HashMap<PieceType, Piece> blackPieces;
+
+    static {
+        whitePieces = new HashMap<>();
+        blackPieces = new HashMap<>();
+        for (PieceType pt : ChessBoardUtil.backRowPieceTypes) {
+            whitePieces.put(pt, new Piece(PieceColor.White, pt));
+            blackPieces.put(pt, new Piece(PieceColor.Black, pt));
+        }
+        blackPieces.put(PieceType.Pawn, new Piece(PieceColor.Black, PieceType.Pawn));
+        whitePieces.put(PieceType.Pawn, new Piece(PieceColor.White, PieceType.Pawn));
+    }
+
+    @NotNull
+    public static Piece getPiece(@NotNull PieceColor pColor, @NotNull PieceType pType) {
+        Piece res = null;
+        switch (pColor) {
+            case Black:
+                res = blackPieces.get(pType);
+                break;
+            case White:
+                res = whitePieces.get(pType);
+                break;
+            case Empty:
+                throw new IllegalArgumentException("Color cannot be empty!");
+        }
+        if (res == null) {
+            throw new IllegalArgumentException("There's no piece type: " + pType);
+        }
+        return res;
+    }
+
+    private Piece(PieceColor pColor, PieceType pType) {
         color = pColor;
         type = pType;
     }

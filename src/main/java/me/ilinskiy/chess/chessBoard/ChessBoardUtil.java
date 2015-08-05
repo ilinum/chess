@@ -66,18 +66,18 @@ public class ChessBoardUtil {
                     ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/black-king.png")
             };
             Piece[] pieces = new Piece[]{
-                    new Piece(PieceColor.White, Pawn),
-                    new Piece(PieceColor.White, Knight),
-                    new Piece(PieceColor.White, Bishop),
-                    new Piece(PieceColor.White, Rook),
-                    new Piece(PieceColor.White, Queen),
-                    new Piece(PieceColor.White, King),
-                    new Piece(PieceColor.Black, Pawn),
-                    new Piece(PieceColor.Black, Knight),
-                    new Piece(PieceColor.Black, Bishop),
-                    new Piece(PieceColor.Black, Rook),
-                    new Piece(PieceColor.Black, Queen),
-                    new Piece(PieceColor.Black, King)
+                    Piece.getPiece(PieceColor.White, Pawn),
+                    Piece.getPiece(PieceColor.White, Knight),
+                    Piece.getPiece(PieceColor.White, Bishop),
+                    Piece.getPiece(PieceColor.White, Rook),
+                    Piece.getPiece(PieceColor.White, Queen),
+                    Piece.getPiece(PieceColor.White, King),
+                    Piece.getPiece(PieceColor.Black, Pawn),
+                    Piece.getPiece(PieceColor.Black, Knight),
+                    Piece.getPiece(PieceColor.Black, Bishop),
+                    Piece.getPiece(PieceColor.Black, Rook),
+                    Piece.getPiece(PieceColor.Black, Queen),
+                    Piece.getPiece(PieceColor.Black, King)
             };
             assert pieces.length == images.length;
             for (int i = 0; i < pieces.length; i++) {
