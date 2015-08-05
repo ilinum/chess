@@ -97,13 +97,13 @@ public class ImmutableBoard extends JPanel implements Copyable {
         }
         turn = ChessBoardUtil.inverse(turn);
         selected = Optional.empty();
-        piecesMoved.remove(move.getInitialPosition());
-        piecesMoved.add(move.getNewPosition());
     }
 
     private void makeActualMove(@NotNull Coordinates initialPosition, @NotNull Coordinates newPosition) {
         checkBounds(initialPosition);
         checkBounds(newPosition);
+        piecesMoved.remove(initialPosition);
+        piecesMoved.add(newPosition);
         ChessElement initialPositionPiece = board[initialPosition.getY()][initialPosition.getX()];
         if (initialPositionPiece instanceof EmptyCell) {
             throw new IllegalStateException("Cannot move an empty cell!");
@@ -311,6 +311,7 @@ public class ImmutableBoard extends JPanel implements Copyable {
         ImmutableBoard result = new ImmutableBoard();
         result.selected = this.selected;
         result.turn = this.turn;
+        result.piecesMoved = GameUtil.copy(piecesMoved);
         for (int row = 0; row < board.length; row++) {
             System.arraycopy(this.board[row], 0, result.board[row], 0, board.length);
         }

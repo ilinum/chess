@@ -188,7 +188,7 @@ public class GameUtil {
                 }
             }
         }
-        if (!board.pieceHasMovedSinceStartOfGame(kingPos) && !kingIsAttacked(kingColor, board, false)) {
+        if (!(board.pieceHasMovedSinceStartOfGame(kingPos) || kingIsAttacked(kingColor, board, false))) {
             //check for castling
             List<Coordinates> rooks = findPiecesByTypeAndColor(PieceType.Rook, kingColor, board);
             assert rooks.size() <= 2;
@@ -307,5 +307,13 @@ public class GameUtil {
             }
         }
         return result;
+    }
+
+    public static <T> List<T> copy(List<T> toCopy) {
+        List<T> res = new ArrayList<>(toCopy.size());
+        for (T c : toCopy) {
+            res.add(c);
+        }
+        return res;
     }
 }
