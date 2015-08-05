@@ -58,8 +58,14 @@ public class UserPlayer implements Player {
                 if (selected.isPresent()) {
                     Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(selected.get(), board);
                     Move m = new Move(selected.get(), location);
-                    if (availableMovesForPiece.contains(m)) {
-                        moveMade = Optional.of(m);
+                    Optional<Move> res = Optional.empty();
+                    for (Move move : availableMovesForPiece) {
+                        if (m.equals(move)) {
+                            res = Optional.of(move);
+                        }
+                    }
+                    if (res.isPresent()) {
+                        moveMade = res;
                         moveIsMade.signal();
                     } else {
                         board.setSelected(location);

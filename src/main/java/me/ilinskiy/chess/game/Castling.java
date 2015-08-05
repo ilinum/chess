@@ -71,4 +71,8 @@ public class Castling extends Move {
                 ", Rook " + getRookInitialPosition() + " -> " + getRookNewPosition();
     }
 
+    @Override
+    public Move inverse() {
+        return new Castling(getKingNewPosition(), getKingInitialPosition(), rookNewPosition, rookInitPosition);
+    }
 }
