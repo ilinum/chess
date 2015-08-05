@@ -150,13 +150,17 @@ public class GameUtil {
         Piece p = (Piece) board.getPieceAt(pos);
         for (int i = 0; i < xChange.length; i++) {
             Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
-            Coordinates copy = c.copy();
             while (!ChessBoardUtil.isOutOfBounds(c) && board.getPieceAt(c) instanceof EmptyCell) {
                 result.add(new Move(pos, c));
                 c = new Coordinates(c.getX() + xChange[i], c.getY() + yChange[i]);
             }
+            if (!ChessBoardUtil.isOutOfBounds(c) &&
+                    board.getPieceAt(c).getColor() == ChessBoardUtil.inverse(board.getPieceAt(pos).getColor())) {
+                //can eat
+                result.add(new Move(pos, c));
+            }
 
-            c = copy; //restore
+            c = pos; //restore
             if (!ChessBoardUtil.isOutOfBounds(c)) {
                 PieceColor color = board.getPieceAt(c).getColor();
                 if (!ChessBoardUtil.isOutOfBounds(c) && color == ChessBoardUtil.inverse(p.getColor())) {
