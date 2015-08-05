@@ -15,8 +15,9 @@ import static me.ilinskiy.chess.chessBoard.ImmutableBoard.BOARD_SIZE;
  * Date: 8/5/15.
  */
 class Painter {
-    //public static final Color WHITE_BG = new Color(0xFFF3E4);
-    private static final Color BLACK_BG = new Color(0x53280C);
+    private static final Color WHITE_BG = new Color(0xCFB884);
+    private static final Color BLACK_BG = new Color(0x76350F);
+
 
     static void paint(@NotNull Graphics graphics, @NotNull ImmutableBoard board) {
         int heightAndWidth = getFrameSize(board).width;
@@ -32,6 +33,10 @@ class Painter {
                 drawCell(new Coordinates(col, row), graphics, heightAndWidth);
             }
             brownStart = brownStart == 0 ? 1 : 0;
+            for (int col = brownStart; col < BOARD_SIZE; col += 2) {
+                graphics.setColor(WHITE_BG);
+                drawCell(new Coordinates(col, row), graphics, heightAndWidth);
+            }
         }
 
         paintSelected(graphics, board);
