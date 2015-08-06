@@ -13,21 +13,30 @@ import java.awt.*;
  */
 public class GameRunner {
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
-    //public static final int MIN_HEIGHT_AND_WIDTH = 30 * Board.BOARD_SIZE;
+    private static JFrame game;
+
 
     @NotNull
     public static PieceColor runGame(@NotNull Player p1, @NotNull Player p2) {
-        JFrame game = new JFrame();
-        game.setTitle("Chess");
-        game.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        game.setLayout(new BorderLayout());
-        game.setSize(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH);
-        //game.setMinimumSize(new Dimension(MIN_HEIGHT_AND_WIDTH, MIN_HEIGHT_AND_WIDTH));
-        //game.setPreferredSize(new Dimension(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH));
-        game.setResizable(false);
-        Game g = new Game(p1, p2, game);
-        game.setLocationRelativeTo(null);
-        game.setVisible(true);
+        Game g;
+        if (game == null) {
+            game = new JFrame();
+            game.setTitle("Chess");
+            game.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            game.setLayout(new BorderLayout());
+            game.setSize(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH);
+            //game.setMinimumSize(new Dimension(MIN_HEIGHT_AND_WIDTH, MIN_HEIGHT_AND_WIDTH));
+            //game.setPreferredSize(new Dimension(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH));
+            game.setResizable(false);
+            g = new Game(p1, p2, game);
+            game.setLocationRelativeTo(null);
+            game.setVisible(true);
+        } else {
+            game.getContentPane().removeAll();
+            g = new Game(p1, p2, game);
+            game.revalidate();
+            game.repaint();
+        }
         while (!g.isGameOver()) {
             try {
                 g.makeMove();
@@ -35,6 +44,37 @@ public class GameRunner {
                 e.printStackTrace();
             }
         }
-        return g.getWinner().get();
+
+        PieceColor winner = g.getWinner().get();
+        JOptionPane.showMessageDialog(game, getWinPhrase(winner));
+        return winner;
+    }
+
+    private static String getWinPhrase(PieceColor winner) {
+        switch (winner) {
+            case Black:
+                return "Black won!";
+            case White:
+                return "White won!";
+            case Empty:
+                return "It's a draw!";
+            default:
+                throw new IllegalArgumentException("Something went wrong");
+        }
+    }
+
+    public static int askToPlayAgain() {
+        JFrame frame;
+        if (game != null) {
+            frame = game;
+        } else {
+            frame = new JFrame();
+        }
+        return JOptionPane.showConfirmDialog(frame, "Would you like to play again?");
+    }
+
+    public static void dispose() {
+        game.dispose();
+        game = null;
     }
 }
