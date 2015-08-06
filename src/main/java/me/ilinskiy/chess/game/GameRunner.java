@@ -15,7 +15,7 @@ public class GameRunner {
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
     private static JFrame game;
     public static final boolean DEBUG = true;
-    public static int TIMEOUT_IN_SECONDS = -1; //If Timeout is -1, then the only limit is yourself
+    public static int TIMEOUT_IN_SECONDS = 30; //if timeout is 0, the only limit is yourself
 
 
     @NotNull
@@ -52,7 +52,8 @@ public class GameRunner {
         return winner;
     }
 
-    private static String getWinPhrase(PieceColor winner) {
+    @NotNull
+    private static String getWinPhrase(@NotNull PieceColor winner) {
         switch (winner) {
             case Black:
                 return "Black won!";
@@ -75,8 +76,34 @@ public class GameRunner {
         return JOptionPane.showConfirmDialog(frame, "Would you like to play again?");
     }
 
+    public static void askTimeOut() {
+        JFrame frame;
+        if (game == null) {
+            frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        } else {
+            frame = game;
+        }
+        boolean updated = false;
+        while (!updated) {
+            String input = JOptionPane.showInputDialog(frame, "Enter timeout in seconds \n(0 for no timeout)",
+                    "Timeout", JOptionPane.QUESTION_MESSAGE);
+            try {
+                int newTimeout = Integer.parseInt(input);
+                if (newTimeout >= 0) {
+                    TIMEOUT_IN_SECONDS = newTimeout;
+                    updated = true;
+                }
+            } catch (NumberFormatException ignored) {
+
+            }
+        }
+    }
+
     public static void dispose() {
-        game.dispose();
-        game = null;
+        if (game != null) {
+            game.dispose();
+            game = null;
+        }
     }
 }

@@ -83,7 +83,7 @@ public class Game {
         Move result = null;
         Optional<Thread> updateTimeLeftThread = Optional.empty();
         try {
-            if (GameRunner.TIMEOUT_IN_SECONDS >= 0) {
+            if (GameRunner.TIMEOUT_IN_SECONDS > 0) {
                 if (myFrame.isPresent()) {
                     JFrame frame = myFrame.get();
                     String oldName = frame.getTitle();
