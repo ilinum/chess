@@ -3,7 +3,7 @@ package me.ilinskiy.chess.chessBoard;
 import me.ilinskiy.chess.game.Move;
 import org.junit.Test;
 
-import static me.ilinskiy.chess.chessBoard.ImmutableBoard.BOARD_SIZE;
+import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -14,9 +14,9 @@ public class ChessBoardUtilTest {
 
     @Test
     public void testMoveAndEvaluate() {
-        ImmutableBoard b = new ImmutableBoard();
+        Board b = new Board();
         assertTrue(b.whoseTurnIsIt() == PieceColor.White);
-        ImmutableBoard copy = b.copy();
+        Board copy = b.copy();
         Move m = new Move(new Coordinates(BOARD_SIZE - 1, BOARD_SIZE - 1), new Coordinates(1, 1));
         ChessBoardUtil.makeMoveAndEvaluate(b, m, b1 -> false);
         assertTrue(b.whoseTurnIsIt() == PieceColor.White);

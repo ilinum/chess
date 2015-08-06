@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.ImmutableBoard;
+import me.ilinskiy.chess.chessBoard.Board;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import me.ilinskiy.chess.chessBoard.PieceType;
 
@@ -12,7 +12,7 @@ import me.ilinskiy.chess.chessBoard.PieceType;
 public interface Player extends Copyable {
 
     @NotNull
-    Move getMove(@NotNull ImmutableBoard b);
+    Move getMove(@NotNull Board b);
 
     @NotNull
     PieceColor getPlayerColor();

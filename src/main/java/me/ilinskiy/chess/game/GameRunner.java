@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.ImmutableBoard;
+import me.ilinskiy.chess.chessBoard.Board;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 
 import javax.swing.*;
@@ -12,8 +12,8 @@ import java.awt.*;
  * Date: 8/5/15.
  */
 public class GameRunner {
-    public static final int INIT_HEIGHT_AND_WIDTH = 62 * ImmutableBoard.BOARD_SIZE; //approx 500
-    //public static final int MIN_HEIGHT_AND_WIDTH = 30 * ImmutableBoard.BOARD_SIZE;
+    public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
+    //public static final int MIN_HEIGHT_AND_WIDTH = 30 * Board.BOARD_SIZE;
 
     @NotNull
     public static PieceColor runGame(@NotNull Player p1, @NotNull Player p2) {

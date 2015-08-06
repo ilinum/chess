@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.Optional;
 import java.util.Set;
 
-import static me.ilinskiy.chess.chessBoard.ImmutableBoard.BOARD_SIZE;
+import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -20,28 +20,21 @@ class Painter {
     private static final Color BLACK_BG = new Color(0x76350F);
 
 
-    static void paint(@NotNull Graphics graphics, @NotNull ImmutableBoard board) {
+    static void paint(@NotNull Graphics graphics, @NotNull Board board) {
         int heightAndWidth = getFrameSize(board).width;
         graphics.setColor(Color.BLACK);
         graphics.drawRect(0, 0, heightAndWidth, heightAndWidth);
 
-        //draw black squares
-        int brownStart = 1;
         for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = brownStart; col < BOARD_SIZE; col += 2) {
-                graphics.setColor(BLACK_BG);
-                drawCell(new Coordinates(col, row), graphics, heightAndWidth);
-            }
-            brownStart = brownStart == 0 ? 1 : 0;
-            for (int col = brownStart; col < BOARD_SIZE; col += 2) {
-                graphics.setColor(WHITE_BG);
-                drawCell(new Coordinates(col, row), graphics, heightAndWidth);
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                Coordinates c = new Coordinates(col, row);
+                setBGForCell(c, graphics);
+                drawCell(c, graphics, heightAndWidth);
             }
         }
 
         paintSelected(graphics, board);
 
-        graphics.setColor(Color.RED);
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 drawImageForCell(new Coordinates(col, row), graphics, board, heightAndWidth);
@@ -49,24 +42,20 @@ class Painter {
         }
     }
 
-    public static void unPaintSelected(@NotNull Graphics graphics, @NotNull ImmutableBoard board) {
+    public static void unPaintSelected(@NotNull Graphics graphics, @NotNull Board board) {
         paintSelected(graphics, board, true);
     }
 
 
-    public static void paintSelected(@NotNull Graphics graphics, @NotNull ImmutableBoard board) {
+    public static void paintSelected(@NotNull Graphics graphics, @NotNull Board board) {
         paintSelected(graphics, board, false);
     }
 
-    private static void paintSelected(@NotNull Graphics graphics, @NotNull ImmutableBoard board, boolean unpaint) {
+    private static void paintSelected(@NotNull Graphics graphics, @NotNull Board board, boolean unpaint) {
         Optional<Coordinates> selected = board.getSelected();
         if (selected.isPresent()) {
             if (unpaint) {
-                if (((selected.get().getX() + selected.get().getY()) % 2) == 0) {
-                    graphics.setColor(WHITE_BG);
-                } else {
-                    graphics.setColor(BLACK_BG);
-                }
+                setBGForCell(selected.get(), graphics);
             } else {
                 graphics.setColor(Color.RED);
             }
@@ -77,11 +66,7 @@ class Painter {
             Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(c, board);
             for (Move move : availableMovesForPiece) {
                 if (unpaint) {
-                    if (((move.getNewPosition().getX() + move.getNewPosition().getY()) % 2) == 0) {
-                        graphics.setColor(WHITE_BG);
-                    } else {
-                        graphics.setColor(BLACK_BG);
-                    }
+                    setBGForCell(move.getNewPosition(), graphics);
                 } else {
                     if (board.getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
                         graphics.setColor(Color.BLUE);
@@ -96,7 +81,7 @@ class Painter {
     }
 
     private static void drawImageForCell(@NotNull Coordinates pos, @NotNull Graphics graphics,
-                                         @NotNull ImmutableBoard board, int heightAndWidth) {
+                                         @NotNull Board board, int heightAndWidth) {
         int cellSize = heightAndWidth / BOARD_SIZE;
         ChessElement element = board.getPieceAt(pos);
         if (element instanceof Piece) {
@@ -112,7 +97,15 @@ class Painter {
         }
     }
 
-    static Dimension getFrameSize(@NotNull ImmutableBoard board) {
+    private static void setBGForCell(@NotNull Coordinates c, @NotNull Graphics graphics) {
+        if (((c.getX() + c.getY()) % 2) == 0) {
+            graphics.setColor(WHITE_BG);
+        } else {
+            graphics.setColor(BLACK_BG);
+        }
+    }
+
+    static Dimension getFrameSize(@NotNull Board board) {
         return board.getSize();
     }
 
@@ -127,7 +120,7 @@ class Painter {
         graphics.setColor(oldColor);
     }
 
-    public static void paint(@NotNull Graphics graphics, @NotNull ImmutableBoard board, @NotNull Move move) {
+    public static void paint(@NotNull Graphics graphics, @NotNull Board board, @NotNull Move move) {
         if (move instanceof Castling) {
             Castling castling = (Castling) move;
             paint(graphics, board, new Move(castling.getKingInitialPosition(), castling.getKingNewPosition()));
@@ -136,19 +129,11 @@ class Painter {
             int heightAndWidth = getFrameSize(board).width;
             Coordinates initPos = move.getInitialPosition();
             Coordinates newPos = move.getNewPosition();
-            if (((initPos.getX() + initPos.getY()) % 2) == 0) {
-                graphics.setColor(WHITE_BG);
-            } else {
-                graphics.setColor(BLACK_BG);
-            }
+            setBGForCell(initPos, graphics);
             drawCell(initPos, graphics, heightAndWidth);
             drawImageForCell(initPos, graphics, board, heightAndWidth);
 
-            if (((newPos.getX() + newPos.getY()) % 2) == 0) {
-                graphics.setColor(WHITE_BG);
-            } else {
-                graphics.setColor(BLACK_BG);
-            }
+            setBGForCell(newPos, graphics);
             drawCell(newPos, graphics, heightAndWidth);
             drawImageForCell(newPos, graphics, board, heightAndWidth);
         }

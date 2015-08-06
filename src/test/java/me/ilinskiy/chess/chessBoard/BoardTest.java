@@ -1,6 +1,5 @@
 package me.ilinskiy.chess.chessBoard;
 
-import me.ilinskiy.chess.chessBoard.*;
 import me.ilinskiy.chess.game.GameUtil;
 import me.ilinskiy.chess.game.Move;
 import org.junit.Test;
@@ -9,13 +8,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static me.ilinskiy.chess.chessBoard.ImmutableBoard.BOARD_SIZE;
+import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
 import static me.ilinskiy.chess.chessBoard.PieceType.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for Board and ImmutableBoard classes
+ * Tests for BoardWrapper and Board classes
  *
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
@@ -24,7 +23,7 @@ public class BoardTest {
 
     @Test
     public void testAllPiecesNotNull() {
-        ImmutableBoard b = new ImmutableBoard();
+        Board b = new Board();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 Coordinates c = new Coordinates(i, j);
@@ -36,7 +35,7 @@ public class BoardTest {
 
     @Test
     public void testInitialSetup() {
-        ImmutableBoard b = new ImmutableBoard();
+        Board b = new Board();
         List<Coordinates> allElements = new ArrayList<>();
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
@@ -103,7 +102,7 @@ public class BoardTest {
 
     @Test
     public void testPieceMove() {
-        Board b = new Board();
+        BoardWrapper b = new BoardWrapper();
         Coordinates knightPos = new Coordinates(1, 0);
         Coordinates newPos = new Coordinates(3, 4);
         ChessElement element = b.getPieceAt(knightPos);
@@ -116,7 +115,7 @@ public class BoardTest {
 
     @Test(expected = IllegalStateException.class)
     public void testMoveEmptyCell() {
-        Board b = new Board();
+        BoardWrapper b = new BoardWrapper();
         Coordinates initPos = new Coordinates(4, 4);
         Coordinates newPos = new Coordinates(0, 0);
         b.movePiece(new Move(initPos, newPos));
@@ -124,7 +123,7 @@ public class BoardTest {
 
     @Test
     public void testSelected() {
-        ImmutableBoard b = new ImmutableBoard();
+        Board b = new Board();
         assertTrue("selected should be empty!", !b.getSelected().isPresent());
         Coordinates coordinates = new Coordinates(7, 7);
         assertTrue(b.setSelected(coordinates));

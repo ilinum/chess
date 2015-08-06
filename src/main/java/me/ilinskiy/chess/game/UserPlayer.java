@@ -1,14 +1,13 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.chessBoard.Board;
 import me.ilinskiy.chess.chessBoard.Coordinates;
-import me.ilinskiy.chess.chessBoard.ImmutableBoard;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import me.ilinskiy.chess.chessBoard.PieceType;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.locks.Condition;
@@ -35,15 +34,15 @@ public class UserPlayer implements Player {
 
     @NotNull
     @Override
-    public Move getMove(@NotNull ImmutableBoard board) {
+    public Move getMove(@NotNull Board board) {
         MouseListener mouseListener = new MouseListener() {
 
             @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
+            public void mouseClicked(@NotNull MouseEvent mouseEvent) {
             }
 
             @Override
-            public void mousePressed(MouseEvent mouseEvent) {
+            public void mousePressed(@NotNull MouseEvent mouseEvent) {
             }
 
             @Override
@@ -52,7 +51,7 @@ public class UserPlayer implements Player {
                 double x = mouseEvent.getX();
                 double y = mouseEvent.getY();
                 int size = board.getFrameSize().width;
-                int cellSize = size / ImmutableBoard.BOARD_SIZE;
+                int cellSize = size / Board.BOARD_SIZE;
                 Coordinates location = new Coordinates((int) x / cellSize, (int) y / cellSize);
                 Optional<Coordinates> selected = board.getSelected();
                 if (selected.isPresent()) {
@@ -77,11 +76,11 @@ public class UserPlayer implements Player {
             }
 
             @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
+            public void mouseEntered(@NotNull MouseEvent mouseEvent) {
             }
 
             @Override
-            public void mouseExited(MouseEvent mouseEvent) {
+            public void mouseExited(@NotNull MouseEvent mouseEvent) {
             }
         };
         board.addMouseListener(mouseListener);
@@ -119,6 +118,7 @@ public class UserPlayer implements Player {
         return PieceType.Queen;
     }
 
+    @NotNull
     @Override
     public UserPlayer copy() {
         return new UserPlayer(myColor);

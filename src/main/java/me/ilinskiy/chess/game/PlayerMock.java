@@ -1,8 +1,8 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.chessBoard.Board;
 import me.ilinskiy.chess.chessBoard.Coordinates;
-import me.ilinskiy.chess.chessBoard.ImmutableBoard;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import me.ilinskiy.chess.chessBoard.PieceType;
 
@@ -24,7 +24,7 @@ public class PlayerMock implements Player {
 
     @Override
     @NotNull
-    public Move getMove(@NotNull ImmutableBoard b) {
+    public Move getMove(@NotNull Board b) {
         Coordinates c = new Coordinates(0, 0);
         return new Move(c, c);
     }

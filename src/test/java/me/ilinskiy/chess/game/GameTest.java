@@ -1,12 +1,12 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.chessBoard.Board;
 import me.ilinskiy.chess.chessBoard.Coordinates;
-import me.ilinskiy.chess.chessBoard.ImmutableBoard;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import org.junit.Test;
 
-import static me.ilinskiy.chess.chessBoard.ImmutableBoard.BOARD_SIZE;
+import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -33,7 +33,7 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull ImmutableBoard b) {
+            public Move getMove(@NotNull Board b) {
                 return move;
             }
         };
@@ -51,8 +51,9 @@ public class GameTest {
     @Test(expected = RuntimeException.class)
     public void testIllegalMove() {
         Player p1 = new PlayerMock(PieceColor.White) {
+            @NotNull
             @Override
-            public Move getMove(@NotNull ImmutableBoard b) {
+            public Move getMove(@NotNull Board b) {
                 return new Move(new Coordinates(8, 8), new Coordinates(1, 1));
             }
         };

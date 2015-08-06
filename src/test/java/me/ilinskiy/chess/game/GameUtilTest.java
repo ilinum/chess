@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static me.ilinskiy.chess.chessBoard.ImmutableBoard.*;
+import static me.ilinskiy.chess.chessBoard.Board.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -19,7 +19,7 @@ public class GameUtilTest {
 
     @Test(timeout = 1000)
     public void testGetAvailableMovesInitialPositionWhite() {
-        Board b = new Board();
+        BoardWrapper b = new BoardWrapper();
         List<Move> actual = GameUtil.getAvailableMoves(PieceColor.White, b.getInner());
         List<Move> expected = new ArrayList<>();
         int row = BOARD_SIZE - 2;
@@ -41,7 +41,7 @@ public class GameUtilTest {
 
     @Test(timeout = 1000)
     public void testGetAvailableMovesInitialPositionBlack() {
-        Board b = new Board();
+        BoardWrapper b = new BoardWrapper();
         List<Move> actual = GameUtil.getAvailableMoves(PieceColor.Black, b.getInner());
         List<Move> expected = new ArrayList<>();
         int row = 1;
@@ -63,7 +63,7 @@ public class GameUtilTest {
 
     @Test(timeout = 1000)
     public void testAvailableMovesAfterMove() {
-        Board b = new Board();
+        BoardWrapper b = new BoardWrapper();
 
         Coordinates newPos = new Coordinates(0, BOARD_SIZE - 3);
         assertTrue(b.getPieceAt(newPos) instanceof EmptyCell);
@@ -79,7 +79,7 @@ public class GameUtilTest {
 
     @Test
     public void testPawnNonEmptyCell() {
-        Board b = new Board();
+        BoardWrapper b = new BoardWrapper();
         Coordinates blackLoc = new Coordinates(3, 3);
         Coordinates whiteLoc = new Coordinates(3, 4);
         b.setPieceAt(blackLoc, Piece.getPiece(PieceColor.Black, PieceType.Pawn));
@@ -90,7 +90,7 @@ public class GameUtilTest {
 
     @Test
     public void testCastling() {
-        Board b = new Board();
+        BoardWrapper b = new BoardWrapper();
         List<Coordinates> blackKings = GameUtil.findPiecesByTypeAndColor(PieceType.King, PieceColor.Black, b.getInner());
         assertTrue(blackKings.size() == 1);
         Coordinates kingPos = blackKings.get(0);

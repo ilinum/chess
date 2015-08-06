@@ -22,9 +22,9 @@ public class ChessBoardUtil {
     public static final PieceType[] backRowPieceTypes = new PieceType[]{Rook, Knight, Bishop, Queen, King, Bishop,
             Knight, Rook};
 
-    public static synchronized boolean makeMoveAndEvaluate(@NotNull ImmutableBoard b, @NotNull Move m,
+    public static synchronized boolean makeMoveAndEvaluate(@NotNull Board b, @NotNull Move m,
                                                            @NotNull BoardOperation op) {
-        Board board = new Board(b.copy());
+        BoardWrapper board = new BoardWrapper(b.copy());
         board.setPieceAccordingToMove(m);
         boolean result = op.run(board.getInner());
         board.setPieceAccordingToMove(m.inverse()); //roll back
@@ -92,6 +92,6 @@ public class ChessBoardUtil {
     }
 
     public static boolean isOutOfBounds(@NotNull Coordinates c) {
-        return c.getX() < 0 || c.getX() >= ImmutableBoard.BOARD_SIZE || c.getY() < 0 || c.getY() >= ImmutableBoard.BOARD_SIZE;
+        return c.getX() < 0 || c.getX() >= Board.BOARD_SIZE || c.getY() < 0 || c.getY() >= Board.BOARD_SIZE;
     }
 }

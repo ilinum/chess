@@ -6,5 +6,5 @@ package me.ilinskiy.chess.chessBoard;
  */
 @FunctionalInterface
 public interface BoardOperation {
-    boolean run(ImmutableBoard b);
+    boolean run(Board b);
 }

@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class Game {
     @NotNull
-    private final Board board;
+    private final BoardWrapper board;
     private Player turn;
     private Optional<PieceColor> winner;
     @NotNull
@@ -31,13 +31,13 @@ public class Game {
         if (ChessBoardUtil.inverse(p1.getPlayerColor()) != p2.getPlayerColor()) {
             throw new IllegalArgumentException("Wrong colors for players!");
         }
-        board = new Board();
+        board = new BoardWrapper();
         movesMade = new ArrayList<>();
         player1 = p1;
         player2 = p2;
         turn = p1.getPlayerColor() == PieceColor.White ? p1 : p2;
         winner = Optional.empty();
-        ImmutableBoard inner = board.getInner();
+        Board inner = board.getInner();
         if (frame != null) {
             frame.add(inner, BorderLayout.CENTER);
         }
@@ -60,7 +60,6 @@ public class Game {
         checkPawnPromoted(m, turn);
         movesMade.add(m);
         turn = ChessBoardUtil.inverse(turn, player1, player2);
-        //board.paint();
         checkGameOver(turn);
     }
 
