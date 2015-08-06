@@ -14,7 +14,8 @@ To run it, just type `java -jar Chess-1.0-SNAPSHOT.jar`
 
 ##The fun part
 Here's the fun part: you can easily build your own AI with this. All you have to do is add this jar to dependencies, and then call GameRunner.runGame() with one of parameters being your implementation of Player interface. 
-Please let me know if you build something like that, so I can link to it from this README!
+Please let me know if you do something like that, so I can link to it from here!
+
 
 ###Icons used
 Images were taken from [Wikimedia Commons](https://commons.wikimedia.org)
