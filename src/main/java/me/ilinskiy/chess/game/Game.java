@@ -83,29 +83,33 @@ public class Game {
         Move result = null;
         Optional<Thread> updateTimeLeftThread = Optional.empty();
         try {
-            if (myFrame.isPresent()) {
-                JFrame frame = myFrame.get();
-                String oldName = frame.getTitle();
-                Thread thread = new Thread(() -> {
-                    try {
-                        int secondsLeft = GameRunner.TIMEOUT_IN_SECONDS;
-                        while (secondsLeft > 0) {
-                            frame.setTitle("Chess. Time left: " + secondsLeft);
-                            secondsLeft--;
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException ignored) {
-                                Thread.currentThread().interrupt();
+            if (GameRunner.TIMEOUT_IN_SECONDS >= 0) {
+                if (myFrame.isPresent()) {
+                    JFrame frame = myFrame.get();
+                    String oldName = frame.getTitle();
+                    Thread thread = new Thread(() -> {
+                        try {
+                            int secondsLeft = GameRunner.TIMEOUT_IN_SECONDS;
+                            while (secondsLeft > 0) {
+                                frame.setTitle("Chess. Time left: " + secondsLeft);
+                                secondsLeft--;
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    Thread.currentThread().interrupt();
+                                }
                             }
+                        } finally {
+                            frame.setTitle(oldName);
                         }
-                    } finally {
-                        frame.setTitle(oldName);
-                    }
-                });
-                updateTimeLeftThread = Optional.of(thread);
-                thread.start();
+                    });
+                    updateTimeLeftThread = Optional.of(thread);
+                    thread.start();
+                }
+                result = future.get(GameRunner.TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
+            } else {
+                result = future.get();
             }
-            result = future.get(GameRunner.TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException ignored) {
 
         } catch (TimeoutException e) {
