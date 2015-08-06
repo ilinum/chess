@@ -22,7 +22,7 @@ class Painter {
 
 
     static void paint(@NotNull Graphics graphics, @NotNull Board board) {
-        int heightAndWidth = getFrameSize(board).width;
+        int heightAndWidth = getSize(board).width;
         graphics.setColor(Color.BLACK);
         graphics.drawRect(0, 0, heightAndWidth, heightAndWidth);
 
@@ -52,16 +52,16 @@ class Painter {
         paintSelected(graphics, board, false);
     }
 
-    private static void paintSelected(@NotNull Graphics graphics, @NotNull Board board, boolean unpaint) {
+    private static void paintSelected(@Nullable Graphics graphics, @NotNull Board board, boolean unpaint) {
         Optional<Coordinates> selected = board.getSelected();
-        if (selected.isPresent()) {
+        if (selected.isPresent() && graphics != null) {
             if (unpaint) {
                 setBGForCell(selected.get(), graphics);
             } else {
                 graphics.setColor(Color.RED);
             }
             Coordinates c = selected.get();
-            int heightAndWidth = getFrameSize(board).width;
+            int heightAndWidth = getSize(board).width;
             drawCell(c, graphics, heightAndWidth);
             drawImageForCell(c, graphics, board, heightAndWidth);
             Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(c, board);
@@ -106,7 +106,7 @@ class Painter {
         }
     }
 
-    static Dimension getFrameSize(@NotNull Board board) {
+    static Dimension getSize(@NotNull Board board) {
         return board.getSize();
     }
 
@@ -121,28 +121,30 @@ class Painter {
         graphics.setColor(oldColor);
     }
 
-    public static void paint(@NotNull Graphics graphics, @NotNull Board board, @NotNull Move move) {
-        if (move instanceof Castling) {
-            Castling castling = (Castling) move;
-            paint(graphics, board, new Move(castling.getKingInitialPosition(), castling.getKingNewPosition()));
-            paint(graphics, board, new Move(castling.getRookInitialPosition(), castling.getRookNewPosition()));
-        } else {
-            int heightAndWidth = getFrameSize(board).width;
-            Coordinates initPos = move.getInitialPosition();
-            Coordinates newPos = move.getNewPosition();
-            setBGForCell(initPos, graphics);
-            drawCell(initPos, graphics, heightAndWidth);
-            drawImageForCell(initPos, graphics, board, heightAndWidth);
+    public static void paint(@Nullable Graphics graphics, @NotNull Board board, @NotNull Move move) {
+        if (graphics != null) {
+            if (move instanceof Castling) {
+                Castling castling = (Castling) move;
+                paint(graphics, board, new Move(castling.getKingInitialPosition(), castling.getKingNewPosition()));
+                paint(graphics, board, new Move(castling.getRookInitialPosition(), castling.getRookNewPosition()));
+            } else {
+                int heightAndWidth = getSize(board).width;
+                Coordinates initPos = move.getInitialPosition();
+                Coordinates newPos = move.getNewPosition();
+                setBGForCell(initPos, graphics);
+                drawCell(initPos, graphics, heightAndWidth);
+                drawImageForCell(initPos, graphics, board, heightAndWidth);
 
-            setBGForCell(newPos, graphics);
-            drawCell(newPos, graphics, heightAndWidth);
-            drawImageForCell(newPos, graphics, board, heightAndWidth);
+                setBGForCell(newPos, graphics);
+                drawCell(newPos, graphics, heightAndWidth);
+                drawImageForCell(newPos, graphics, board, heightAndWidth);
+            }
         }
     }
 
     public static void paintCell(@NotNull Coordinates pos, @Nullable Graphics graphics, @NotNull Board b) {
         if (graphics != null) {
-            int heightAndWidth = getFrameSize(b).height;
+            int heightAndWidth = getSize(b).height;
             setBGForCell(pos, graphics);
             drawCell(pos, graphics, heightAndWidth);
             drawImageForCell(pos, graphics, b, heightAndWidth);

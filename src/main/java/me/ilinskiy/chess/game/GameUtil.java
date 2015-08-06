@@ -317,4 +317,10 @@ public class GameUtil {
         }
         return res;
     }
+
+    public static void println(String s) {
+        if (GameRunner.DEBUG) {
+            System.out.println(s);
+        }
+    }
 }

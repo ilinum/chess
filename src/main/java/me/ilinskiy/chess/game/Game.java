@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.*;
+
+import static me.ilinskiy.chess.game.GameUtil.println;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -47,20 +50,43 @@ public class Game {
         if (isGameOver()) {
             throw new RuntimeException("Game is over! Cannot make more moves!");
         }
-        Move m = null;
-        while (m == null) {
-            m = turn.getMove(board.getInner());
+        Optional<Move> moveOptional = getMove();
+        if (!moveOptional.isPresent()) {
+            //it timed out
+            winner = Optional.of(ChessBoardUtil.inverse(turn.getPlayerColor()));
+            println("Timed out!");
+        } else {
+            Move m = moveOptional.get();
+            Set<Move> availableMoves = GameUtil.getAvailableMovesForPiece(m.getInitialPosition(), board.getInner());
+            if (!availableMoves.contains(m)) {
+                throw new RuntimeException("Illegal move: " + m);
+            }
+            board.movePiece(m);
+            checkPawnPromoted(m, turn);
+            movesMade.add(m);
+            turn = ChessBoardUtil.inverse(turn, player1, player2);
+            checkGameOver(turn);
         }
-        Set<Move> availableMoves = GameUtil.getAvailableMovesForPiece(m.getInitialPosition(), board.getInner());
-        if (!availableMoves.contains(m)) {
-            throw new RuntimeException("Illegal move: " + m);
+    }
+
+    private Optional<Move> getMove() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<Move> future = executorService.submit(() -> {
+            Move m = null;
+            while (m == null) {
+                m = turn.getMove(board.getInner());
+            }
+            return m;
+        });
+        Move result = null;
+        try {
+            result = future.get(GameRunner.TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException ignored) {
+
+        } catch (TimeoutException e) {
+            future.cancel(true);
         }
-        board.movePiece(m);
-        //if reverting moves will ever be implemented, will have trouble reverting pawn promotion
-        checkPawnPromoted(m, turn);
-        movesMade.add(m);
-        turn = ChessBoardUtil.inverse(turn, player1, player2);
-        checkGameOver(turn);
+        return Optional.ofNullable(result);
     }
 
     /**

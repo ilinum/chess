@@ -13,7 +13,10 @@ import java.awt.*;
  */
 public class GameRunner {
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
+    public static final int STATUS_HEIGHT = 0;
     private static JFrame game;
+    public static final boolean DEBUG = true;
+    public static int TIMEOUT_IN_SECONDS = 10;
 
 
     @NotNull

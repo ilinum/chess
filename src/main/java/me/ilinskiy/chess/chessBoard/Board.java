@@ -233,7 +233,7 @@ public class Board extends JPanel implements Copyable {
     }
 
     public Dimension getFrameSize() {
-        return Painter.getFrameSize(this);
+        return Painter.getSize(this);
     }
 
     @Override
