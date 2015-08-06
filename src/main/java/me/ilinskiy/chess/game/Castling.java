@@ -35,6 +35,7 @@ public class Castling extends Move {
         return rookNewPosition;
     }
 
+    @NotNull
     @Override
     public Castling copy() {
         return new Castling(getKingInitialPosition(), getKingNewPosition(), getRookInitialPosition(), getRookNewPosition());
@@ -64,6 +65,7 @@ public class Castling extends Move {
         return hash;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Castling: " +
@@ -71,6 +73,7 @@ public class Castling extends Move {
                 ", Rook " + getRookInitialPosition() + " -> " + getRookNewPosition();
     }
 
+    @NotNull
     @Override
     public Move inverse() {
         return new Castling(getKingNewPosition(), getKingInitialPosition(), rookNewPosition, rookInitPosition);

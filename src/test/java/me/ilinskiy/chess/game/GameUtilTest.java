@@ -67,7 +67,7 @@ public class GameUtilTest {
 
         Coordinates newPos = new Coordinates(0, BOARD_SIZE - 3);
         assertTrue(b.getPieceAt(newPos) instanceof EmptyCell);
-        Piece knight = Piece.getPiece(PieceColor.White, PieceType.Knight);
+        Piece knight = Piece.createPiece(PieceColor.White, PieceType.Knight);
         b.setPieceAt(newPos, knight);
 
         Coordinates initPos = new Coordinates(1, BOARD_SIZE - 1);
@@ -82,8 +82,8 @@ public class GameUtilTest {
         BoardWrapper b = new BoardWrapper();
         Coordinates blackLoc = new Coordinates(3, 3);
         Coordinates whiteLoc = new Coordinates(3, 4);
-        b.setPieceAt(blackLoc, Piece.getPiece(PieceColor.Black, PieceType.Pawn));
-        b.setPieceAt(whiteLoc, Piece.getPiece(PieceColor.White, PieceType.Pawn));
+        b.setPieceAt(blackLoc, Piece.createPiece(PieceColor.Black, PieceType.Pawn));
+        b.setPieceAt(whiteLoc, Piece.createPiece(PieceColor.White, PieceType.Pawn));
         assertThat(new HashSet<>(), is(GameUtil.getAvailableMovesForPiece(whiteLoc, b.getInner())));
         assertThat(new HashSet<>(), is(GameUtil.getAvailableMovesForPiece(blackLoc, b.getInner())));
     }

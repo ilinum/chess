@@ -80,21 +80,22 @@ public class GameUtil {
                 assert (color == White || color == Black);
                 int dir = getDirectionForPlayer(color);
                 Coordinates newC = new Coordinates(pos.getX(), pos.getY() + dir);
-                assert !ChessBoardUtil.isOutOfBounds(newC); //should've been promoted
-                if (board.getPieceAt(newC) instanceof EmptyCell) {
-                    result.add(new Move(pos, newC));
-                    boolean hasNotMoved = ChessBoardUtil.isOutOfBounds(new Coordinates(pos.getX(), pos.getY() - 2 * dir));
-                    Coordinates longMove = new Coordinates(pos.getX(), pos.getY() + 2 * dir);
-                    if (hasNotMoved && (board.getPieceAt(longMove) instanceof EmptyCell)) {
-                        result.add(new Move(pos, longMove));
+                if (!ChessBoardUtil.isOutOfBounds(newC)) { //should've been promoted
+                    if (board.getPieceAt(newC) instanceof EmptyCell) {
+                        result.add(new Move(pos, newC));
+                        boolean hasNotMoved = ChessBoardUtil.isOutOfBounds(new Coordinates(pos.getX(), pos.getY() - 2 * dir));
+                        Coordinates longMove = new Coordinates(pos.getX(), pos.getY() + 2 * dir);
+                        if (hasNotMoved && (board.getPieceAt(longMove) instanceof EmptyCell)) {
+                            result.add(new Move(pos, longMove));
+                        }
                     }
-                }
-                Coordinates[] eatLocations = new Coordinates[]{new Coordinates(pos.getX() + 1, pos.getY() + dir),
-                        new Coordinates(pos.getX() - 1, pos.getY() + dir)};
-                for (Coordinates eatLocation : eatLocations) {
-                    boolean outOfBounds = ChessBoardUtil.isOutOfBounds(eatLocation);
-                    if (!outOfBounds && board.getPieceAt(eatLocation).getColor() == ChessBoardUtil.inverse(color)) {
-                        result.add(new Move(pos, eatLocation));
+                    Coordinates[] eatLocations = new Coordinates[]{new Coordinates(pos.getX() + 1, pos.getY() + dir),
+                            new Coordinates(pos.getX() - 1, pos.getY() + dir)};
+                    for (Coordinates eatLocation : eatLocations) {
+                        boolean outOfBounds = ChessBoardUtil.isOutOfBounds(eatLocation);
+                        if (!outOfBounds && board.getPieceAt(eatLocation).getColor() == ChessBoardUtil.inverse(color)) {
+                            result.add(new Move(pos, eatLocation));
+                        }
                     }
                 }
                 break;
@@ -296,7 +297,7 @@ public class GameUtil {
     @NotNull
     public static List<Coordinates> findPiecesByTypeAndColor(@NotNull PieceType type, @NotNull PieceColor color,
                                                              @NotNull Board board) {
-        ChessElement elemToFind = Piece.getPiece(color, type);
+        ChessElement elemToFind = Piece.createPiece(color, type);
         List<Coordinates> result = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {

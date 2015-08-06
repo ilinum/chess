@@ -1,6 +1,7 @@
 package me.ilinskiy.chess.chessBoard;
 
 import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.annotations.Nullable;
 import me.ilinskiy.chess.game.Castling;
 import me.ilinskiy.chess.game.GameUtil;
 import me.ilinskiy.chess.game.Move;
@@ -136,6 +137,15 @@ class Painter {
             setBGForCell(newPos, graphics);
             drawCell(newPos, graphics, heightAndWidth);
             drawImageForCell(newPos, graphics, board, heightAndWidth);
+        }
+    }
+
+    public static void paintCell(@NotNull Coordinates pos, @Nullable Graphics graphics, @NotNull Board b) {
+        if (graphics != null) {
+            int heightAndWidth = getFrameSize(b).height;
+            setBGForCell(pos, graphics);
+            drawCell(pos, graphics, heightAndWidth);
+            drawImageForCell(pos, graphics, b, heightAndWidth);
         }
     }
 }

@@ -57,21 +57,21 @@ public class Board extends JPanel implements Copyable {
             bottomPieceColor = PieceColor.White;
         }
         for (int i = 0; i < board[0].length; i++) {
-            board[currRow][i] = Piece.getPiece(topPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
+            board[currRow][i] = Piece.createPiece(topPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
         }
         currRow++;
-        Arrays.fill(board[currRow], Piece.getPiece(topPieceColor, Pawn));
+        Arrays.fill(board[currRow], Piece.createPiece(topPieceColor, Pawn));
 
         currRow++;
         for (; currRow < board.length - 2; currRow++) {
             Arrays.fill(board[currRow], EmptyCell.INSTANCE);
         }
 
-        Arrays.fill(board[currRow], Piece.getPiece(bottomPieceColor, Pawn));
+        Arrays.fill(board[currRow], Piece.createPiece(bottomPieceColor, Pawn));
         currRow++;
         assert (currRow == (BOARD_SIZE - 1)) : "Wrong current row: " + currRow;
         for (int i = 0; i < board[currRow].length; i++) {
-            board[currRow][i] = Piece.getPiece(bottomPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
+            board[currRow][i] = Piece.createPiece(bottomPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
         }
         piecesMoved = new ArrayList<>();
         paint();
@@ -239,5 +239,9 @@ public class Board extends JPanel implements Copyable {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(board) * 31 + selected.hashCode() + turn.hashCode();
+    }
+
+    public void paintCell(@NotNull Coordinates pos) {
+        Painter.paintCell(pos, getGraphics(), this);
     }
 }

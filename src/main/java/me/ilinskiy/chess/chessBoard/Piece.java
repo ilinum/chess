@@ -28,7 +28,7 @@ public class Piece implements ChessElement {
     }
 
     @NotNull
-    public static Piece getPiece(@NotNull PieceColor pColor, @NotNull PieceType pType) {
+    public static Piece createPiece(@NotNull PieceColor pColor, @NotNull PieceType pType) {
         Piece res = null;
         switch (pColor) {
             case Black:
@@ -91,7 +91,7 @@ public class Piece implements ChessElement {
                 throw new RuntimeException("Unknown color!");
         }
         int pieceTypeMultiplier;
-        switch (type) {
+        switch (type) { //could I use Enum.ordinal here?
             case Pawn:
                 pieceTypeMultiplier = 1;
                 break;
