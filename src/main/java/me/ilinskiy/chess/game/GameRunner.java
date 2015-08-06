@@ -14,7 +14,7 @@ import java.awt.*;
 public class GameRunner {
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
     private static JFrame game;
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static int TIMEOUT_IN_SECONDS = 30; //if timeout is 0, the only limit is yourself
 
 
@@ -25,11 +25,12 @@ public class GameRunner {
             game = new JFrame();
             game.setTitle("Chess");
             game.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            game.setResizable(false);
             game.setLayout(new BorderLayout());
             game.setSize(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH);
+            game.getContentPane().setSize(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH);
             //game.setMinimumSize(new Dimension(MIN_HEIGHT_AND_WIDTH, MIN_HEIGHT_AND_WIDTH));
             //game.setPreferredSize(new Dimension(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH));
-            game.setResizable(false);
             g = new Game(p1, p2, game);
             game.setLocationRelativeTo(null);
             game.setVisible(true);
@@ -78,12 +79,12 @@ public class GameRunner {
 
     public static void askTimeOut() {
         JFrame frame;
-        if (game == null) {
+//        if (game == null) {
             frame = new JFrame();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        } else {
-            frame = game;
-        }
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        } else {
+//            frame = game;
+//        }
         boolean updated = false;
         while (!updated) {
             String input = JOptionPane.showInputDialog(frame, "Enter timeout in seconds \n(0 for no timeout)",
