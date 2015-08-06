@@ -88,6 +88,9 @@ public class GameRunner {
         while (!updated) {
             String input = JOptionPane.showInputDialog(frame, "Enter timeout in seconds \n(0 for no timeout)",
                     "Timeout", JOptionPane.QUESTION_MESSAGE);
+            if (input == null) {
+                System.exit(-2);
+            }
             try {
                 int newTimeout = Integer.parseInt(input);
                 if (newTimeout >= 0) {
