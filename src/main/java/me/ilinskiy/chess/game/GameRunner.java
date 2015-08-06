@@ -16,7 +16,7 @@ public class GameRunner {
     public static final int STATUS_HEIGHT = 0;
     private static JFrame game;
     public static final boolean DEBUG = true;
-    public static int TIMEOUT_IN_SECONDS = 10;
+    public static int TIMEOUT_IN_SECONDS = 30;
 
 
     @NotNull

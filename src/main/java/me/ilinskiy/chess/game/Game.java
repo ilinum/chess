@@ -29,6 +29,7 @@ public class Game {
     private final Player player1;
     @NotNull
     private final Player player2;
+    private Optional<JFrame> myFrame;
 
     public Game(@NotNull Player p1, @NotNull Player p2, @Nullable JFrame frame) {
         if (ChessBoardUtil.inverse(p1.getPlayerColor()) != p2.getPlayerColor()) {
@@ -44,6 +45,7 @@ public class Game {
         if (frame != null) {
             frame.add(inner, BorderLayout.CENTER);
         }
+        myFrame = Optional.ofNullable(frame);
     }
 
     public void makeMove() {
@@ -79,12 +81,39 @@ public class Game {
             return m;
         });
         Move result = null;
+        Optional<Thread> updateTimeLeftThread = Optional.empty();
         try {
+            if (myFrame.isPresent()) {
+                JFrame frame = myFrame.get();
+                String oldName = frame.getTitle();
+                Thread thread = new Thread(() -> {
+                    try {
+                        int secondsLeft = GameRunner.TIMEOUT_IN_SECONDS;
+                        while (secondsLeft > 0) {
+                            frame.setTitle("Chess. Time left: " + secondsLeft);
+                            secondsLeft--;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ignored) {
+                                Thread.currentThread().interrupt();
+                            }
+                        }
+                    } finally {
+                        frame.setTitle(oldName);
+                    }
+                });
+                updateTimeLeftThread = Optional.of(thread);
+                thread.start();
+            }
             result = future.get(GameRunner.TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException ignored) {
 
         } catch (TimeoutException e) {
             future.cancel(true);
+        } finally {
+            if (updateTimeLeftThread.isPresent()) {
+                updateTimeLeftThread.get().interrupt();
+            }
         }
         return Optional.ofNullable(result);
     }
