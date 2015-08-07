@@ -35,6 +35,7 @@
                             <mainClass>me.ilinskiy.chess.Main</mainClass>
                         </manifest>
                     </archive>
+                    <outputDirectory>.</outputDirectory>
                 </configuration>
             </plugin>
 
