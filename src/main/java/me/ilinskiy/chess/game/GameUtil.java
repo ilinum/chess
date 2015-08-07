@@ -93,8 +93,23 @@ public class GameUtil {
                             new Coordinates(pos.getX() - 1, pos.getY() + dir)};
                     for (Coordinates eatLocation : eatLocations) {
                         boolean outOfBounds = ChessBoardUtil.isOutOfBounds(eatLocation);
-                        if (!outOfBounds && board.getPieceAt(eatLocation).getColor() == ChessBoardUtil.inverse(color)) {
+                        PieceColor enemyColor = ChessBoardUtil.inverse(color);
+                        if (!outOfBounds && board.getPieceAt(eatLocation).getColor() == enemyColor) {
                             result.add(new Move(pos, eatLocation));
+                        } else if (!outOfBounds && board.getLastMove().isPresent()) { //check for en passe
+                            Move lastMove = board.getLastMove().get();
+                            Coordinates newPos = lastMove.getNewPosition();
+                            Coordinates initPos = lastMove.getInitialPosition();
+                            int enemyDir = getDirectionForPlayer(ChessBoardUtil.inverse(color));
+                            if (eatLocation.equals(new Coordinates(initPos.getX(), initPos.getY() + enemyDir))) {
+                                ChessElement piece = board.getPieceAt(newPos);
+                                if (piece.getType() == PieceType.Pawn && piece.getColor() == enemyColor) {
+                                    boolean wasALongMove = Math.abs(initPos.getY() - newPos.getY()) == 2;
+                                    if (wasALongMove) {
+                                        result.add(new EnPasse(pos, new Coordinates(initPos.getX(), initPos.getY() + enemyDir)));
+                                    }
+                                }
+                            }
                         }
                     }
                 }

@@ -2,10 +2,7 @@ package me.ilinskiy.chess.chessBoard;
 
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
-import me.ilinskiy.chess.game.Castling;
-import me.ilinskiy.chess.game.Copyable;
-import me.ilinskiy.chess.game.GameUtil;
-import me.ilinskiy.chess.game.Move;
+import me.ilinskiy.chess.game.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +18,7 @@ import static me.ilinskiy.chess.chessBoard.PieceType.Pawn;
  * and which elements have moved.
  * Board can (and should) be only modified using BoardWrapper. The actual BoardWrapper instance used for making moves
  * is held by Game instance. So there is no way to modify this board from an outside package.
- * @see ChessBoardUtil.makeMoveAndEvaluate(Board, Move, BoardOperation)
+ * @see {@link ChessBoardUtil#makeMoveAndEvaluate}
  *
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
@@ -34,10 +31,10 @@ public class Board extends JPanel implements Copyable {
     private Optional<Coordinates> selected;
     private PieceColor turn;
     private List<Coordinates> piecesMoved;
+    private Optional<Move> lastMove;
 
     public Board() {
         super();
-        ChessBoardUtil.initIcons();
         reset();
     }
 
@@ -48,7 +45,7 @@ public class Board extends JPanel implements Copyable {
         selected = Optional.empty();
         int currRow = 0;
         assert ChessBoardUtil.backRowPieceTypes.length == BOARD_SIZE;
-
+        lastMove = Optional.empty();
         PieceColor topPieceColor;
         PieceColor bottomPieceColor;
         if (BLACK_DIRECTION == 1) {
@@ -96,11 +93,19 @@ public class Board extends JPanel implements Copyable {
      * @param move move that was made
      */
     void movePiece(@NotNull Move move) {
+        lastMove = Optional.of(move);
         if (move instanceof Castling) {
             Castling c = (Castling) move;
             Painter.unPaintSelected(getGraphics(), this);
             makeActualMove(c.getKingInitialPosition(), c.getKingNewPosition());
             makeActualMove(c.getRookInitialPosition(), c.getRookNewPosition());
+        } else if (move instanceof EnPasse) {
+            Painter.unPaintSelected(getGraphics(), this);
+            Coordinates eaten = ((EnPasse) move).eatenPiece();
+            assert getPieceAt(eaten).getType() == Pawn;
+            setPieceAt(eaten, EmptyCell.INSTANCE);
+            makeActualMove(move.getInitialPosition(), move.getNewPosition());
+            Painter.paintCell(eaten, getGraphics(), this);
         } else {
             Painter.unPaintSelected(getGraphics(), this);
             makeActualMove(move.getInitialPosition(), move.getNewPosition());
@@ -249,5 +254,10 @@ public class Board extends JPanel implements Copyable {
 
     public void paintCell(@NotNull Coordinates pos) {
         Painter.paintCell(pos, getGraphics(), this);
+    }
+
+    @NotNull
+    public Optional<Move> getLastMove() {
+        return lastMove;
     }
 }

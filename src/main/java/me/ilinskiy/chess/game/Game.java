@@ -35,6 +35,7 @@ public class Game {
         if (ChessBoardUtil.inverse(p1.getPlayerColor()) != p2.getPlayerColor()) {
             throw new IllegalArgumentException("Wrong colors for players!");
         }
+        ChessBoardUtil.initIcons();
         board = new BoardWrapper();
         movesMade = new ArrayList<>();
         player1 = p1;

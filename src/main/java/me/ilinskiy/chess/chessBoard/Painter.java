@@ -3,6 +3,7 @@ package me.ilinskiy.chess.chessBoard;
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
 import me.ilinskiy.chess.game.Castling;
+import me.ilinskiy.chess.game.EnPasse;
 import me.ilinskiy.chess.game.GameUtil;
 import me.ilinskiy.chess.game.Move;
 
@@ -69,7 +70,9 @@ class Painter {
                 if (unpaint) {
                     setBGForCell(move.getNewPosition(), graphics);
                 } else {
-                    if (board.getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
+                    if (move instanceof EnPasse) {
+                        graphics.setColor(Color.GREEN);
+                    } else if (board.getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
                         graphics.setColor(Color.BLUE);
                     } else if (board.getPieceAt(move.getNewPosition()).getColor() != board.getPieceAt(selected.get()).getColor()) {
                         graphics.setColor(Color.GREEN);
