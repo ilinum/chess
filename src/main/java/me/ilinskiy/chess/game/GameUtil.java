@@ -207,7 +207,6 @@ public class GameUtil {
         if (!(board.pieceHasMovedSinceStartOfGame(kingPos) || kingIsAttacked(kingColor, board, false))) {
             //check for castling
             List<Coordinates> rooks = findPiecesByTypeAndColor(PieceType.Rook, kingColor, board);
-            assert rooks.size() <= 2;
             for (Coordinates rookPos : rooks) {
                 if (!board.pieceHasMovedSinceStartOfGame(rookPos)) {
                     assert rookPos.getY() == kingPos.getY();

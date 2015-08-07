@@ -6,6 +6,8 @@ import me.ilinskiy.chess.chessBoard.Coordinates;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import me.ilinskiy.chess.chessBoard.PieceType;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Optional;
@@ -13,6 +15,8 @@ import java.util.Set;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static me.ilinskiy.chess.game.GameUtil.println;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -115,7 +119,7 @@ public class UserPlayer implements Player {
     @Override
     @NotNull
     public PieceType getPieceTypeForPromotedPawn() {
-        return PieceType.Queen;
+        return new ChoosePieceTypeForPromotedPawn().getChosenPiece();
     }
 
     @NotNull
@@ -123,4 +127,93 @@ public class UserPlayer implements Player {
     public UserPlayer copy() {
         return new UserPlayer(myColor);
     }
+}
+
+class ChoosePieceTypeForPromotedPawn extends JPanel {
+    @NotNull
+    private Optional<PieceType> selectedPiece = Optional.empty();
+    @NotNull
+    private final Lock buttonLock;
+    @NotNull
+    private final Condition buttonPressed;
+
+    JRadioButton[] buttons = new JRadioButton[]{
+            new JRadioButton("Queen"),
+            new JRadioButton("Rook"),
+            new JRadioButton("Bishop"),
+            new JRadioButton("Knight")
+    };
+
+    ChoosePieceTypeForPromotedPawn() {
+        super(new GridLayout(0, 1));
+
+        buttonLock = new ReentrantLock();
+        buttonPressed = buttonLock.newCondition();
+        ButtonGroup buttonGroup = new ButtonGroup();
+        for (JRadioButton button : buttons) {
+            buttonGroup.add(button);
+        }
+
+        add(new JLabel("Choose piece type for promoted pawn:"));
+        for (JRadioButton button : buttons) {
+            add(button);
+        }
+
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(actionEvent -> {
+            buttonLock.lock();
+            buttonPressed.signal();
+            for (JRadioButton button : buttons) {
+                if (button.isSelected()) {
+                    switch (button.getText()) {
+                        case "Queen":
+                            selectedPiece = Optional.of(PieceType.Queen);
+                            break;
+                        case "Rook":
+                            selectedPiece = Optional.of(PieceType.Rook);
+                            break;
+                        case "Bishop":
+                            selectedPiece = Optional.of(PieceType.Bishop);
+                            break;
+                        case "Knight":
+                            selectedPiece = Optional.of(PieceType.Knight);
+                            break;
+                        default:
+                            assert false;
+                    }
+                }
+            }
+            buttonLock.unlock();
+        });
+        add(submitButton);
+    }
+
+    @NotNull
+    PieceType getChosenPiece() {
+        buttonLock.lock();
+        JFrame frame = new JFrame("Choose Piece Type");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.add(this);
+        frame.pack();
+        frame.setVisible(true);
+        try {
+            while (!selectedPiece.isPresent()) {
+                try {
+                    buttonPressed.await();
+                } catch (InterruptedException ignored) {
+
+                }
+            }
+            PieceType selected = selectedPiece.get();
+            assert selected != null;
+            println(selected.toString());
+            selectedPiece = Optional.empty();
+            return selected;
+        } finally {
+            frame.dispose();
+            buttonLock.unlock();
+        }
+    }
+
 }
