@@ -15,7 +15,7 @@ public class GameRunner {
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
     private static JFrame game;
     public static final boolean DEBUG = false;
-    public static int TIMEOUT_IN_SECONDS = 30; //if timeout is 0, the only limit is yourself
+    public static int TIMEOUT_IN_SECONDS = 0; //if timeout is 0, the only limit is yourself
 
 
     @NotNull
@@ -79,28 +79,24 @@ public class GameRunner {
     }
 
     public static void askTimeOut() {
-        JFrame frame;
-//        if (game == null) {
-            frame = new JFrame();
-//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        } else {
-//            frame = game;
-//        }
+        JFrame frame = new JFrame();
+
         boolean updated = false;
         while (!updated) {
             String input = JOptionPane.showInputDialog(frame, "Enter timeout in seconds \n(0 for no timeout)",
                     "Timeout", JOptionPane.QUESTION_MESSAGE);
             if (input == null) {
-                System.exit(-2);
-            }
-            try {
-                int newTimeout = Integer.parseInt(input);
-                if (newTimeout >= 0) {
-                    TIMEOUT_IN_SECONDS = newTimeout;
-                    updated = true;
-                }
-            } catch (NumberFormatException ignored) {
+                updated = true;
+            } else {
+                try {
+                    int newTimeout = Integer.parseInt(input);
+                    if (newTimeout >= 0) {
+                        TIMEOUT_IN_SECONDS = newTimeout;
+                        updated = true;
+                    }
+                } catch (NumberFormatException ignored) {
 
+                }
             }
         }
     }
