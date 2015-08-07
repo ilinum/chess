@@ -18,6 +18,15 @@ public class GameRunner {
     public static int TIMEOUT_IN_SECONDS = 0; //if timeout is 0, the only limit is yourself
 
 
+    /**
+     * Run the actual game with the given players
+     * ChessBoardUtil.inverse(p1.getPlayerColor()) == p2.getPlayerColor() must be true
+     * At the end of the game shows the dialog, who won
+     *
+     * @param p1 player 1
+     * @param p2 player 2
+     * @return the piece color of the winner or PieceColor.Empty if it's a draw
+     */
     @NotNull
     public static PieceColor runGame(@NotNull Player p1, @NotNull Player p2) {
         Game g;
@@ -30,8 +39,6 @@ public class GameRunner {
             game.setSize(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH);
             game.getContentPane().setPreferredSize(new Dimension(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH));
             game.pack();
-            //game.setMinimumSize(new Dimension(MIN_HEIGHT_AND_WIDTH, MIN_HEIGHT_AND_WIDTH));
-            //game.setPreferredSize(new Dimension(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH));
             g = new Game(p1, p2, game);
             game.setLocationRelativeTo(null);
             game.setVisible(true);
@@ -68,6 +75,11 @@ public class GameRunner {
         }
     }
 
+    /**
+     * creates a dialog that asks if user wants to play again
+     *
+     * @return 0 if user pressed yes
+     */
     public static int askToPlayAgain() {
         JFrame frame;
         if (game != null) {
@@ -78,6 +90,9 @@ public class GameRunner {
         return JOptionPane.showConfirmDialog(frame, "Would you like to play again?");
     }
 
+    /**
+     * Ask the user the timeout they want to use. It sets the timeout according to the answer
+     */
     public static void askTimeOut() {
         JFrame frame = new JFrame();
 
@@ -101,6 +116,9 @@ public class GameRunner {
         }
     }
 
+    /**
+     * Disposes of the frame
+     */
     public static void dispose() {
         if (game != null) {
             game.dispose();

@@ -17,6 +17,12 @@ import java.util.Optional;
 import static me.ilinskiy.chess.chessBoard.PieceType.Pawn;
 
 /**
+ * A class that represents chess board. It keeps track of the elements, where they are on the board, whose turn it is
+ * and which elements have moved.
+ * Board can (and should) be only modified using BoardWrapper. The actual BoardWrapper instance used for making moves
+ * is held by Game instance. So there is no way to modify this board from an outside package.
+ * @see ChessBoardUtil.makeMoveAndEvaluate(Board, Move, BoardOperation)
+ *
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */
@@ -85,7 +91,7 @@ public class Board extends JPanel implements Copyable {
 
     /**
      * Method that lets you change position of a piece on the board
-     * NOTE! This will overwrite anything at the position move.getNewPosition !!!
+     * NOTE! This will overwrite anything at the position move.getNewPosition!!!
      *
      * @param move move that was made
      */
