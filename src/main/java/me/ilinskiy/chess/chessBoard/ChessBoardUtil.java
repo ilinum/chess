@@ -51,6 +51,7 @@ public class ChessBoardUtil {
     public static final HashMap<Piece, Image> icons = new HashMap<>();
 
     public static void initIcons() {
+        if (icons.isEmpty()) {
             InputStream[] images = new InputStream[]{
                     ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/white-pawn.png"),
                     ChessBoardUtil.class.getResourceAsStream("/resources/ChessPieces/white-knight.png"),
@@ -89,6 +90,7 @@ public class ChessBoardUtil {
                     e.printStackTrace();
                 }
             }
+        }
     }
 
     public static boolean isOutOfBounds(@NotNull Coordinates c) {
