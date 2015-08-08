@@ -98,7 +98,7 @@ public class ChessBoardUtil {
     }
 
     @NotNull
-    public BoardWrapper getBoardWrapperCopy(Board b) {
+    public static BoardWrapper getBoardWrapperCopy(Board b) {
         return new BoardWrapper(b.copy());
     }
 }
