@@ -20,6 +20,9 @@ import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
 class Painter {
     private static final Color WHITE_BG = new Color(0xCFB884);
     private static final Color BLACK_BG = new Color(0x76350F);
+    private static final Color EAT_COLOR = new Color(0x0FCE3C);
+    private static final Color MOVE_COLOR = new Color(0x5447FF);
+    private static final Color SELECT_COLOR = new Color(0xFA1843);
 
 
     static void paint(@NotNull Graphics graphics, @NotNull Board board) {
@@ -59,7 +62,7 @@ class Painter {
             if (unpaint) {
                 setBGForCell(selected.get(), graphics);
             } else {
-                graphics.setColor(Color.RED);
+                graphics.setColor(SELECT_COLOR);
             }
             Coordinates c = selected.get();
             int heightAndWidth = getSize(board).width;
@@ -71,11 +74,11 @@ class Painter {
                     setBGForCell(move.getNewPosition(), graphics);
                 } else {
                     if (move instanceof EnPasse) {
-                        graphics.setColor(Color.GREEN);
+                        graphics.setColor(EAT_COLOR);
                     } else if (board.getPieceAt(move.getNewPosition()) instanceof EmptyCell) {
-                        graphics.setColor(Color.BLUE);
+                        graphics.setColor(MOVE_COLOR);
                     } else if (board.getPieceAt(move.getNewPosition()).getColor() != board.getPieceAt(selected.get()).getColor()) {
-                        graphics.setColor(Color.GREEN);
+                        graphics.setColor(EAT_COLOR);
                     }
                 }
                 drawCell(move.getNewPosition(), graphics, heightAndWidth);
