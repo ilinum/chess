@@ -96,4 +96,9 @@ public class ChessBoardUtil {
     public static boolean isOutOfBounds(@NotNull Coordinates c) {
         return c.getX() < 0 || c.getX() >= Board.BOARD_SIZE || c.getY() < 0 || c.getY() >= Board.BOARD_SIZE;
     }
+
+    @NotNull
+    public BoardWrapper getBoardWrapperCopy(Board b) {
+        return new BoardWrapper(b.copy());
+    }
 }
