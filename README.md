@@ -16,7 +16,7 @@ To run it, just type `java -jar Chess-1.0.jar`
 Here's the fun part: you can easily build your own AI with this. All you have to do is add this jar to dependencies, and then call GameRunner.runGame() with one of parameters being your implementation of Player interface. 
 (Please let me know if you do something like that, so I can link to it from here!)
 
-[Here](https://github.com/ChessAI)'s one implementation
+[Here](https://github.com/ilinum/ChessAI)'s one implementation
 
 
 ###Icons used
