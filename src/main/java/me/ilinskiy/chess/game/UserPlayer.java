@@ -121,12 +121,6 @@ public class UserPlayer implements Player {
     public PieceType getPieceTypeForPromotedPawn() {
         return new ChoosePieceTypeForPromotedPawn().getChosenPiece();
     }
-
-    @NotNull
-    @Override
-    public UserPlayer copy() {
-        return new UserPlayer(myColor);
-    }
 }
 
 class ChoosePieceTypeForPromotedPawn extends JPanel {
@@ -192,7 +186,7 @@ class ChoosePieceTypeForPromotedPawn extends JPanel {
     PieceType getChosenPiece() {
         buttonLock.lock();
         JFrame frame = new JFrame("Choose Piece Type");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.add(this);
         frame.pack();

@@ -13,11 +13,6 @@ import me.ilinskiy.chess.chessBoard.PieceType;
 public class PlayerMock implements Player {
     public final PieceColor myColor;
 
-
-    public PlayerMock() {
-        this(PieceColor.Empty);
-    }
-
     public PlayerMock(PieceColor color) {
         myColor = color;
     }
@@ -39,11 +34,5 @@ public class PlayerMock implements Player {
     @NotNull
     public PieceType getPieceTypeForPromotedPawn() {
         return PieceType.Empty;
-    }
-
-    @Override
-    @NotNull
-    public PlayerMock copy() {
-        return new PlayerMock();
     }
 }

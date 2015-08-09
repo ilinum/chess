@@ -9,7 +9,7 @@ import me.ilinskiy.chess.chessBoard.PieceType;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/17/15
  */
-public interface Player extends Copyable {
+public interface Player {
 
     @NotNull
     Move getMove(@NotNull Board b);
@@ -19,8 +19,4 @@ public interface Player extends Copyable {
 
     @NotNull
     PieceType getPieceTypeForPromotedPawn();
-
-    @NotNull
-    @Override
-    Player copy();
 }
