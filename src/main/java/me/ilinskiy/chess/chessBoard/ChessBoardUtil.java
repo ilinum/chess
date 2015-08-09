@@ -22,13 +22,11 @@ public class ChessBoardUtil {
     public static final PieceType[] backRowPieceTypes = new PieceType[]{Rook, Knight, Bishop, Queen, King, Bishop,
             Knight, Rook};
 
-    public static synchronized boolean makeMoveAndEvaluate(@NotNull Board b, @NotNull Move m,
-                                                           @NotNull BoardOperation op) {
-        BoardWrapper board = new BoardWrapper(b.copy());
+    public static <V> V makeMoveAndEvaluate(@NotNull Board b, @NotNull Move m,
+                                            @NotNull BoardOperation<V> op) {
+        BoardWrapper board = getBoardWrapperCopy(b);
         board.setPieceAccordingToMove(m);
-        boolean result = op.run(board.getInner());
-        board.setPieceAccordingToMove(m.inverse()); //roll back
-        return result;
+        return op.run(board.getInner());
     }
 
     @NotNull

@@ -5,6 +5,6 @@ package me.ilinskiy.chess.chessBoard;
  * Date: 7/18/15
  */
 @FunctionalInterface
-public interface BoardOperation {
-    boolean run(Board b);
+public interface BoardOperation<V> {
+    V run(Board b);
 }
