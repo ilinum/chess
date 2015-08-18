@@ -84,6 +84,7 @@ public class Game {
         Move result = null;
         Optional<Thread> updateTimeLeftThread = Optional.empty();
         try {
+            long moveMustBeMadeByMillis = System.currentTimeMillis() + (GameRunner.TIMEOUT_IN_SECONDS + 1) * 1000;
             if (GameRunner.TIMEOUT_IN_SECONDS > 0) {
                 if (myFrame.isPresent()) {
                     JFrame frame = myFrame.get();
@@ -92,8 +93,8 @@ public class Game {
                         try {
                             int secondsLeft = GameRunner.TIMEOUT_IN_SECONDS;
                             while (secondsLeft > 0) {
+                                secondsLeft = (int) (moveMustBeMadeByMillis - System.currentTimeMillis()) / 1000;
                                 frame.setTitle("Chess. Time left: " + secondsLeft);
-                                secondsLeft--;
                                 try {
                                     Thread.sleep(1000);
                                 } catch (InterruptedException e) {
@@ -107,7 +108,7 @@ public class Game {
                     updateTimeLeftThread = Optional.of(thread);
                     thread.start();
                 }
-                result = future.get(GameRunner.TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
+                result = future.get(GameRunner.TIMEOUT_IN_SECONDS + 1, TimeUnit.SECONDS); //be nice and add an extra second
             } else {
                 result = future.get();
             }
