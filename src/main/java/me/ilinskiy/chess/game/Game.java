@@ -91,16 +91,14 @@ public class Game {
                     String oldName = frame.getTitle();
                     Thread thread = new Thread(() -> {
                         try {
-                            int secondsLeft = GameRunner.TIMEOUT_IN_SECONDS;
+                            int secondsLeft = GameRunner.TIMEOUT_IN_SECONDS - 1;
                             while (secondsLeft > 0) {
                                 secondsLeft = (int) (moveMustBeMadeByMillis - System.currentTimeMillis()) / 1000;
                                 frame.setTitle("Chess. Time left: " + secondsLeft);
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    Thread.currentThread().interrupt();
-                                }
+                                Thread.sleep(1000);
                             }
+                        } catch (InterruptedException ignored) {
+
                         } finally {
                             frame.setTitle(oldName);
                         }

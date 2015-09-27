@@ -332,7 +332,7 @@ public class GameUtil {
         return res;
     }
 
-    public static void println(String s) {
+    public static void println(Object s) {
         if (GameRunner.DEBUG) {
             System.out.println(s);
         }
