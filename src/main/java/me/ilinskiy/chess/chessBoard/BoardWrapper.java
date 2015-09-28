@@ -1,7 +1,9 @@
 package me.ilinskiy.chess.chessBoard;
 
 import me.ilinskiy.chess.annotations.NotNull;
+import me.ilinskiy.chess.annotations.Nullable;
 import me.ilinskiy.chess.game.Move;
+import me.ilinskiy.chess.ui.ChessPainter;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -10,9 +12,12 @@ import me.ilinskiy.chess.game.Move;
 public final class BoardWrapper {
     private final Board inner;
 
-    public BoardWrapper() {
+    public BoardWrapper(@Nullable ChessPainter painter) {
+        inner = new Board(painter);
+    }
 
-        inner = new Board();
+    public BoardWrapper() {
+        this((ChessPainter) null);
     }
 
     BoardWrapper(Board b) {

@@ -3,9 +3,8 @@ package me.ilinskiy.chess.game;
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
 import me.ilinskiy.chess.chessBoard.*;
+import me.ilinskiy.chess.ui.ChessPainter;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,24 +28,19 @@ public class Game {
     private final Player player1;
     @NotNull
     private final Player player2;
-    private Optional<JFrame> myFrame;
+    private Optional<ChessPainter> myPainter;
 
-    public Game(@NotNull Player p1, @NotNull Player p2, @Nullable JFrame frame) {
+    public Game(@NotNull Player p1, @NotNull Player p2, @Nullable ChessPainter painter) {
         if (ChessBoardUtil.inverse(p1.getPlayerColor()) != p2.getPlayerColor()) {
             throw new IllegalArgumentException("Wrong colors for players!");
         }
-        ChessBoardUtil.initIcons();
-        board = new BoardWrapper();
+        board = new BoardWrapper(painter);
         movesMade = new ArrayList<>();
         player1 = p1;
         player2 = p2;
         turn = p1.getPlayerColor() == PieceColor.White ? p1 : p2;
         winner = Optional.empty();
-        Board inner = board.getInner();
-        if (frame != null) {
-            frame.add(inner, BorderLayout.CENTER);
-        }
-        myFrame = Optional.ofNullable(frame);
+        myPainter = Optional.ofNullable(painter);
     }
 
     public void makeMove() {
@@ -84,27 +78,10 @@ public class Game {
         Move result = null;
         Optional<Thread> updateTimeLeftThread = Optional.empty();
         try {
-            long moveMustBeMadeByMillis = System.currentTimeMillis() + (GameRunner.TIMEOUT_IN_SECONDS + 1) * 1000;
             if (GameRunner.TIMEOUT_IN_SECONDS > 0) {
-                if (myFrame.isPresent()) {
-                    JFrame frame = myFrame.get();
-                    String oldName = frame.getTitle();
-                    Thread thread = new Thread(() -> {
-                        try {
-                            int secondsLeft = GameRunner.TIMEOUT_IN_SECONDS - 1;
-                            while (secondsLeft > 0) {
-                                secondsLeft = (int) (moveMustBeMadeByMillis - System.currentTimeMillis()) / 1000;
-                                frame.setTitle("Chess. Time left: " + secondsLeft);
-                                Thread.sleep(1000);
-                            }
-                        } catch (InterruptedException ignored) {
-
-                        } finally {
-                            frame.setTitle(oldName);
-                        }
-                    });
-                    updateTimeLeftThread = Optional.of(thread);
-                    thread.start();
+                if (myPainter.isPresent()) {
+                    updateTimeLeftThread = Optional.ofNullable(myPainter.get().getUpdateTimeLeftThread());
+                    updateTimeLeftThread.ifPresent(Thread::start);
                 }
                 result = future.get(GameRunner.TIMEOUT_IN_SECONDS + 1, TimeUnit.SECONDS); //be nice and add an extra second
             } else {
@@ -115,9 +92,7 @@ public class Game {
         } catch (TimeoutException e) {
             future.cancel(true);
         } finally {
-            if (updateTimeLeftThread.isPresent()) {
-                updateTimeLeftThread.get().interrupt();
-            }
+            updateTimeLeftThread.ifPresent(Thread::interrupt);
         }
         return Optional.ofNullable(result);
     }

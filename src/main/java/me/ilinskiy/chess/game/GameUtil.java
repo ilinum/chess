@@ -67,6 +67,15 @@ public class GameUtil {
         return result;
     }
 
+    public static Set<Coordinates> getAvailableNewPositions(@NotNull Coordinates pos, @NotNull Board board) {
+        Set<Move> moves = getAvailableMovesForPiece(pos, board);
+        Set<Coordinates> res = new HashSet<>(moves.size());
+        for (Move move : moves) {
+            res.add(move.getNewPosition());
+        }
+        return res;
+    }
+
     /**
      * Get all available moves for piece without considering if the king will be attacked
      */
@@ -204,11 +213,11 @@ public class GameUtil {
                 }
             }
         }
-        if (!(board.pieceHasMovedSinceStartOfGame(kingPos) || kingIsAttacked(kingColor, board, false))) {
+        if (board.pieceHasNotMovedSinceStartOfGame(kingPos) && !kingIsAttacked(kingColor, board, false)) {
             //check for castling
             List<Coordinates> rooks = findPiecesByTypeAndColor(PieceType.Rook, kingColor, board);
             for (Coordinates rookPos : rooks) {
-                if (!board.pieceHasMovedSinceStartOfGame(rookPos)) {
+                if (board.pieceHasNotMovedSinceStartOfGame(rookPos)) {
                     assert rookPos.getY() == kingPos.getY();
                     int direction;
                     if (rookPos.getX() > kingPos.getX()) {

@@ -60,16 +60,8 @@ public class Move implements Copyable, Comparable<Move> {
         return new int[]{a[0], a[1], b[0], b[1]};
     }
 
-    /**
-     * @return new Move that is inverse of this
-     */
-    @NotNull
-    public Move inverse() {
-        return new Move(newPosition, initialPosition);
-    }
-
     @Override
-    public int compareTo(Move move) {
+    public int compareTo(@NotNull Move move) {
         int initDiff = initialPosition.compareTo(move.getInitialPosition());
         if (initDiff != 0) {
             return initDiff;

@@ -3,13 +3,9 @@ package me.ilinskiy.chess.chessBoard;
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
 import me.ilinskiy.chess.game.*;
+import me.ilinskiy.chess.ui.ChessPainter;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static me.ilinskiy.chess.chessBoard.PieceType.Pawn;
 
@@ -23,7 +19,7 @@ import static me.ilinskiy.chess.chessBoard.PieceType.Pawn;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */
-public class Board extends JPanel implements Copyable {
+public class Board implements Copyable {
     public static final int BOARD_SIZE = 8;
     public static final int WHITE_DIRECTION = -1;
     public static final int BLACK_DIRECTION = 1;
@@ -32,17 +28,23 @@ public class Board extends JPanel implements Copyable {
     private PieceColor turn;
     private List<Coordinates> piecesMoved;
     private Optional<Move> lastMove;
+    public final Optional<ChessPainter> myPainter;
+
+    public Board(@Nullable ChessPainter painter) {
+        selected = Optional.empty();
+        putPiecesOnBoard();
+        myPainter = Optional.ofNullable(painter);
+        myPainter.ifPresent(p -> p.initialize(this));
+        turn = PieceColor.White;
+    }
 
     public Board() {
-        super();
-        reset();
+        this(null);
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void reset() {
-        turn = PieceColor.White;
+    private void putPiecesOnBoard() {
         board = new ChessElement[BOARD_SIZE][BOARD_SIZE];
-        selected = Optional.empty();
         int currRow = 0;
         assert ChessBoardUtil.backRowPieceTypes.length == BOARD_SIZE;
         lastMove = Optional.empty();
@@ -77,7 +79,6 @@ public class Board extends JPanel implements Copyable {
             board[currRow][i] = Piece.createPiece(bottomPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
         }
         piecesMoved = new ArrayList<>();
-        paint();
     }
 
     @NotNull
@@ -94,25 +95,28 @@ public class Board extends JPanel implements Copyable {
      */
     void movePiece(@NotNull Move move) {
         lastMove = Optional.of(move);
+        List<Coordinates> cellsToRepaint = new LinkedList<>();
+        cellsToRepaint.addAll(GameUtil.getAvailableNewPositions(move.getInitialPosition(), this));
+        cellsToRepaint.add(move.getInitialPosition());
         if (move instanceof Castling) {
             Castling c = (Castling) move;
-            Painter.unPaintSelected(getGraphics(), this);
+            cellsToRepaint.add(c.getRookInitialPosition());
+            cellsToRepaint.add(c.getRookNewPosition());
             makeActualMove(c.getKingInitialPosition(), c.getKingNewPosition());
             makeActualMove(c.getRookInitialPosition(), c.getRookNewPosition());
         } else if (move instanceof EnPasse) {
-            Painter.unPaintSelected(getGraphics(), this);
             Coordinates eaten = ((EnPasse) move).eatenPiece();
             assert getPieceAt(eaten).getType() == Pawn;
             setPieceAt(eaten, EmptyCell.INSTANCE);
             makeActualMove(move.getInitialPosition(), move.getNewPosition());
-            Painter.paintCell(eaten, getGraphics(), this);
+            cellsToRepaint.add(eaten);
+            cellsToRepaint.add(move.getNewPosition());
         } else {
-            Painter.unPaintSelected(getGraphics(), this);
             makeActualMove(move.getInitialPosition(), move.getNewPosition());
         }
         turn = ChessBoardUtil.inverse(turn);
         selected = Optional.empty();
-        Painter.paint(getGraphics(), this, move);
+        cellsToRepaint.forEach(this::paintCell);
     }
 
     private void makeActualMove(@NotNull Coordinates initialPosition, @NotNull Coordinates newPosition) {
@@ -128,25 +132,15 @@ public class Board extends JPanel implements Copyable {
         board[initialPosition.getY()][initialPosition.getX()] = EmptyCell.INSTANCE;
     }
 
-    void movePiece(@NotNull Coordinates initPos, @NotNull Coordinates newPos) {
-        movePiece(new Move(initPos, newPos));
+    public boolean pieceHasNotMovedSinceStartOfGame(@NotNull Coordinates pos) {
+        return !piecesMoved.contains(pos);
     }
 
-    public boolean pieceHasMovedSinceStartOfGame(@NotNull Coordinates pos) {
-        return piecesMoved.contains(pos);
-    }
-
-    /**
-     * @return copy of selected coordinates
-     */
     @NotNull
     public Optional<Coordinates> getSelected() {
-        if (selected.isPresent()) {
-            return Optional.of(selected.get().copy());
-        }
-        return Optional.empty();
+        if (selected == null) throw new RuntimeException("selected is null!");
+        return selected; //can return selected without copying because both Optional and Coordinates are immutable
     }
-
 
     void setPieceAt(@NotNull Coordinates pos, @NotNull ChessElement element) {
         checkBounds(pos);
@@ -164,16 +158,19 @@ public class Board extends JPanel implements Copyable {
      *
      * @return true if a piece is there. False if it's an empty cell and nothing is done
      */
-    public boolean setSelected(@NotNull Coordinates c) {
-        checkBounds(c);
-        if (board[c.getY()][c.getX()] instanceof EmptyCell || getPieceAt(c).getColor() != whoseTurnIsIt()) {
+    public boolean setSelected(@NotNull Coordinates newSelected) {
+        checkBounds(newSelected);
+        if (getPieceAt(newSelected).getColor() != whoseTurnIsIt()) {
             return false;
         }
-        if (selected.isPresent()) {
-            Painter.unPaintSelected(getGraphics(), this);
+        @Nullable Coordinates selectedCopy = selected.orElse(null);
+        selected = Optional.of(newSelected);
+        if (selectedCopy != null) {
+            paintCell(selectedCopy);
+            GameUtil.getAvailableNewPositions(selectedCopy, this).forEach(this::paintCell);
         }
-        selected = Optional.of(c);
-        Painter.paintSelected(getGraphics(), this);
+        paintCell(newSelected);
+        GameUtil.getAvailableNewPositions(newSelected, this).forEach(this::paintCell);
         return true;
     }
 
@@ -181,23 +178,6 @@ public class Board extends JPanel implements Copyable {
     public PieceColor whoseTurnIsIt() {
         return turn;
     }
-
-    private void paint() {
-        paint(getGraphics());
-    }
-
-    @Override
-    public void paint(@Nullable Graphics graphics) {
-        if (graphics == null) {
-            graphics = getGraphics();
-            if (graphics == null) {
-                return;
-            }
-        }
-        super.paint(graphics); //this line is necessary for some reason. I have no idea why.
-        Painter.paint(graphics, this);
-    }
-
 
     @NotNull
     @Override
@@ -217,6 +197,7 @@ public class Board extends JPanel implements Copyable {
     @Override
     public Board copy() {
         Board result = new Board();
+
         result.selected = this.selected;
         result.turn = this.turn;
         result.piecesMoved = GameUtil.copy(piecesMoved);
@@ -243,17 +224,13 @@ public class Board extends JPanel implements Copyable {
         }
     }
 
-    public Dimension getFrameSize() {
-        return Painter.getSize(this);
-    }
-
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(board) * 31 + selected.hashCode() + turn.hashCode();
     }
 
     public void paintCell(@NotNull Coordinates pos) {
-        Painter.paintCell(pos, getGraphics(), this);
+        myPainter.ifPresent(painter -> painter.paintCell(pos));
     }
 
     @NotNull

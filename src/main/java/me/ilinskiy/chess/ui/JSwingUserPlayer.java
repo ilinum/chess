@@ -1,10 +1,13 @@
-package me.ilinskiy.chess.game;
+package me.ilinskiy.chess.ui;
 
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.chessBoard.Board;
 import me.ilinskiy.chess.chessBoard.Coordinates;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import me.ilinskiy.chess.chessBoard.PieceType;
+import me.ilinskiy.chess.game.GameUtil;
+import me.ilinskiy.chess.game.Move;
+import me.ilinskiy.chess.game.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +25,7 @@ import static me.ilinskiy.chess.game.GameUtil.println;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/20/15
  */
-public class UserPlayer implements Player {
+public class JSwingUserPlayer implements Player {
     private Optional<Move> moveMade = Optional.empty();
     @NotNull
     private final Lock mouseLock;
@@ -30,7 +33,7 @@ public class UserPlayer implements Player {
     private final Condition moveIsMade;
     private final PieceColor myColor;
 
-    public UserPlayer(PieceColor color) {
+    public JSwingUserPlayer(PieceColor color) {
         myColor = color;
         mouseLock = new ReentrantLock();
         moveIsMade = mouseLock.newCondition();
@@ -39,8 +42,8 @@ public class UserPlayer implements Player {
     @NotNull
     @Override
     public Move getMove(@NotNull Board board) {
+        BoardPanel panel = ((JSwingChessPainter) board.myPainter.get()).getPanel();
         MouseListener mouseListener = new MouseListener() {
-
             @Override
             public void mouseClicked(@NotNull MouseEvent mouseEvent) {
             }
@@ -54,7 +57,7 @@ public class UserPlayer implements Player {
                 mouseLock.lock();
                 double x = mouseEvent.getX();
                 double y = mouseEvent.getY();
-                int size = board.getFrameSize().width;
+                int size = panel.getSize().width;
                 int cellSize = size / Board.BOARD_SIZE;
                 Coordinates location = new Coordinates((int) x / cellSize, (int) y / cellSize);
                 Optional<Coordinates> selected = board.getSelected();
@@ -87,7 +90,7 @@ public class UserPlayer implements Player {
             public void mouseExited(@NotNull MouseEvent mouseEvent) {
             }
         };
-        board.addMouseListener(mouseListener);
+        panel.addMouseListener(mouseListener);
 
         try {
             mouseLock.lock();
@@ -103,9 +106,9 @@ public class UserPlayer implements Player {
             moveMade = Optional.empty();
             return move;
         } finally {
-            assert board.getMouseListeners().length > 0;
-            board.removeMouseListener(mouseListener);
-            assert board.getMouseListeners().length == 0;
+            assert panel.getMouseListeners().length > 0;
+            panel.removeMouseListener(mouseListener);
+            assert panel.getMouseListeners().length == 0;
             mouseLock.unlock();
         }
     }
@@ -131,7 +134,7 @@ class ChoosePieceTypeForPromotedPawn extends JPanel {
     @NotNull
     private final Condition buttonPressed;
 
-    JRadioButton[] buttons = new JRadioButton[]{
+    final JRadioButton[] buttons = new JRadioButton[]{
             new JRadioButton("Queen"),
             new JRadioButton("Rook"),
             new JRadioButton("Bishop"),

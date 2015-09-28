@@ -52,15 +52,6 @@ public class Coordinates implements Copyable, Comparable<Coordinates> {
         return o instanceof Coordinates && getX() == ((Coordinates) o).getX() && getY() == ((Coordinates) o).getY();
     }
 
-    /**
-     * @return a new instance of coordinates with x and y switched
-     */
-    @NotNull
-    public Coordinates inverse() {
-        //noinspection SuspiciousNameCombination
-        return new Coordinates(myY, myX);
-    }
-
     @Override
     public int hashCode() {
         return Arrays.hashCode(toArray());

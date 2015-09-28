@@ -135,7 +135,7 @@ public class BoardTest {
         assertTrue("selected should be empty!", !b.getSelected().isPresent());
         assertTrue(!b.setSelected(newCoordinates));
         assertTrue(!b.getSelected().isPresent());
-        b.movePiece(new Coordinates(0, 0), new Coordinates(4, 4));
+        b.movePiece(new Move(new Coordinates(0, 0), new Coordinates(4, 4)));
         assertTrue(b.setSelected(newCoordinates));
         assertTrue(b.getSelected().get().equals(newCoordinates));
     }
