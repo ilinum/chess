@@ -114,7 +114,7 @@ public class Board implements Copyable {
         } else {
             makeActualMove(move.getInitialPosition(), move.getNewPosition());
         }
-        turn = ChessBoardUtil.inverse(turn);
+        turn = turn.inverse();
         selected = Optional.empty();
         cellsToRepaint.forEach(this::paintCell);
     }
@@ -148,7 +148,7 @@ public class Board implements Copyable {
     }
 
     private void checkBounds(@NotNull Coordinates c) {
-        if (ChessBoardUtil.isOutOfBounds(c)) {
+        if (c.isOutOfBounds()) {
             throw new IllegalArgumentException("Index out of bounds: " + c);
         }
     }

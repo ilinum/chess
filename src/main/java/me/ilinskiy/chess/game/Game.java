@@ -17,6 +17,7 @@ import static me.ilinskiy.chess.game.GameUtil.println;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */
+@SuppressWarnings("WeakerAccess")
 public class Game {
     @NotNull
     private final BoardWrapper board;
@@ -31,7 +32,7 @@ public class Game {
     private Optional<ChessPainter> myPainter;
 
     public Game(@NotNull Player p1, @NotNull Player p2, @Nullable ChessPainter painter) {
-        if (ChessBoardUtil.inverse(p1.getPlayerColor()) != p2.getPlayerColor()) {
+        if (p1.getPlayerColor().inverse() != p2.getPlayerColor()) {
             throw new IllegalArgumentException("Wrong colors for players!");
         }
         board = new BoardWrapper(painter);
@@ -50,7 +51,7 @@ public class Game {
         Optional<Move> moveOptional = getMove();
         if (!moveOptional.isPresent()) {
             //it timed out
-            winner = Optional.of(ChessBoardUtil.inverse(turn.getPlayerColor()));
+            winner = Optional.of(turn.getPlayerColor().inverse());
             println("Timed out!");
         } else {
             Move m = moveOptional.get();
@@ -61,7 +62,7 @@ public class Game {
             board.movePiece(m);
             checkPawnPromoted(m, turn);
             movesMade.add(m);
-            turn = ChessBoardUtil.inverse(turn, player1, player2);
+            turn = turn.inverse(player1, player2);
             checkGameOver(turn);
         }
     }
@@ -110,7 +111,7 @@ public class Game {
             int x = move.getNewPosition().getX();
             int y = move.getNewPosition().getY();
             Coordinates nextAdvance = new Coordinates(x, y + GameUtil.getDirectionForPlayer(pieceColor));
-            if (ChessBoardUtil.isOutOfBounds(nextAdvance)) {
+            if (nextAdvance.isOutOfBounds()) {
                 ArrayList<PieceType> canBePromotedTo = new ArrayList<>(4);
                 canBePromotedTo.add(PieceType.Queen);
                 canBePromotedTo.add(PieceType.Rook);
@@ -140,7 +141,7 @@ public class Game {
         if (GameUtil.getAvailableMoves(nextToMove.getPlayerColor(), board.getInner()).size() == 0) {
             //game is over
             if (GameUtil.kingIsAttacked(nextToMove.getPlayerColor(), board.getInner())) {
-                winner = Optional.of((ChessBoardUtil.inverse(nextToMove, player1, player2)).getPlayerColor());
+                winner = Optional.of((nextToMove.inverse(player1, player2)).getPlayerColor());
             } else {
                 //it's a draw
                 winner = Optional.of(PieceColor.Empty);

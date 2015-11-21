@@ -19,4 +19,8 @@ public interface Player {
 
     @NotNull
     PieceType getPieceTypeForPromotedPawn();
+
+    default Player inverse(Player p1, Player p2) {
+        return this == p1 ? p2 : p1;
+    }
 }

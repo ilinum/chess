@@ -134,7 +134,7 @@ class ChoosePieceTypeForPromotedPawn extends JPanel {
     @NotNull
     private final Condition buttonPressed;
 
-    final JRadioButton[] buttons = new JRadioButton[]{
+    private final JRadioButton[] buttons = new JRadioButton[]{
             new JRadioButton("Queen"),
             new JRadioButton("Rook"),
             new JRadioButton("Bishop"),

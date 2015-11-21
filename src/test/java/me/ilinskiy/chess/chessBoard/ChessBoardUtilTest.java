@@ -25,12 +25,12 @@ public class ChessBoardUtilTest {
 
     @Test
     public void testInverseColor() {
-        assertTrue(ChessBoardUtil.inverse(PieceColor.Black) == PieceColor.White);
-        assertTrue(ChessBoardUtil.inverse(PieceColor.White) == PieceColor.Black);
+        assertTrue(PieceColor.Black.inverse() == PieceColor.White);
+        assertTrue(PieceColor.White.inverse() == PieceColor.Black);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInverseColor2() {
-        ChessBoardUtil.inverse(PieceColor.Empty);
+        PieceColor.Empty.inverse();
     }
 }

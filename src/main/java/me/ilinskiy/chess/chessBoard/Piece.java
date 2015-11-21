@@ -13,8 +13,8 @@ public class Piece implements ChessElement {
     private final PieceColor color;
     private final PieceType type;
 
-    public static final HashMap<PieceType, Piece> whitePieces;
-    public static final HashMap<PieceType, Piece> blackPieces;
+    private static final HashMap<PieceType, Piece> whitePieces;
+    private static final HashMap<PieceType, Piece> blackPieces;
 
     static {
         whitePieces = new HashMap<>();

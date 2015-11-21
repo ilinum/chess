@@ -5,6 +5,7 @@ import me.ilinskiy.chess.game.GameRunner;
 import me.ilinskiy.chess.game.Player;
 import me.ilinskiy.chess.ui.JSwingUserPlayer;
 
+@SuppressWarnings("WeakerAccess")
 public class Main {
 
     public static void main(String[] args) {

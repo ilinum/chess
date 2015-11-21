@@ -16,33 +16,43 @@ public class ChessBoardUtil {
 
     public static <V> V makeMoveAndEvaluate(@NotNull Board b, @NotNull Move m,
                                             @NotNull BoardOperation<V> op) {
-        BoardWrapper board = getBoardWrapperCopy(b);
+        BoardWrapper board = BoardWrapper.getCopy(b);
         board.setPieceAccordingToMove(m);
         return op.run(board.getInner());
     }
 
+    /**
+     * @deprecated use {@link PieceColor#inverse()} instead
+     */
     @NotNull
+    @Deprecated
     public static PieceColor inverse(PieceColor color) {
-        if (color == PieceColor.Empty) {
-            throw new IllegalArgumentException("Color may not be empty!");
-        }
-        return color == PieceColor.Black ? PieceColor.White : PieceColor.Black;
+        return color.inverse();
     }
 
+    /**
+     * @deprecated use {@link Player#inverse} instead
+     */
     @NotNull
+    @Deprecated
     public static Player inverse(@NotNull Player inverseOf, @NotNull Player p1, @NotNull Player p2) {
-        if (inverseOf.getPlayerColor() == PieceColor.Empty) {
-            throw new IllegalArgumentException("Color may not be empty!");
-        }
-        return inverseOf == p1 ? p2 : p1;
+        return inverseOf.inverse(p1, p2);
     }
 
+    /**
+     * @deprecated use {@link Coordinates#isOutOfBounds} instead
+     */
+    @Deprecated
     public static boolean isOutOfBounds(@NotNull Coordinates c) {
-        return c.getX() < 0 || c.getX() >= Board.BOARD_SIZE || c.getY() < 0 || c.getY() >= Board.BOARD_SIZE;
+        return c.isOutOfBounds();
     }
 
+    /**
+     * @deprecated use {@link BoardWrapper#getCopy(Board)} instead
+     */
     @NotNull
+    @Deprecated
     public static BoardWrapper getBoardWrapperCopy(Board b) {
-        return new BoardWrapper(b.copy());
+        return BoardWrapper.getCopy(b);
     }
 }

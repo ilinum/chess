@@ -46,6 +46,7 @@ public class Move implements Copyable, Comparable<Move> {
 
     @Override
     public boolean equals(Object o) {
+        //noinspection SimplifiableIfStatement
         if (o instanceof Move) {
             return initialPosition.equals(((Move) o).getInitialPosition()) && newPosition.equals(((Move) o).getNewPosition());
         } else {

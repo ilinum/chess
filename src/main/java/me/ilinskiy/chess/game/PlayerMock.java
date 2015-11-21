@@ -11,6 +11,7 @@ import me.ilinskiy.chess.chessBoard.PieceType;
  * Date: 7/19/15
  */
 public class PlayerMock implements Player {
+    @SuppressWarnings("WeakerAccess")
     public final PieceColor myColor;
 
     public PlayerMock(PieceColor color) {

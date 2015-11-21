@@ -66,4 +66,8 @@ public class Coordinates implements Copyable, Comparable<Coordinates> {
             return myY - coordinates.myY;
         }
     }
+
+    public boolean isOutOfBounds() {
+        return this.getX() < 0 || this.getX() >= Board.BOARD_SIZE || this.getY() < 0 || this.getY() >= Board.BOARD_SIZE;
+    }
 }

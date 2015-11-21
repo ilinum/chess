@@ -20,7 +20,7 @@ public final class BoardWrapper {
         this((ChessPainter) null);
     }
 
-    BoardWrapper(Board b) {
+    private BoardWrapper(Board b) {
         inner = b;
     }
 
@@ -53,5 +53,9 @@ public final class BoardWrapper {
     @Override
     public String toString() {
         return inner.toString();
+    }
+
+    public static BoardWrapper getCopy(Board b) {
+        return new BoardWrapper(b.copy());
     }
 }

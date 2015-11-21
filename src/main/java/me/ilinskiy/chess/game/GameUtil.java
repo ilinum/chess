@@ -89,10 +89,10 @@ public class GameUtil {
                 assert (color == White || color == Black);
                 int dir = getDirectionForPlayer(color);
                 Coordinates newC = new Coordinates(pos.getX(), pos.getY() + dir);
-                if (!ChessBoardUtil.isOutOfBounds(newC)) { //should've been promoted
+                if (!newC.isOutOfBounds()) { //should've been promoted
                     if (board.getPieceAt(newC) instanceof EmptyCell) {
                         result.add(new Move(pos, newC));
-                        boolean hasNotMoved = ChessBoardUtil.isOutOfBounds(new Coordinates(pos.getX(), pos.getY() - 2 * dir));
+                        boolean hasNotMoved = new Coordinates(pos.getX(), pos.getY() - 2 * dir).isOutOfBounds();
                         Coordinates longMove = new Coordinates(pos.getX(), pos.getY() + 2 * dir);
                         if (hasNotMoved && (board.getPieceAt(longMove) instanceof EmptyCell)) {
                             result.add(new Move(pos, longMove));
@@ -101,15 +101,15 @@ public class GameUtil {
                     Coordinates[] eatLocations = new Coordinates[]{new Coordinates(pos.getX() + 1, pos.getY() + dir),
                             new Coordinates(pos.getX() - 1, pos.getY() + dir)};
                     for (Coordinates eatLocation : eatLocations) {
-                        boolean outOfBounds = ChessBoardUtil.isOutOfBounds(eatLocation);
-                        PieceColor enemyColor = ChessBoardUtil.inverse(color);
+                        boolean outOfBounds = eatLocation.isOutOfBounds();
+                        PieceColor enemyColor = color.inverse();
                         if (!outOfBounds && board.getPieceAt(eatLocation).getColor() == enemyColor) {
                             result.add(new Move(pos, eatLocation));
                         } else if (!outOfBounds && board.getLastMove().isPresent()) { //check for en passe
                             Move lastMove = board.getLastMove().get();
                             Coordinates newPos = lastMove.getNewPosition();
                             Coordinates initPos = lastMove.getInitialPosition();
-                            int enemyDir = getDirectionForPlayer(ChessBoardUtil.inverse(color));
+                            int enemyDir = getDirectionForPlayer(color.inverse());
                             if (eatLocation.equals(new Coordinates(initPos.getX(), initPos.getY() + enemyDir))) {
                                 ChessElement piece = board.getPieceAt(newPos);
                                 if (piece.getType() == PieceType.Pawn && piece.getColor() == enemyColor) {
@@ -129,7 +129,7 @@ public class GameUtil {
                 assert xChange.length == yChange.length;
                 for (int c = 0; c < xChange.length; c++) {
                     Coordinates newPos = new Coordinates(pos.getX() + xChange[c], pos.getY() + yChange[c]);
-                    if (!ChessBoardUtil.isOutOfBounds(newPos) && board.getPieceAt(newPos).getColor() != color) {
+                    if (!newPos.isOutOfBounds() && board.getPieceAt(newPos).getColor() != color) {
                         result.add(new Move(pos, newPos));
                     }
                 }
@@ -175,20 +175,20 @@ public class GameUtil {
         Piece p = (Piece) board.getPieceAt(pos);
         for (int i = 0; i < xChange.length; i++) {
             Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
-            while (!ChessBoardUtil.isOutOfBounds(c) && board.getPieceAt(c) instanceof EmptyCell) {
+            while (!c.isOutOfBounds() && board.getPieceAt(c) instanceof EmptyCell) {
                 result.add(new Move(pos, c));
                 c = new Coordinates(c.getX() + xChange[i], c.getY() + yChange[i]);
             }
-            if (!ChessBoardUtil.isOutOfBounds(c) &&
-                    board.getPieceAt(c).getColor() == ChessBoardUtil.inverse(board.getPieceAt(pos).getColor())) {
+            if (!c.isOutOfBounds() &&
+                    board.getPieceAt(c).getColor() == board.getPieceAt(pos).getColor().inverse()) {
                 //can eat
                 result.add(new Move(pos, c));
             }
 
             c = pos; //restore
-            if (!ChessBoardUtil.isOutOfBounds(c)) {
+            if (!c.isOutOfBounds()) {
                 PieceColor color = board.getPieceAt(c).getColor();
-                if (!ChessBoardUtil.isOutOfBounds(c) && color == ChessBoardUtil.inverse(p.getColor())) {
+                if (!c.isOutOfBounds() && color == p.getColor().inverse()) {
                     result.add(new Move(pos, c));
                 }
             }
@@ -206,9 +206,9 @@ public class GameUtil {
         PieceColor kingColor = board.getPieceAt(kingPos).getColor();
         for (int i = 0; i < xChange.length; i++) {
             Coordinates c = new Coordinates(kingPos.getX() + xChange[i], kingPos.getY() + yChange[i]);
-            if (!ChessBoardUtil.isOutOfBounds(c)) {
+            if (!c.isOutOfBounds()) {
                 boolean correctColor = board.getPieceAt(c).getColor() != kingColor;
-                if (correctColor && !kingAround(c, board, ChessBoardUtil.inverse(kingColor))) {
+                if (correctColor && !kingAround(c, board, kingColor.inverse())) {
                     result.add(new Move(kingPos, c)); //all the situation when king is attacked will be filtered out later
                 }
             }
@@ -254,7 +254,7 @@ public class GameUtil {
         assert xChange.length == yChange.length;
         for (int i = 0; i < xChange.length; i++) {
             Coordinates c = new Coordinates(pos.getX() + xChange[i], pos.getY() + yChange[i]);
-            if (!ChessBoardUtil.isOutOfBounds(c)) {
+            if (!c.isOutOfBounds()) {
                 ChessElement elem = board.getPieceAt(c);
                 if (elem.getType() == PieceType.King && elem.getColor() == opposingKingColor) {
                     return true;
@@ -265,7 +265,7 @@ public class GameUtil {
     }
 
     public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull Board board, boolean checkKing) {
-        List<Coordinates> allOpponentPieces = getAllPieces(ChessBoardUtil.inverse(kingColor), board);
+        List<Coordinates> allOpponentPieces = getAllPieces(kingColor.inverse(), board);
         Coordinates kingPos = findKing(kingColor, board);
 
         for (Coordinates pos : allOpponentPieces) {
