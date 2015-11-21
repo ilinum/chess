@@ -10,6 +10,9 @@ public final class EmptyCell implements ChessElement {
 
     public static final EmptyCell INSTANCE = new EmptyCell();
 
+    private EmptyCell() {
+    }
+
     @Override
     @NotNull
     public PieceType getType() {
