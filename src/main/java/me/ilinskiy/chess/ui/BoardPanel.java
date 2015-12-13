@@ -3,10 +3,13 @@ package me.ilinskiy.chess.ui;
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.chessBoard.*;
 import me.ilinskiy.chess.game.GameUtil;
+import me.ilinskiy.chess.game.moves.EnPasse;
+import me.ilinskiy.chess.game.moves.Move;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Optional;
+import java.util.Set;
 
 import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
 
@@ -74,7 +77,14 @@ class BoardPanel extends JPanel {
         if (c.equals(selected.orElse(null))) {
             graphics.setColor(SELECT_COLOR);
         } else if (selected.isPresent() && GameUtil.getAvailableNewPositions(selected.get(), b).contains(c)) {
-            if (b.getPieceAt(c) instanceof Piece) {
+            boolean isEnPasse = false;
+            Set<Move> selectedMoves = GameUtil.getAvailableMovesForPiece(selected.get(), b);
+            for (Move selectedMove : selectedMoves) {
+                if (selectedMove.getNewPositions()[0].equals(c) && selectedMove instanceof EnPasse) {
+                    isEnPasse = true;
+                }
+            }
+            if (b.getPieceAt(c) instanceof Piece || isEnPasse) {
                 graphics.setColor(EAT_COLOR);
             } else {
                 graphics.setColor(MOVE_COLOR);

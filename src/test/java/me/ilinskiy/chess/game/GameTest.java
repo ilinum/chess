@@ -4,6 +4,8 @@ import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.chessBoard.Board;
 import me.ilinskiy.chess.chessBoard.Coordinates;
 import me.ilinskiy.chess.chessBoard.PieceColor;
+import me.ilinskiy.chess.game.moves.Move;
+import me.ilinskiy.chess.game.moves.RegularMove;
 import org.junit.Test;
 
 import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
@@ -29,7 +31,7 @@ public class GameTest {
 
     @Test(timeout = 1000)
     public void testMakeMove() {
-        Move move = new Move(new Coordinates(1, BOARD_SIZE - 1), new Coordinates(2, BOARD_SIZE - 3));
+        Move move = new RegularMove(new Coordinates(1, BOARD_SIZE - 1), new Coordinates(2, BOARD_SIZE - 3));
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
@@ -54,7 +56,7 @@ public class GameTest {
             @NotNull
             @Override
             public Move getMove(@NotNull Board b) {
-                return new Move(new Coordinates(8, 8), new Coordinates(1, 1));
+                return new RegularMove(new Coordinates(8, 8), new Coordinates(1, 1));
             }
         };
         Player p2 = new PlayerMock(PieceColor.Black);

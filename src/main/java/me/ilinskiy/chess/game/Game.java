@@ -3,12 +3,10 @@ package me.ilinskiy.chess.game;
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
 import me.ilinskiy.chess.chessBoard.*;
+import me.ilinskiy.chess.game.moves.Move;
 import me.ilinskiy.chess.ui.ChessPainter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 
 import static me.ilinskiy.chess.game.GameUtil.println;
@@ -55,7 +53,10 @@ public class Game {
             println("Timed out!");
         } else {
             Move m = moveOptional.get();
-            Set<Move> availableMoves = GameUtil.getAvailableMovesForPiece(m.getInitialPosition(), board.getInner());
+            Set<Move> availableMoves = new HashSet<>();
+            for (Coordinates coordinates : m.getInitialPositions()) {
+                availableMoves.addAll(GameUtil.getAvailableMovesForPiece(coordinates, board.getInner()));
+            }
             if (!availableMoves.contains(m)) {
                 throw new RuntimeException("Illegal move: " + m);
             }
@@ -104,26 +105,27 @@ public class Game {
      * @param move that has been made
      */
     private void checkPawnPromoted(@NotNull Move move, @NotNull Player madeLastMove) {
-        Coordinates newPosition = move.getNewPosition();
-        ChessElement piece = board.getPieceAt(newPosition);
-        if (piece.getType() == PieceType.Pawn) {
-            PieceColor pieceColor = madeLastMove.getPlayerColor();
-            int x = move.getNewPosition().getX();
-            int y = move.getNewPosition().getY();
-            Coordinates nextAdvance = new Coordinates(x, y + GameUtil.getDirectionForPlayer(pieceColor));
-            if (nextAdvance.isOutOfBounds()) {
-                ArrayList<PieceType> canBePromotedTo = new ArrayList<>(4);
-                canBePromotedTo.add(PieceType.Queen);
-                canBePromotedTo.add(PieceType.Rook);
-                canBePromotedTo.add(PieceType.Bishop);
-                canBePromotedTo.add(PieceType.Knight);
-                PieceType promotedTo = PieceType.Empty;
-                while (!canBePromotedTo.contains(promotedTo)) {
-                    promotedTo = madeLastMove.getPieceTypeForPromotedPawn();
+        for (Coordinates newPosition : move.getNewPositions()) {
+            ChessElement piece = board.getPieceAt(newPosition);
+            if (piece.getType() == PieceType.Pawn) {
+                PieceColor pieceColor = madeLastMove.getPlayerColor();
+                int x = newPosition.getX();
+                int y = newPosition.getY();
+                Coordinates nextAdvance = new Coordinates(x, y + GameUtil.getDirectionForPlayer(pieceColor));
+                if (nextAdvance.isOutOfBounds()) {
+                    ArrayList<PieceType> canBePromotedTo = new ArrayList<>(4);
+                    canBePromotedTo.add(PieceType.Queen);
+                    canBePromotedTo.add(PieceType.Rook);
+                    canBePromotedTo.add(PieceType.Bishop);
+                    canBePromotedTo.add(PieceType.Knight);
+                    PieceType promotedTo = PieceType.Empty;
+                    while (!canBePromotedTo.contains(promotedTo)) {
+                        promotedTo = madeLastMove.getPieceTypeForPromotedPawn();
+                    }
+                    Piece promoted = Piece.createPiece(pieceColor, promotedTo);
+                    board.setPieceAt(newPosition, promoted);
+                    board.getInner().paintCell(newPosition);
                 }
-                Piece promoted = Piece.createPiece(pieceColor, promotedTo);
-                board.setPieceAt(newPosition, promoted);
-                board.getInner().paintCell(newPosition);
             }
         }
     }

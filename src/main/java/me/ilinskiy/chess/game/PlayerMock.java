@@ -5,6 +5,8 @@ import me.ilinskiy.chess.chessBoard.Board;
 import me.ilinskiy.chess.chessBoard.Coordinates;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import me.ilinskiy.chess.chessBoard.PieceType;
+import me.ilinskiy.chess.game.moves.Move;
+import me.ilinskiy.chess.game.moves.RegularMove;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -22,7 +24,7 @@ public class PlayerMock implements Player {
     @NotNull
     public Move getMove(@NotNull Board b) {
         Coordinates c = new Coordinates(0, 0);
-        return new Move(c, c);
+        return new RegularMove(c, c);
     }
 
     @Override

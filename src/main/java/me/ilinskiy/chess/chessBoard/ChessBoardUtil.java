@@ -1,8 +1,8 @@
 package me.ilinskiy.chess.chessBoard;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.game.Move;
 import me.ilinskiy.chess.game.Player;
+import me.ilinskiy.chess.game.moves.Move;
 
 import static me.ilinskiy.chess.chessBoard.PieceType.*;
 

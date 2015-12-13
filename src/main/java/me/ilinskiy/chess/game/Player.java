@@ -4,6 +4,7 @@ import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.chessBoard.Board;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import me.ilinskiy.chess.chessBoard.PieceType;
+import me.ilinskiy.chess.game.moves.Move;
 
 /**
  * Author: Svyatoslav Ilinskiy

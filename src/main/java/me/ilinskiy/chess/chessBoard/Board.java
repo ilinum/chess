@@ -2,7 +2,12 @@ package me.ilinskiy.chess.chessBoard;
 
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
-import me.ilinskiy.chess.game.*;
+import me.ilinskiy.chess.game.Copyable;
+import me.ilinskiy.chess.game.GameUtil;
+import me.ilinskiy.chess.game.moves.Castling;
+import me.ilinskiy.chess.game.moves.EnPasse;
+import me.ilinskiy.chess.game.moves.Move;
+import me.ilinskiy.chess.game.moves.RegularMove;
 import me.ilinskiy.chess.ui.ChessPainter;
 
 import java.util.*;
@@ -96,8 +101,10 @@ public class Board implements Copyable {
     void movePiece(@NotNull Move move) {
         lastMove = Optional.of(move);
         List<Coordinates> cellsToRepaint = new LinkedList<>();
-        cellsToRepaint.addAll(GameUtil.getAvailableNewPositions(move.getInitialPosition(), this));
-        cellsToRepaint.add(move.getInitialPosition());
+        for (Coordinates coordinates : move.getInitialPositions()) {
+            cellsToRepaint.addAll(GameUtil.getAvailableNewPositions(coordinates, this));
+            cellsToRepaint.add(coordinates);
+        }
         if (move instanceof Castling) {
             Castling c = (Castling) move;
             cellsToRepaint.add(c.getRookInitialPosition());
@@ -105,14 +112,16 @@ public class Board implements Copyable {
             makeActualMove(c.getKingInitialPosition(), c.getKingNewPosition());
             makeActualMove(c.getRookInitialPosition(), c.getRookNewPosition());
         } else if (move instanceof EnPasse) {
-            Coordinates eaten = ((EnPasse) move).eatenPiece();
+            EnPasse enPasse = (EnPasse) move;
+            Coordinates eaten = enPasse.eatenPiece();
             assert getPieceAt(eaten).getType() == Pawn;
             setPieceAt(eaten, EmptyCell.INSTANCE);
-            makeActualMove(move.getInitialPosition(), move.getNewPosition());
+            makeActualMove(enPasse.initialPosition, enPasse.newPosition);
             cellsToRepaint.add(eaten);
-            cellsToRepaint.add(move.getNewPosition());
+            cellsToRepaint.add(enPasse.newPosition);
         } else {
-            makeActualMove(move.getInitialPosition(), move.getNewPosition());
+            RegularMove rm = ((RegularMove) move);
+            makeActualMove(rm.initialPosition, rm.newPosition);
         }
         turn = turn.inverse();
         selected = Optional.empty();

@@ -6,8 +6,9 @@ import me.ilinskiy.chess.chessBoard.Coordinates;
 import me.ilinskiy.chess.chessBoard.PieceColor;
 import me.ilinskiy.chess.chessBoard.PieceType;
 import me.ilinskiy.chess.game.GameUtil;
-import me.ilinskiy.chess.game.Move;
 import me.ilinskiy.chess.game.Player;
+import me.ilinskiy.chess.game.moves.Move;
+import me.ilinskiy.chess.game.moves.RegularMove;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,10 +64,10 @@ public class JSwingUserPlayer implements Player {
                 Optional<Coordinates> selected = board.getSelected();
                 if (selected.isPresent()) {
                     Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(selected.get(), board);
-                    Move m = new Move(selected.get(), location);
+                    Move m = new RegularMove(selected.get(), location);
                     Optional<Move> res = Optional.empty();
                     for (Move move : availableMovesForPiece) {
-                        if (m.equals(move)) {
+                        if (move.equals(m)) {
                             res = Optional.of(move);
                         }
                     }

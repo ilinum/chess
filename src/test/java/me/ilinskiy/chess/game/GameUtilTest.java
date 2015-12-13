@@ -1,6 +1,9 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.chessBoard.*;
+import me.ilinskiy.chess.game.moves.Castling;
+import me.ilinskiy.chess.game.moves.Move;
+import me.ilinskiy.chess.game.moves.RegularMove;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,15 +28,15 @@ public class GameUtilTest {
         int row = BOARD_SIZE - 2;
         for (int i = 0; i < BOARD_SIZE; i++) {
             Coordinates initPos = new Coordinates(i, row);
-            expected.add(new Move(initPos, new Coordinates(i, row + WHITE_DIRECTION)));
-            expected.add(new Move(initPos, new Coordinates(i, row + WHITE_DIRECTION * 2)));
+            expected.add(new RegularMove(initPos, new Coordinates(i, row + WHITE_DIRECTION)));
+            expected.add(new RegularMove(initPos, new Coordinates(i, row + WHITE_DIRECTION * 2)));
         }
         Coordinates bishopPos = new Coordinates(1, BOARD_SIZE - 1);
-        expected.add(new Move(bishopPos, new Coordinates(0, BOARD_SIZE - 3)));
-        expected.add(new Move(bishopPos, new Coordinates(2, BOARD_SIZE - 3)));
+        expected.add(new RegularMove(bishopPos, new Coordinates(0, BOARD_SIZE - 3)));
+        expected.add(new RegularMove(bishopPos, new Coordinates(2, BOARD_SIZE - 3)));
         bishopPos = new Coordinates(BOARD_SIZE - 2, BOARD_SIZE - 1);
-        expected.add(new Move(bishopPos, new Coordinates(BOARD_SIZE - 3, BOARD_SIZE - 3)));
-        expected.add(new Move(bishopPos, new Coordinates(BOARD_SIZE - 1, BOARD_SIZE - 3)));
+        expected.add(new RegularMove(bishopPos, new Coordinates(BOARD_SIZE - 3, BOARD_SIZE - 3)));
+        expected.add(new RegularMove(bishopPos, new Coordinates(BOARD_SIZE - 1, BOARD_SIZE - 3)));
         Collections.sort(expected);
         Collections.sort(actual);
         assertThat(expected, is(actual));
@@ -47,15 +50,15 @@ public class GameUtilTest {
         int row = 1;
         for (int i = 0; i < BOARD_SIZE; i++) {
             Coordinates initPos = new Coordinates(i, row);
-            expected.add(new Move(initPos, new Coordinates(i, row + BLACK_DIRECTION)));
-            expected.add(new Move(initPos, new Coordinates(i, row + BLACK_DIRECTION * 2)));
+            expected.add(new RegularMove(initPos, new Coordinates(i, row + BLACK_DIRECTION)));
+            expected.add(new RegularMove(initPos, new Coordinates(i, row + BLACK_DIRECTION * 2)));
         }
         Coordinates bishopPos = new Coordinates(1, 0);
-        expected.add(new Move(bishopPos, new Coordinates(0, 2)));
-        expected.add(new Move(bishopPos, new Coordinates(2, 2)));
+        expected.add(new RegularMove(bishopPos, new Coordinates(0, 2)));
+        expected.add(new RegularMove(bishopPos, new Coordinates(2, 2)));
         bishopPos = new Coordinates(BOARD_SIZE - 2, 0);
-        expected.add(new Move(bishopPos, new Coordinates(BOARD_SIZE - 3, 2)));
-        expected.add(new Move(bishopPos, new Coordinates(BOARD_SIZE - 1, 2)));
+        expected.add(new RegularMove(bishopPos, new Coordinates(BOARD_SIZE - 3, 2)));
+        expected.add(new RegularMove(bishopPos, new Coordinates(BOARD_SIZE - 1, 2)));
         Collections.sort(expected);
         Collections.sort(actual);
         assertThat(expected, is(actual));
@@ -103,7 +106,7 @@ public class GameUtilTest {
         assertTrue(b.getPieceAt(rookInitPos).getType() == PieceType.Rook);
         Coordinates rookNewPos = new Coordinates(BOARD_SIZE - 3, 0);
         expected.add(new Castling(kingPos, new Coordinates(BOARD_SIZE - 2, 0), rookInitPos, rookNewPos));
-        expected.add(new Move(kingPos, new Coordinates(BOARD_SIZE - 3, 0)));
+        expected.add(new RegularMove(kingPos, new Coordinates(BOARD_SIZE - 3, 0)));
         LinkedList<Move> actual = new LinkedList<>(GameUtil.getAvailableMovesForPiece(kingPos, b.getInner()));
         Collections.sort(actual);
         Collections.sort(expected);

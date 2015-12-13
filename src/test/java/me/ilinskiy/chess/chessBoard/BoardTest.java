@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.chessBoard;
 
 import me.ilinskiy.chess.game.GameUtil;
-import me.ilinskiy.chess.game.Move;
+import me.ilinskiy.chess.game.moves.RegularMove;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -108,7 +108,7 @@ public class BoardTest {
         ChessElement element = b.getPieceAt(knightPos);
         assertTrue("Should be a knight " + knightPos, element.getType() == Knight);
         assertTrue("Should be black " + knightPos, element.getColor() == PieceColor.Black);
-        b.movePiece(new Move(knightPos, newPos));
+        b.movePiece(new RegularMove(knightPos, newPos));
         assertTrue("Just moved piece from here! Should be empty!", b.getPieceAt(knightPos) instanceof EmptyCell);
         assertTrue("Just moved a knight here: " + newPos, b.getPieceAt(newPos).getType() == Knight);
     }
@@ -118,7 +118,7 @@ public class BoardTest {
         BoardWrapper b = new BoardWrapper();
         Coordinates initPos = new Coordinates(4, 4);
         Coordinates newPos = new Coordinates(0, 0);
-        b.movePiece(new Move(initPos, newPos));
+        b.movePiece(new RegularMove(initPos, newPos));
     }
 
     @Test
@@ -131,11 +131,11 @@ public class BoardTest {
         Coordinates newCoordinates = new Coordinates(5, 5);
         assertTrue(!b.setSelected(newCoordinates));
         assertTrue(b.getSelected().get().equals(coordinates));
-        b.movePiece(new Move(coordinates, newCoordinates));
+        b.movePiece(new RegularMove(coordinates, newCoordinates));
         assertTrue("selected should be empty!", !b.getSelected().isPresent());
         assertTrue(!b.setSelected(newCoordinates));
         assertTrue(!b.getSelected().isPresent());
-        b.movePiece(new Move(new Coordinates(0, 0), new Coordinates(4, 4)));
+        b.movePiece(new RegularMove(new Coordinates(0, 0), new Coordinates(4, 4)));
         assertTrue(b.setSelected(newCoordinates));
         assertTrue(b.getSelected().get().equals(newCoordinates));
     }

@@ -2,8 +2,11 @@ package me.ilinskiy.chess.chessBoard;
 
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
-import me.ilinskiy.chess.game.Move;
+import me.ilinskiy.chess.game.moves.Move;
 import me.ilinskiy.chess.ui.ChessPainter;
+import me.ilinskiy.chess.util.Tuple2;
+
+import java.util.List;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -34,12 +37,17 @@ public final class BoardWrapper {
     }
 
     public void setPieceAccordingToMove(@NotNull Move move) {
-        ChessElement initPosPiece = inner.getPieceAt(move.getInitialPosition());
-        if (initPosPiece instanceof EmptyCell) {
-            throw new IllegalArgumentException("Cannot move an empty cell!");
+        List<Tuple2<Coordinates, Coordinates>> positions = move.zippedPositions();
+        for (Tuple2<Coordinates, Coordinates> position : positions) {
+            Coordinates initPos = position.getFirst();
+            Coordinates newPos = position.getSecond();
+            ChessElement initPosPiece = inner.getPieceAt(initPos);
+            if (initPosPiece instanceof EmptyCell) {
+                throw new IllegalArgumentException("Cannot move an empty cell!");
+            }
+            inner.setPieceAt(initPos, EmptyCell.INSTANCE);
+            inner.setPieceAt(newPos, initPosPiece);
         }
-        inner.setPieceAt(move.getInitialPosition(), EmptyCell.INSTANCE);
-        inner.setPieceAt(move.getNewPosition(), initPosPiece);
     }
 
     public void movePiece(@NotNull Move m) {
