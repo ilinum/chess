@@ -1,7 +1,10 @@
 package me.ilinskiy.chess.ui;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.*;
+import me.ilinskiy.chess.chessBoard.Board;
+import me.ilinskiy.chess.chessBoard.ChessElement;
+import me.ilinskiy.chess.chessBoard.Coordinates;
+import me.ilinskiy.chess.chessBoard.Piece;
 import me.ilinskiy.chess.game.GameUtil;
 import me.ilinskiy.chess.game.moves.EnPasse;
 import me.ilinskiy.chess.game.moves.Move;
@@ -23,6 +26,7 @@ class BoardPanel extends JPanel {
     private static final Color EAT_COLOR = new Color(0x0FCE3C);
     private static final Color MOVE_COLOR = new Color(0x5447FF);
     private static final Color SELECT_COLOR = new Color(0xFA1843);
+    private static final Color BORDER_COLOR = Color.BLACK;
 
     private final Board myBoard;
 
@@ -31,29 +35,11 @@ class BoardPanel extends JPanel {
         myBoard = board;
     }
 
-    public void paintCell(@NotNull Coordinates pos) {
-        Graphics graphics = getGraphics();
-        if (graphics != null) {
-            int heightAndWidth = getSize().height;
-            setBGForCell(pos, graphics, myBoard);
-            drawCell(pos, graphics, heightAndWidth);
-            drawImageForCell(pos, graphics, myBoard, heightAndWidth);
-        }
-    }
-
-    public void repaintBoard() {
-        for (int i = 0; i < Board.BOARD_SIZE; i++) {
-            for (int j = 0; j < Board.BOARD_SIZE; j++) {
-                paintCell(new Coordinates(i, j));
-            }
-        }
-    }
-
     @Override
     public void paint(Graphics graphics) {
         super.paint(graphics);
         int heightAndWidth = getSize().width;
-        graphics.setColor(Color.BLACK);
+        graphics.setColor(BORDER_COLOR);
         graphics.drawRect(0, 0, heightAndWidth, heightAndWidth);
 
         for (int row = 0; row < BOARD_SIZE; row++) {
@@ -102,7 +88,7 @@ class BoardPanel extends JPanel {
         int initY = pos.getY() * cellSize;
         graphics.fillRect(initX, initY, cellSize, cellSize);
         Color oldColor = graphics.getColor();
-        graphics.setColor(Color.BLACK);
+        graphics.setColor(BORDER_COLOR);
         graphics.drawRect(initX, initY, cellSize, cellSize);
         graphics.setColor(oldColor);
     }
@@ -113,8 +99,6 @@ class BoardPanel extends JPanel {
         ChessElement element = board.getPieceAt(pos);
         if (element instanceof Piece) {
             Piece piece = (Piece) element;
-            Color c = piece.getColor() == PieceColor.Black ? Color.BLACK : Color.WHITE;
-            graphics.setColor(c);
             Image image = JSwingChessPainter.icons.get(piece);
             if (image != null) {
                 int initX = pos.getX() * cellSize;

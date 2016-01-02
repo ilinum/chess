@@ -112,12 +112,11 @@ public class JSwingChessPainter implements ChessPainter {
 
     @Override
     public void paintCell(@NotNull Coordinates pos) {
-        panel.paintCell(pos);
+        repaintBoard();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void repaintBoard() {
-        panel.repaintBoard();
+        panel.repaint();
     }
 
 
