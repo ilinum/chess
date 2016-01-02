@@ -32,7 +32,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>me.ilinskiy.chess.Main</mainClass>
+                            <mainClass>me.ilinskiy.chess.JSwingMain</mainClass>
                         </manifest>
                     </archive>
                     <outputDirectory>.</outputDirectory>
