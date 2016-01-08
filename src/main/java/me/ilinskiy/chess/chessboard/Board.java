@@ -1,4 +1,4 @@
-package me.ilinskiy.chess.chessBoard;
+package me.ilinskiy.chess.chessboard;
 
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
@@ -12,7 +12,7 @@ import me.ilinskiy.chess.ui.ChessPainter;
 
 import java.util.*;
 
-import static me.ilinskiy.chess.chessBoard.PieceType.Pawn;
+import static me.ilinskiy.chess.chessboard.PieceType.Pawn;
 
 /**
  * A class that represents chess board. It keeps track of the elements, where they are on the board, whose turn it is

@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.game;
 
-import me.ilinskiy.chess.chessBoard.*;
+import me.ilinskiy.chess.chessboard.*;
 import me.ilinskiy.chess.game.moves.Castling;
 import me.ilinskiy.chess.game.moves.Move;
 import me.ilinskiy.chess.game.moves.RegularMove;
@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static me.ilinskiy.chess.chessBoard.Board.*;
+import static me.ilinskiy.chess.chessboard.Board.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;

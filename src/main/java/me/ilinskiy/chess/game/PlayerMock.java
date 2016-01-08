@@ -1,10 +1,10 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.Board;
-import me.ilinskiy.chess.chessBoard.Coordinates;
-import me.ilinskiy.chess.chessBoard.PieceColor;
-import me.ilinskiy.chess.chessBoard.PieceType;
+import me.ilinskiy.chess.chessboard.Board;
+import me.ilinskiy.chess.chessboard.Coordinates;
+import me.ilinskiy.chess.chessboard.PieceColor;
+import me.ilinskiy.chess.chessboard.PieceType;
 import me.ilinskiy.chess.game.moves.Move;
 import me.ilinskiy.chess.game.moves.RegularMove;
 
@@ -12,7 +12,7 @@ import me.ilinskiy.chess.game.moves.RegularMove;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/19/15
  */
-public final class PlayerMock implements Player {
+public class PlayerMock implements Player {
     @SuppressWarnings("WeakerAccess")
     public final PieceColor myColor;
 

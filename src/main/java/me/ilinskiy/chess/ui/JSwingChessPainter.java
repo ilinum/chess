@@ -1,10 +1,10 @@
 package me.ilinskiy.chess.ui;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.Board;
-import me.ilinskiy.chess.chessBoard.Coordinates;
-import me.ilinskiy.chess.chessBoard.Piece;
-import me.ilinskiy.chess.chessBoard.PieceColor;
+import me.ilinskiy.chess.chessboard.Board;
+import me.ilinskiy.chess.chessboard.Coordinates;
+import me.ilinskiy.chess.chessboard.Piece;
+import me.ilinskiy.chess.chessboard.PieceColor;
 import me.ilinskiy.chess.game.GameRunner;
 
 import javax.imageio.ImageIO;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import static me.ilinskiy.chess.chessBoard.PieceType.*;
+import static me.ilinskiy.chess.chessboard.PieceType.*;
 
 /**
  * Author: Svyatoslav Ilinskiy

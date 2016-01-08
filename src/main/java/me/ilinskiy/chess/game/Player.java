@@ -1,9 +1,9 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.Board;
-import me.ilinskiy.chess.chessBoard.PieceColor;
-import me.ilinskiy.chess.chessBoard.PieceType;
+import me.ilinskiy.chess.chessboard.Board;
+import me.ilinskiy.chess.chessboard.PieceColor;
+import me.ilinskiy.chess.chessboard.PieceType;
 import me.ilinskiy.chess.game.moves.Move;
 
 /**

@@ -1,4 +1,4 @@
-package me.ilinskiy.chess.chessBoard;
+package me.ilinskiy.chess.chessboard;
 
 import me.ilinskiy.chess.game.GameUtil;
 import me.ilinskiy.chess.game.moves.RegularMove;
@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
-import static me.ilinskiy.chess.chessBoard.PieceType.*;
+import static me.ilinskiy.chess.chessboard.Board.BOARD_SIZE;
+import static me.ilinskiy.chess.chessboard.PieceType.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

@@ -2,9 +2,9 @@ package me.ilinskiy.chess.ui;
 
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
-import me.ilinskiy.chess.chessBoard.Board;
-import me.ilinskiy.chess.chessBoard.Coordinates;
-import me.ilinskiy.chess.chessBoard.PieceColor;
+import me.ilinskiy.chess.chessboard.Board;
+import me.ilinskiy.chess.chessboard.Coordinates;
+import me.ilinskiy.chess.chessboard.PieceColor;
 
 /**
  * Author: Svyatoslav Ilinskiy

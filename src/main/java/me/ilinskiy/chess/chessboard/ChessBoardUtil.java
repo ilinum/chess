@@ -1,10 +1,10 @@
-package me.ilinskiy.chess.chessBoard;
+package me.ilinskiy.chess.chessboard;
 
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.game.Player;
 import me.ilinskiy.chess.game.moves.Move;
 
-import static me.ilinskiy.chess.chessBoard.PieceType.*;
+import static me.ilinskiy.chess.chessboard.PieceType.*;
 
 /**
  * Author: Svyatoslav Ilinskiy

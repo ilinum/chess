@@ -1,12 +1,7 @@
 package me.ilinskiy.chess.game.moves;
 
-/**
- * Author: Svyatoslav Ilinskiy
- * Date: 06.12.15.
- */
-
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.Coordinates;
+import me.ilinskiy.chess.chessboard.Coordinates;
 
 /**
  * Author: Svyatoslav Ilinskiy

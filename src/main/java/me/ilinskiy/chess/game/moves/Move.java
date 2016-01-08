@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.game.moves;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.Coordinates;
+import me.ilinskiy.chess.chessboard.Coordinates;
 import me.ilinskiy.chess.game.Copyable;
 import me.ilinskiy.chess.util.CollectionUtil;
 import me.ilinskiy.chess.util.Tuple2;

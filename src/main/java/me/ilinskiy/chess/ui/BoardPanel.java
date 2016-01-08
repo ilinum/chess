@@ -1,10 +1,10 @@
 package me.ilinskiy.chess.ui;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.Board;
-import me.ilinskiy.chess.chessBoard.ChessElement;
-import me.ilinskiy.chess.chessBoard.Coordinates;
-import me.ilinskiy.chess.chessBoard.Piece;
+import me.ilinskiy.chess.chessboard.Board;
+import me.ilinskiy.chess.chessboard.ChessElement;
+import me.ilinskiy.chess.chessboard.Coordinates;
+import me.ilinskiy.chess.chessboard.Piece;
 import me.ilinskiy.chess.game.GameUtil;
 import me.ilinskiy.chess.game.moves.EnPasse;
 import me.ilinskiy.chess.game.moves.Move;
@@ -14,7 +14,7 @@ import java.awt.*;
 import java.util.Optional;
 import java.util.Set;
 
-import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
+import static me.ilinskiy.chess.chessboard.Board.BOARD_SIZE;
 
 /**
  * Author: Svyatoslav Ilinskiy

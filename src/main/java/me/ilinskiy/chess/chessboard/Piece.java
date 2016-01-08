@@ -1,4 +1,4 @@
-package me.ilinskiy.chess.chessBoard;
+package me.ilinskiy.chess.chessboard;
 
 
 import me.ilinskiy.chess.annotations.NotNull;

@@ -1,10 +1,10 @@
-package me.ilinskiy.chess.chessBoard;
+package me.ilinskiy.chess.chessboard;
 
 import me.ilinskiy.chess.game.moves.Move;
 import me.ilinskiy.chess.game.moves.RegularMove;
 import org.junit.Test;
 
-import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
+import static me.ilinskiy.chess.chessboard.Board.BOARD_SIZE;
 import static org.junit.Assert.assertTrue;
 
 /**

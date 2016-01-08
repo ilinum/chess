@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.*;
+import me.ilinskiy.chess.chessboard.*;
 import me.ilinskiy.chess.game.moves.Castling;
 import me.ilinskiy.chess.game.moves.EnPasse;
 import me.ilinskiy.chess.game.moves.Move;
@@ -9,9 +9,9 @@ import me.ilinskiy.chess.game.moves.RegularMove;
 
 import java.util.*;
 
-import static me.ilinskiy.chess.chessBoard.Board.*;
-import static me.ilinskiy.chess.chessBoard.PieceColor.Black;
-import static me.ilinskiy.chess.chessBoard.PieceColor.White;
+import static me.ilinskiy.chess.chessboard.Board.*;
+import static me.ilinskiy.chess.chessboard.PieceColor.Black;
+import static me.ilinskiy.chess.chessboard.PieceColor.White;
 
 /**
  * Author: Svyatoslav Ilinskiy

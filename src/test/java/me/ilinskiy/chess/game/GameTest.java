@@ -1,14 +1,14 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.Board;
-import me.ilinskiy.chess.chessBoard.Coordinates;
-import me.ilinskiy.chess.chessBoard.PieceColor;
+import me.ilinskiy.chess.chessboard.Board;
+import me.ilinskiy.chess.chessboard.Coordinates;
+import me.ilinskiy.chess.chessboard.PieceColor;
 import me.ilinskiy.chess.game.moves.Move;
 import me.ilinskiy.chess.game.moves.RegularMove;
 import org.junit.Test;
 
-import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
+import static me.ilinskiy.chess.chessboard.Board.BOARD_SIZE;
 import static org.junit.Assert.assertTrue;
 
 /**

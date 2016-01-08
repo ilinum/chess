@@ -2,7 +2,7 @@ package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
 import me.ilinskiy.chess.annotations.Nullable;
-import me.ilinskiy.chess.chessBoard.*;
+import me.ilinskiy.chess.chessboard.*;
 import me.ilinskiy.chess.game.moves.Move;
 import me.ilinskiy.chess.ui.ChessPainter;
 

@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.annotations.NotNull;
-import me.ilinskiy.chess.chessBoard.PieceColor;
+import me.ilinskiy.chess.chessboard.PieceColor;
 import me.ilinskiy.chess.ui.ChessPainter;
 
 /**
