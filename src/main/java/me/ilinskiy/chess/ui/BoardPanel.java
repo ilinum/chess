@@ -20,7 +20,7 @@ import static me.ilinskiy.chess.chessBoard.Board.BOARD_SIZE;
  * Author: Svyatoslav Ilinskiy
  * Date: 9/27/15.
  */
-class BoardPanel extends JPanel {
+final class BoardPanel extends JPanel {
     private static final Color WHITE_BG = new Color(0xCFB884);
     private static final Color BLACK_BG = new Color(0x76350F);
     private static final Color EAT_COLOR = new Color(0x0FCE3C);

@@ -8,7 +8,7 @@ import me.ilinskiy.chess.game.Copyable;
  * Author: Svyatoslav Ilinskiy
  * Date: 8/7/15.
  */
-public class EnPasse extends Move {
+public final class EnPasse extends Move {
     @NotNull
     public final Coordinates initialPosition;
     @NotNull

@@ -26,7 +26,7 @@ import static me.ilinskiy.chess.game.GameUtil.println;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/20/15
  */
-public class JSwingUserPlayer implements Player {
+public final class JSwingUserPlayer implements Player {
     private Optional<Move> moveMade = Optional.empty();
     @NotNull
     private final Lock mouseLock;

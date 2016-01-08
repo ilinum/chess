@@ -7,7 +7,7 @@ import me.ilinskiy.chess.chessBoard.Coordinates;
  * Author: Svyatoslav Ilinskiy
  * Date: 8/2/15.
  */
-public class Castling extends Move {
+public final class Castling extends Move {
     @NotNull
     public final Coordinates initialPosition;
     @NotNull

@@ -21,7 +21,7 @@ import static me.ilinskiy.chess.chessBoard.PieceType.*;
  * Author: Svyatoslav Ilinskiy
  * Date: 9/27/15.
  */
-public class JSwingChessPainter implements ChessPainter {
+public final class JSwingChessPainter implements ChessPainter {
     @SuppressWarnings("WeakerAccess")
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
     @NotNull private final JFrame myFrame;

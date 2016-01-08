@@ -10,7 +10,7 @@ import java.util.Arrays;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/17/15
  */
-public class Coordinates implements Copyable, Comparable<Coordinates> {
+public final class Coordinates implements Copyable, Comparable<Coordinates> {
     private final int myX;
     private final int myY;
 

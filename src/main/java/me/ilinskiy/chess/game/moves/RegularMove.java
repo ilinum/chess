@@ -12,7 +12,7 @@ import me.ilinskiy.chess.chessBoard.Coordinates;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/17/15
  */
-public class RegularMove extends Move {
+public final class RegularMove extends Move {
     @NotNull
     public final Coordinates initialPosition;
     @NotNull

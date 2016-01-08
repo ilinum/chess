@@ -12,7 +12,7 @@ import me.ilinskiy.chess.game.moves.RegularMove;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/19/15
  */
-public class PlayerMock implements Player {
+public final class PlayerMock implements Player {
     @SuppressWarnings("WeakerAccess")
     public final PieceColor myColor;
 

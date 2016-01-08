@@ -9,7 +9,7 @@ import java.util.HashMap;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */
-public class Piece implements ChessElement {
+public final class Piece implements ChessElement {
     private final PieceColor color;
     private final PieceType type;
 

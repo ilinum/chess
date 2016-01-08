@@ -16,7 +16,7 @@ import static me.ilinskiy.chess.game.GameUtil.println;
  * Date: 7/16/15
  */
 @SuppressWarnings("WeakerAccess")
-public class Game {
+public final class Game {
     @NotNull
     private final BoardWrapper board;
     private Player turn;

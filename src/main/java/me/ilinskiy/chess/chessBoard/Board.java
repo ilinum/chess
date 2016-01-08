@@ -24,7 +24,7 @@ import static me.ilinskiy.chess.chessBoard.PieceType.Pawn;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */
-public class Board implements Copyable {
+public final class Board implements Copyable {
     public static final int BOARD_SIZE = 8;
     public static final int WHITE_DIRECTION = -1;
     public static final int BLACK_DIRECTION = 1;
