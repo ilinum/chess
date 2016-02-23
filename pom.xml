@@ -6,7 +6,7 @@
 
     <groupId>com.github.ilinum</groupId>
     <artifactId>Chess</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <packaging>jar</packaging>
 

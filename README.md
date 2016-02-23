@@ -6,9 +6,9 @@ An implementation of chess in Java
 
 
 Here is the jar file: 
-[Chess-1.0.jar](https://github.com/ilinum/Chess/releases/download/1.1/Chess-1.1.jar)
+[Chess-1.0.jar](https://github.com/ilinum/Chess/releases/download/1.2/Chess.jar)
 
-To run it, just type `java -jar Chess-1.0.jar`
+To run it, just type `java -jar Chess.jar`
 (It requires Java 8)
 
 
