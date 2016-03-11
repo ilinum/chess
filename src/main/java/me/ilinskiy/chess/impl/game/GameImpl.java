@@ -34,7 +34,7 @@ public final class GameImpl implements Game {
     private final Player player2;
     private Optional<ChessPainter> myPainter;
 
-    public GameImpl(@org.jetbrains.annotations.NotNull Player p1, @NotNull Player p2, @Nullable ChessPainter painter) {
+    public GameImpl(@NotNull Player p1, @NotNull Player p2, @Nullable ChessPainter painter) {
         if (p1.getPlayerColor().inverse() != p2.getPlayerColor()) {
             throw new IllegalArgumentException("Wrong colors for players!");
         }
@@ -160,7 +160,7 @@ public final class GameImpl implements Game {
     }
 
     @Override
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     public Optional<PieceColor> getWinner() {
         return winner;
     }

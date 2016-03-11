@@ -12,7 +12,7 @@ import static me.ilinskiy.chess.api.chessboard.PieceType.*;
  * Date: 7/16/15
  */
 public class ChessBoardUtil {
-    public static final me.ilinskiy.chess.api.chessboard.PieceType[] backRowPieceTypes = new me.ilinskiy.chess.api.chessboard.PieceType[]{Rook, Knight, Bishop, Queen, King, Bishop,
+    public static final PieceType[] backRowPieceTypes = new PieceType[]{Rook, Knight, Bishop, Queen, King, Bishop,
             Knight, Rook};
 
     public static <V> V makeMoveAndEvaluate(@NotNull Board b, @NotNull Move m,
@@ -36,7 +36,7 @@ public class ChessBoardUtil {
      */
     @NotNull
     @Deprecated
-    public static Player inverse(@NotNull Player inverseOf, @NotNull Player p1, @org.jetbrains.annotations.NotNull Player p2) {
+    public static Player inverse(@NotNull Player inverseOf, @NotNull Player p1, @NotNull Player p2) {
         return inverseOf.inverse(p1, p2);
     }
 

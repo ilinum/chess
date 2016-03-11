@@ -16,7 +16,7 @@ import java.util.List;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/18/15
  */
-public final class BoardWrapperImpl implements me.ilinskiy.chess.api.chessboard.BoardWrapper {
+public final class BoardWrapperImpl implements BoardWrapper {
     private final BoardImpl inner;
 
     public BoardWrapperImpl(@Nullable ChessPainter painter) {
@@ -33,7 +33,7 @@ public final class BoardWrapperImpl implements me.ilinskiy.chess.api.chessboard.
 
     @Override
     @NotNull
-    public ChessElement getPieceAt(@org.jetbrains.annotations.NotNull Coordinates c) {
+    public ChessElement getPieceAt(@NotNull Coordinates c) {
         return inner.getPieceAt(c);
     }
 
@@ -43,7 +43,7 @@ public final class BoardWrapperImpl implements me.ilinskiy.chess.api.chessboard.
     }
 
     @Override
-    public void setPieceAccordingToMove(@org.jetbrains.annotations.NotNull Move move) {
+    public void setPieceAccordingToMove(@NotNull Move move) {
         List<Tuple2<Coordinates, Coordinates>> positions = move.zippedPositions();
         for (Tuple2<Coordinates, Coordinates> position : positions) {
             Coordinates initPos = position.getFirst();
@@ -58,7 +58,7 @@ public final class BoardWrapperImpl implements me.ilinskiy.chess.api.chessboard.
     }
 
     @Override
-    public void movePiece(@org.jetbrains.annotations.NotNull Move m) {
+    public void movePiece(@NotNull Move m) {
         inner.movePiece(m);
     }
 

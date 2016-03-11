@@ -15,7 +15,7 @@ public interface BoardWrapper {
 
     void setPieceAccordingToMove(@NotNull Move move);
 
-    void movePiece(@org.jetbrains.annotations.NotNull Move m);
+    void movePiece(@NotNull Move m);
 
     Board getInner();
 }

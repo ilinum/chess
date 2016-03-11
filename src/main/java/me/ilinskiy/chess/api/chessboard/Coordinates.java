@@ -12,7 +12,7 @@ public interface Coordinates extends Copyable, Comparable<Coordinates> {
 
     int getY();
 
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     int[] toArray();
 
     @NotNull

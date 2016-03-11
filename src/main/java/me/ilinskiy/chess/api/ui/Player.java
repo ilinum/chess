@@ -12,10 +12,10 @@ import me.ilinskiy.chess.api.chessboard.PieceType;
  */
 public interface Player {
 
-    @org.jetbrains.annotations.NotNull
-    Move getMove(@org.jetbrains.annotations.NotNull Board b);
+    @NotNull
+    Move getMove(@NotNull Board b);
 
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     PieceColor getPlayerColor();
 
     @NotNull

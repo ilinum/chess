@@ -11,6 +11,7 @@ import me.ilinskiy.chess.impl.game.Castling;
 import me.ilinskiy.chess.impl.game.EnPasse;
 import me.ilinskiy.chess.impl.game.GameUtil;
 import me.ilinskiy.chess.impl.game.RegularMove;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -34,7 +35,7 @@ public final class BoardImpl implements Board {
     private Optional<Move> lastMove;
     public final Optional<ChessPainter> myPainter;
 
-    public BoardImpl(@org.jetbrains.annotations.Nullable ChessPainter painter) {
+    public BoardImpl(@Nullable ChessPainter painter) {
         selected = Optional.empty();
         putPiecesOnBoard();
         myPainter = Optional.ofNullable(painter);
@@ -87,7 +88,7 @@ public final class BoardImpl implements Board {
 
     @Override
     @NotNull
-    public ChessElement getPieceAt(@org.jetbrains.annotations.NotNull Coordinates c) {
+    public ChessElement getPieceAt(@NotNull Coordinates c) {
         checkBounds(c);
         return board[c.getY()][c.getX()];
     }
@@ -98,7 +99,7 @@ public final class BoardImpl implements Board {
      *
      * @param move move that was made
      */
-    void movePiece(@org.jetbrains.annotations.NotNull Move move) {
+    void movePiece(@NotNull Move move) {
         lastMove = Optional.of(move);
         List<Coordinates> cellsToRepaint = new LinkedList<>();
         for (Coordinates coordinates : move.getInitialPositions()) {
@@ -128,7 +129,7 @@ public final class BoardImpl implements Board {
         cellsToRepaint.forEach(this::paintCell);
     }
 
-    private void makeActualMove(@NotNull Coordinates initialPosition, @org.jetbrains.annotations.NotNull Coordinates newPosition) {
+    private void makeActualMove(@NotNull Coordinates initialPosition, @NotNull Coordinates newPosition) {
         checkBounds(initialPosition);
         checkBounds(newPosition);
         piecesMoved.remove(initialPosition);
@@ -153,7 +154,7 @@ public final class BoardImpl implements Board {
         return selected; //can return selected without copying because both Optional and Coordinates are immutable
     }
 
-    void setPieceAt(@org.jetbrains.annotations.NotNull Coordinates pos, @NotNull ChessElement element) {
+    void setPieceAt(@NotNull Coordinates pos, @NotNull ChessElement element) {
         checkBounds(pos);
         board[pos.getY()][pos.getX()] = element;
     }
@@ -175,7 +176,7 @@ public final class BoardImpl implements Board {
         if (getPieceAt(newSelected).getColor() != whoseTurnIsIt()) {
             return false;
         }
-        @org.jetbrains.annotations.Nullable Coordinates selectedCopy = selected.orElse(null);
+        @Nullable Coordinates selectedCopy = selected.orElse(null);
         selected = Optional.of(newSelected);
         if (selectedCopy != null) {
             paintCell(selectedCopy);
@@ -243,7 +244,7 @@ public final class BoardImpl implements Board {
     }
 
     @Override
-    public void paintCell(@org.jetbrains.annotations.NotNull Coordinates pos) {
+    public void paintCell(@NotNull Coordinates pos) {
         myPainter.ifPresent(painter -> painter.paintCell(pos));
     }
 

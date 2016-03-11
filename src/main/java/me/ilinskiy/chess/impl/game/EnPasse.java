@@ -15,7 +15,7 @@ public final class EnPasse extends MoveAdapter {
     @NotNull
     public final Coordinates newPosition;
 
-    public EnPasse(@NotNull Coordinates init, @org.jetbrains.annotations.NotNull Coordinates newC) {
+    public EnPasse(@NotNull Coordinates init, @NotNull Coordinates newC) {
         initialPosition = init;
         newPosition = newC;
     }

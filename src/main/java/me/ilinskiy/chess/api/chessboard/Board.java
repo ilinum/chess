@@ -4,6 +4,7 @@ import me.ilinskiy.chess.api.Move;
 import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.game.Copyable;
 import me.ilinskiy.chess.api.ui.ChessPainter;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public interface Board extends Copyable {
     int BLACK_DIRECTION = 1;
 
     @NotNull
-    ChessElement getPieceAt(@org.jetbrains.annotations.NotNull Coordinates c);
+    ChessElement getPieceAt(@NotNull Coordinates c);
 
     boolean pieceHasNotMovedSinceStartOfGame(@NotNull Coordinates pos);
 
@@ -29,15 +30,15 @@ public interface Board extends Copyable {
     @NotNull
     PieceColor whoseTurnIsIt();
 
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     @Override
     Board copy();
 
-    void paintCell(@org.jetbrains.annotations.NotNull Coordinates pos);
+    void paintCell(@NotNull Coordinates pos);
 
     @NotNull
     Optional<Move> getLastMove();
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     ChessPainter getPainter();
 }

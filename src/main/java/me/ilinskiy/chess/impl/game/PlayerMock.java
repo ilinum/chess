@@ -22,20 +22,20 @@ public class PlayerMock implements Player {
     }
 
     @Override
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     public Move getMove(@NotNull Board b) {
         Coordinates c = new CoordinatesImpl(0, 0);
         return new RegularMove(c, c);
     }
 
     @Override
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     public PieceColor getPlayerColor() {
         return myColor;
     }
 
     @Override
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     public PieceType getPieceTypeForPromotedPawn() {
         return PieceType.Empty;
     }

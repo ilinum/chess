@@ -31,7 +31,7 @@ public final class CoordinatesImpl implements Coordinates {
     }
 
     @Override
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     public int[] toArray() {
         return new int[]{myX, myY};
     }

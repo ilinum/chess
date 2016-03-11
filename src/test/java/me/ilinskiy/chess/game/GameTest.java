@@ -37,7 +37,7 @@ public class GameTest {
     public void testMakeMove() {
         Move move = new RegularMove(new CoordinatesImpl(1, BOARD_SIZE - 1), new CoordinatesImpl(2, BOARD_SIZE - 3));
         Player p1 = new PlayerMock(PieceColor.White) {
-            @org.jetbrains.annotations.NotNull
+            @NotNull
             @Override
             public Move getMove(@NotNull Board b) {
                 return move;

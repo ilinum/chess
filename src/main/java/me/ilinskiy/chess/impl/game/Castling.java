@@ -12,13 +12,13 @@ public final class Castling extends MoveAdapter {
     public final Coordinates initialPosition;
     @NotNull
     public final Coordinates newPosition;
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     public final Coordinates rookNewPosition;
     @NotNull
     public final Coordinates rookInitPosition;
 
 
-    public Castling(@NotNull Coordinates kingInitPos, @org.jetbrains.annotations.NotNull Coordinates kingNewPos, @NotNull Coordinates rookInitPos,
+    public Castling(@NotNull Coordinates kingInitPos, @NotNull Coordinates kingNewPos, @NotNull Coordinates rookInitPos,
                     @NotNull Coordinates rookNewPos) {
         initialPosition = kingInitPos;
         newPosition = kingNewPos;
@@ -85,7 +85,7 @@ public final class Castling extends MoveAdapter {
         return hash;
     }
 
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     @Override
     public String toString() {
         return "Castling: " +

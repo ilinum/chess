@@ -3,6 +3,8 @@ package me.ilinskiy.chess.api.ui;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -12,9 +14,9 @@ public interface ChessPainter {
     /**
      * Initialize the Painter with the board
      */
-    void initialize(@org.jetbrains.annotations.NotNull Board board);
+    void initialize(@NotNull Board board);
 
-    void showWinner(@org.jetbrains.annotations.NotNull PieceColor winner);
+    void showWinner(@NotNull PieceColor winner);
 
     /**
      * @return true if user pressed yes
@@ -39,11 +41,11 @@ public interface ChessPainter {
      *
      * @return a thread that will update time left and interrupted after the move is over
      */
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     Thread getUpdateTimeLeftThread();
 
     /**
      * A particular cell has been change and needs to be repainted
      */
-    void paintCell(@org.jetbrains.annotations.NotNull Coordinates pos);
+    void paintCell(@NotNull Coordinates pos);
 }

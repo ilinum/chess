@@ -20,8 +20,8 @@ import static me.ilinskiy.chess.impl.chessboard.BoardImpl.*;
  */
 public class GameUtil {
 
-    @org.jetbrains.annotations.NotNull
-    public static synchronized List<Move> getAvailableMoves(@org.jetbrains.annotations.NotNull PieceColor color, @org.jetbrains.annotations.NotNull Board board) {
+    @NotNull
+    public static synchronized List<Move> getAvailableMoves(@NotNull PieceColor color, @NotNull Board board) {
         List<Move> result = new ArrayList<>();
         List<Coordinates> allPiecesOfCorrectColor = getAllPieces(color, board);
 
@@ -33,7 +33,7 @@ public class GameUtil {
     }
 
     @NotNull
-    public static List<Coordinates> getAllPieces(PieceColor color, @org.jetbrains.annotations.NotNull Board board) {
+    public static List<Coordinates> getAllPieces(PieceColor color, @NotNull Board board) {
         ArrayList<Coordinates> allPiecesOfCorrectColor = new ArrayList<>(BOARD_SIZE * 2); //should use default instead?
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
@@ -46,7 +46,7 @@ public class GameUtil {
         return allPiecesOfCorrectColor;
     }
 
-    public static int getDirectionForPlayer(@org.jetbrains.annotations.NotNull PieceColor color) {
+    public static int getDirectionForPlayer(@NotNull PieceColor color) {
         if (color == PieceColor.White) {
             return WHITE_DIRECTION;
         } else {
@@ -58,8 +58,8 @@ public class GameUtil {
     /**
      * If board.getPieceAt(pos) is EmptyCell returns an empty list
      */
-    @org.jetbrains.annotations.NotNull
-    public static Set<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @org.jetbrains.annotations.NotNull Board board) {
+    @NotNull
+    public static Set<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull Board board) {
         Set<Move> result = getAllMovesForPiece(pos, board);
 
         //filter out the ones when king is attacked
@@ -72,7 +72,7 @@ public class GameUtil {
         return result;
     }
 
-    public static Set<Coordinates> getAvailableNewPositions(@org.jetbrains.annotations.NotNull Coordinates pos, @org.jetbrains.annotations.NotNull Board board) {
+    public static Set<Coordinates> getAvailableNewPositions(@NotNull Coordinates pos, @NotNull Board board) {
         Set<Move> moves = getAvailableMovesForPiece(pos, board);
         Set<Coordinates> res = new HashSet<>(moves.size());
         for (Move move : moves) {
@@ -84,8 +84,8 @@ public class GameUtil {
     /**
      * Get all available moves for piece without considering if the king will be attacked
      */
-    @org.jetbrains.annotations.NotNull
-    private static Set<Move> getAllMovesForPiece(@org.jetbrains.annotations.NotNull Coordinates pos, @org.jetbrains.annotations.NotNull Board board) {
+    @NotNull
+    private static Set<Move> getAllMovesForPiece(@NotNull Coordinates pos, @NotNull Board board) {
         ChessElement element = board.getPieceAt(pos);
         Set<Move> result = new HashSet<>();
         PieceColor color = element.getColor();
@@ -162,22 +162,22 @@ public class GameUtil {
         return result;
     }
 
-    @org.jetbrains.annotations.NotNull
-    private static Set<Move> getRookMoves(@NotNull Coordinates pos, @org.jetbrains.annotations.NotNull Board board) {
+    @NotNull
+    private static Set<Move> getRookMoves(@NotNull Coordinates pos, @NotNull Board board) {
         int[] xChange = new int[]{0, 0, 1, -1};
         int[] yChange = new int[]{1, -1, 0, 0};
         return getBishopOrRookMoves(pos, board, xChange, yChange);
     }
 
-    @org.jetbrains.annotations.NotNull
-    private static Set<Move> getBishopMoves(@org.jetbrains.annotations.NotNull Coordinates pos, @org.jetbrains.annotations.NotNull Board board) {
+    @NotNull
+    private static Set<Move> getBishopMoves(@NotNull Coordinates pos, @NotNull Board board) {
         int[] xChange = new int[]{-1, -1, 1, 1};
         int[] yChange = new int[]{1, -1, 1, -1};
         return getBishopOrRookMoves(pos, board, xChange, yChange);
     }
 
-    private static Set<Move> getBishopOrRookMoves(@org.jetbrains.annotations.NotNull Coordinates pos, @org.jetbrains.annotations.NotNull Board board,
-                                                  @org.jetbrains.annotations.NotNull int[] xChange, @org.jetbrains.annotations.NotNull int[] yChange) {
+    private static Set<Move> getBishopOrRookMoves(@NotNull Coordinates pos, @NotNull Board board,
+                                                  @NotNull int[] xChange, @NotNull int[] yChange) {
         assert xChange.length == yChange.length;
         Set<Move> result = new HashSet<>();
         assert board.getPieceAt(pos) instanceof Piece;
@@ -205,8 +205,8 @@ public class GameUtil {
         return result;
     }
 
-    @org.jetbrains.annotations.NotNull
-    private static Set<Move> getKingMoves(@org.jetbrains.annotations.NotNull Coordinates kingPos, @org.jetbrains.annotations.NotNull Board board) {
+    @NotNull
+    private static Set<Move> getKingMoves(@NotNull Coordinates kingPos, @NotNull Board board) {
         int[] xChange = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
         int[] yChange = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
         Set<Move> result = new HashSet<>();
@@ -257,7 +257,7 @@ public class GameUtil {
         return result;
     }
 
-    private static boolean kingAround(@org.jetbrains.annotations.NotNull Coordinates pos, @org.jetbrains.annotations.NotNull Board board, PieceColor opposingKingColor) {
+    private static boolean kingAround(@NotNull Coordinates pos, @NotNull Board board, PieceColor opposingKingColor) {
         int[] xChange = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
         int[] yChange = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
         assert xChange.length == yChange.length;
@@ -273,7 +273,7 @@ public class GameUtil {
         return false;
     }
 
-    public static boolean kingIsAttacked(@org.jetbrains.annotations.NotNull PieceColor kingColor, @org.jetbrains.annotations.NotNull Board board, boolean checkKing) {
+    public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull Board board, boolean checkKing) {
         List<Coordinates> allOpponentPieces = getAllPieces(kingColor.inverse(), board);
         Coordinates kingPos = findKing(kingColor, board);
 
@@ -292,11 +292,11 @@ public class GameUtil {
         return false;
     }
 
-    public static boolean kingIsAttacked(@org.jetbrains.annotations.NotNull PieceColor kingColor, @org.jetbrains.annotations.NotNull Board board) {
+    public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull Board board) {
         return kingIsAttacked(kingColor, board, true);
     }
 
-    private static boolean kingIsAttackedAfterMove(@NotNull PieceColor color, @org.jetbrains.annotations.NotNull Board b,
+    private static boolean kingIsAttackedAfterMove(@NotNull PieceColor color, @NotNull Board b,
                                                    @NotNull Move m) {
         if (m instanceof Castling) {
             Castling castling = (Castling) m;
@@ -321,15 +321,15 @@ public class GameUtil {
         }
     }
 
-    @org.jetbrains.annotations.NotNull
-    private static Coordinates findKing(@NotNull PieceColor kingColor, @org.jetbrains.annotations.NotNull Board board) {
+    @NotNull
+    private static Coordinates findKing(@NotNull PieceColor kingColor, @NotNull Board board) {
         List<Coordinates> kingLocation = findPiecesByTypeAndColor(PieceType.King, kingColor, board);
         assert kingLocation.size() == 1 : "Wrong number of kings on the board: " + kingLocation;
         return kingLocation.get(0);
     }
 
-    @org.jetbrains.annotations.NotNull
-    public static List<Coordinates> findPiecesByTypeAndColor(@org.jetbrains.annotations.NotNull PieceType type, @org.jetbrains.annotations.NotNull PieceColor color,
+    @NotNull
+    public static List<Coordinates> findPiecesByTypeAndColor(@NotNull PieceType type, @NotNull PieceColor color,
                                                              @NotNull Board board) {
         ChessElement elemToFind = Piece.createPiece(color, type);
         List<Coordinates> result = new ArrayList<>();

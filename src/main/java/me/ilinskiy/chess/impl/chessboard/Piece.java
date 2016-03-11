@@ -31,7 +31,7 @@ public final class Piece implements ChessElement {
     }
 
     @NotNull
-    public static Piece createPiece(@NotNull PieceColor pColor, @org.jetbrains.annotations.NotNull PieceType pType) {
+    public static Piece createPiece(@NotNull PieceColor pColor, @NotNull PieceType pType) {
         Piece res = null;
         switch (pColor) {
             case Black:
@@ -67,7 +67,7 @@ public final class Piece implements ChessElement {
     }
 
     @Override
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     public String toString() {
         return getColor() + " " + getType();
     }

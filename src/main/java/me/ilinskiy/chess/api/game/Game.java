@@ -19,7 +19,7 @@ public interface Game {
 
     boolean isGameOver();
 
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     Optional<PieceColor> getWinner();
 
     @NotNull

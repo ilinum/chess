@@ -14,7 +14,7 @@ public final class RegularMove extends MoveAdapter {
     @NotNull
     public final Coordinates newPosition;
 
-    public RegularMove(@NotNull Coordinates init, @org.jetbrains.annotations.NotNull Coordinates newC) {
+    public RegularMove(@NotNull Coordinates init, @NotNull Coordinates newC) {
         initialPosition = init;
         newPosition = newC;
     }
@@ -30,7 +30,7 @@ public final class RegularMove extends MoveAdapter {
     }
 
     @Override
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     public Move copy() {
         return new RegularMove(initialPosition.copy(), newPosition.copy());
     }

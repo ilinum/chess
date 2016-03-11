@@ -30,7 +30,7 @@ public class GameRunnerImpl implements GameRunner {
      */
     @Override
     @NotNull
-    public PieceColor runGame(@org.jetbrains.annotations.NotNull Player p1, @org.jetbrains.annotations.NotNull Player p2) {
+    public PieceColor runGame(@NotNull Player p1, @NotNull Player p2) {
         Game g;
         g = new GameImpl(p1, p2, painter);
         while (!g.isGameOver()) {
