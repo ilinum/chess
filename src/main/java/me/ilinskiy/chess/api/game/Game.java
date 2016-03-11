@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.api.game;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface Game {
 
     boolean isGameOver();
 
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     Optional<PieceColor> getWinner();
 
     @NotNull

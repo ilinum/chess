@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.game;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
@@ -22,20 +22,20 @@ public class PlayerMock implements Player {
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public Move getMove(@NotNull Board b) {
         Coordinates c = new CoordinatesImpl(0, 0);
         return new RegularMove(c, c);
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public PieceColor getPlayerColor() {
         return myColor;
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public PieceType getPieceTypeForPromotedPawn() {
         return PieceType.Empty;
     }

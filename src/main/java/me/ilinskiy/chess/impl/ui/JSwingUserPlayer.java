@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.ui;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
@@ -29,9 +29,9 @@ import static me.ilinskiy.chess.impl.game.GameUtil.println;
  */
 public final class JSwingUserPlayer implements Player {
     private Optional<Move> moveMade = Optional.empty();
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     private final Lock mouseLock;
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     private final Condition moveIsMade;
     private final PieceColor myColor;
 
@@ -41,21 +41,22 @@ public final class JSwingUserPlayer implements Player {
         moveIsMade = mouseLock.newCondition();
     }
 
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     @Override
-    public Move getMove(@NotNull Board board) {
+    public Move getMove(@org.jetbrains.annotations.NotNull Board board) {
+        assert board.getPainter() != null;
         BoardPanel panel = ((JSwingChessPainter) board.getPainter()).getPanel();
         MouseListener mouseListener = new MouseListener() {
             @Override
-            public void mouseClicked(@NotNull MouseEvent mouseEvent) {
+            public void mouseClicked(@org.jetbrains.annotations.NotNull MouseEvent mouseEvent) {
             }
 
             @Override
-            public void mousePressed(@NotNull MouseEvent mouseEvent) {
+            public void mousePressed(@org.jetbrains.annotations.NotNull MouseEvent mouseEvent) {
             }
 
             @Override
-            public void mouseReleased(@NotNull MouseEvent mouseEvent) {
+            public void mouseReleased(@org.jetbrains.annotations.NotNull MouseEvent mouseEvent) {
                 mouseLock.lock();
                 double x = mouseEvent.getX();
                 double y = mouseEvent.getY();
@@ -85,11 +86,11 @@ public final class JSwingUserPlayer implements Player {
             }
 
             @Override
-            public void mouseEntered(@NotNull MouseEvent mouseEvent) {
+            public void mouseEntered(@org.jetbrains.annotations.NotNull MouseEvent mouseEvent) {
             }
 
             @Override
-            public void mouseExited(@NotNull MouseEvent mouseEvent) {
+            public void mouseExited(@org.jetbrains.annotations.NotNull MouseEvent mouseEvent) {
             }
         };
         panel.addMouseListener(mouseListener);
@@ -115,25 +116,25 @@ public final class JSwingUserPlayer implements Player {
         }
     }
 
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     @Override
     public PieceColor getPlayerColor() {
         return myColor;
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public PieceType getPieceTypeForPromotedPawn() {
         return new ChoosePieceTypeForPromotedPawn().getChosenPiece();
     }
 }
 
 class ChoosePieceTypeForPromotedPawn extends JPanel {
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     private Optional<PieceType> selectedPiece = Optional.empty();
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     private final Lock buttonLock;
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     private final Condition buttonPressed;
 
     private final JRadioButton[] buttons = new JRadioButton[]{

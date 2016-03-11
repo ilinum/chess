@@ -1,8 +1,8 @@
 package me.ilinskiy.chess.impl.chessboard;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
-import me.ilinskiy.chess.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.BoardWrapper;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
@@ -33,7 +33,7 @@ public final class BoardWrapperImpl implements me.ilinskiy.chess.api.chessboard.
 
     @Override
     @NotNull
-    public ChessElement getPieceAt(@NotNull Coordinates c) {
+    public ChessElement getPieceAt(@org.jetbrains.annotations.NotNull Coordinates c) {
         return inner.getPieceAt(c);
     }
 
@@ -43,7 +43,7 @@ public final class BoardWrapperImpl implements me.ilinskiy.chess.api.chessboard.
     }
 
     @Override
-    public void setPieceAccordingToMove(@NotNull Move move) {
+    public void setPieceAccordingToMove(@org.jetbrains.annotations.NotNull Move move) {
         List<Tuple2<Coordinates, Coordinates>> positions = move.zippedPositions();
         for (Tuple2<Coordinates, Coordinates> position : positions) {
             Coordinates initPos = position.getFirst();
@@ -58,7 +58,7 @@ public final class BoardWrapperImpl implements me.ilinskiy.chess.api.chessboard.
     }
 
     @Override
-    public void movePiece(@NotNull Move m) {
+    public void movePiece(@org.jetbrains.annotations.NotNull Move m) {
         inner.movePiece(m);
     }
 

@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.impl.game;
 
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.ui.Player;
 

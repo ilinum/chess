@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.api.chessboard;
 
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.game.Copyable;
 
 /**
@@ -12,7 +12,7 @@ public interface Coordinates extends Copyable, Comparable<Coordinates> {
 
     int getY();
 
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     int[] toArray();
 
     @NotNull

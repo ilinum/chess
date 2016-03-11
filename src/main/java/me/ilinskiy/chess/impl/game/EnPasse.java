@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.impl.game;
 
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.game.Copyable;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
@@ -15,7 +15,7 @@ public final class EnPasse extends MoveAdapter {
     @NotNull
     public final Coordinates newPosition;
 
-    public EnPasse(@NotNull Coordinates init, @NotNull Coordinates newC) {
+    public EnPasse(@NotNull Coordinates init, @org.jetbrains.annotations.NotNull Coordinates newC) {
         initialPosition = init;
         newPosition = newC;
     }

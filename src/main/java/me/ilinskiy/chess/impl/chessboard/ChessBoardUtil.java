@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.chessboard;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.ui.Player;
 
@@ -36,7 +36,7 @@ public class ChessBoardUtil {
      */
     @NotNull
     @Deprecated
-    public static Player inverse(@NotNull Player inverseOf, @NotNull Player p1, @NotNull Player p2) {
+    public static Player inverse(@NotNull Player inverseOf, @NotNull Player p1, @org.jetbrains.annotations.NotNull Player p2) {
         return inverseOf.inverse(p1, p2);
     }
 

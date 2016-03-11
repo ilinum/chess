@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.api.chessboard;
 
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: Svyatoslav Ilinskiy

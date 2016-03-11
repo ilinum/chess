@@ -1,7 +1,5 @@
 package me.ilinskiy.chess.api.ui;
 
-import me.ilinskiy.chess.api.annotations.NotNull;
-import me.ilinskiy.chess.api.annotations.Nullable;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
@@ -14,9 +12,9 @@ public interface ChessPainter {
     /**
      * Initialize the Painter with the board
      */
-    void initialize(@NotNull Board board);
+    void initialize(@org.jetbrains.annotations.NotNull Board board);
 
-    void showWinner(@NotNull PieceColor winner);
+    void showWinner(@org.jetbrains.annotations.NotNull PieceColor winner);
 
     /**
      * @return true if user pressed yes
@@ -41,11 +39,11 @@ public interface ChessPainter {
      *
      * @return a thread that will update time left and interrupted after the move is over
      */
-    @Nullable
+    @org.jetbrains.annotations.Nullable
     Thread getUpdateTimeLeftThread();
 
     /**
      * A particular cell has been change and needs to be repainted
      */
-    void paintCell(@NotNull Coordinates pos);
+    void paintCell(@org.jetbrains.annotations.NotNull Coordinates pos);
 }

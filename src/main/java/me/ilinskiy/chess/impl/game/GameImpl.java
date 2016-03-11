@@ -1,8 +1,8 @@
 package me.ilinskiy.chess.impl.game;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
-import me.ilinskiy.chess.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.ui.ChessPainter;
@@ -34,7 +34,7 @@ public final class GameImpl implements Game {
     private final Player player2;
     private Optional<ChessPainter> myPainter;
 
-    public GameImpl(@NotNull Player p1, @NotNull Player p2, @Nullable ChessPainter painter) {
+    public GameImpl(@org.jetbrains.annotations.NotNull Player p1, @NotNull Player p2, @Nullable ChessPainter painter) {
         if (p1.getPlayerColor().inverse() != p2.getPlayerColor()) {
             throw new IllegalArgumentException("Wrong colors for players!");
         }
@@ -160,7 +160,7 @@ public final class GameImpl implements Game {
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public Optional<PieceColor> getWinner() {
         return winner;
     }

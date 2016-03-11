@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.impl.game;
 
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 
 /**
@@ -12,13 +12,13 @@ public final class Castling extends MoveAdapter {
     public final Coordinates initialPosition;
     @NotNull
     public final Coordinates newPosition;
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public final Coordinates rookNewPosition;
     @NotNull
     public final Coordinates rookInitPosition;
 
 
-    public Castling(@NotNull Coordinates kingInitPos, @NotNull Coordinates kingNewPos, @NotNull Coordinates rookInitPos,
+    public Castling(@NotNull Coordinates kingInitPos, @org.jetbrains.annotations.NotNull Coordinates kingNewPos, @NotNull Coordinates rookInitPos,
                     @NotNull Coordinates rookNewPos) {
         initialPosition = kingInitPos;
         newPosition = kingNewPos;
@@ -38,6 +38,7 @@ public final class Castling extends MoveAdapter {
         return rookInitPosition;
     }
 
+    @NotNull
     public Coordinates getRookNewPosition() {
         return rookNewPosition;
     }
@@ -84,7 +85,7 @@ public final class Castling extends MoveAdapter {
         return hash;
     }
 
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     @Override
     public String toString() {
         return "Castling: " +

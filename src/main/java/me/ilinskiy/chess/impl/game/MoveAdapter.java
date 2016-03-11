@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.game;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.impl.util.CollectionUtil;
 import me.ilinskiy.chess.impl.util.Tuple2;
@@ -13,7 +13,7 @@ import java.util.List;
  * Author: Svyatoslav Ilinskiy
  * Date: 06.12.15.
  */
-public abstract class MoveAdapter implements me.ilinskiy.chess.api.Move {
+public abstract class MoveAdapter implements Move {
 
     private Coordinates[] toArray() {
         Coordinates[] newPositions = getNewPositions();

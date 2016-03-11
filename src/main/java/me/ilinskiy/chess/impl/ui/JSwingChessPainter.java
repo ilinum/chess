@@ -1,6 +1,5 @@
 package me.ilinskiy.chess.impl.ui;
 
-import me.ilinskiy.chess.api.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
@@ -25,7 +24,8 @@ import static me.ilinskiy.chess.api.chessboard.PieceType.*;
 public final class JSwingChessPainter implements ChessPainter {
     @SuppressWarnings("WeakerAccess")
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
-    @NotNull private final JFrame myFrame;
+    @org.jetbrains.annotations.NotNull
+    private final JFrame myFrame;
 
     private BoardPanel panel;
 
@@ -41,7 +41,7 @@ public final class JSwingChessPainter implements ChessPainter {
     }
 
     @Override
-    public void initialize(@NotNull Board board) {
+    public void initialize(@org.jetbrains.annotations.NotNull Board board) {
         if (panel == null) {
             //playing for the first time
             panel = new BoardPanel(board);
@@ -57,7 +57,7 @@ public final class JSwingChessPainter implements ChessPainter {
     }
 
     @Override
-    public void showWinner(@NotNull PieceColor winner) {
+    public void showWinner(@org.jetbrains.annotations.NotNull PieceColor winner) {
         JOptionPane.showMessageDialog(myFrame, getWinPhrase(winner));
     }
 
@@ -91,7 +91,7 @@ public final class JSwingChessPainter implements ChessPainter {
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public Thread getUpdateTimeLeftThread() {
         long moveMustBeMadeByMillis = System.currentTimeMillis() + (GameRunnerImpl.TIMEOUT_IN_SECONDS + 1) * 1000;
         String oldName = myFrame.getTitle();
@@ -112,7 +112,7 @@ public final class JSwingChessPainter implements ChessPainter {
     }
 
     @Override
-    public void paintCell(@NotNull Coordinates pos) {
+    public void paintCell(@org.jetbrains.annotations.NotNull Coordinates pos) {
         repaintBoard();
     }
 
@@ -121,8 +121,8 @@ public final class JSwingChessPainter implements ChessPainter {
     }
 
 
-    @NotNull
-    private static String getWinPhrase(@NotNull PieceColor winner) {
+    @org.jetbrains.annotations.NotNull
+    private static String getWinPhrase(@org.jetbrains.annotations.NotNull PieceColor winner) {
         switch (winner) {
             case Black:
                 return "Black won!";
@@ -139,7 +139,7 @@ public final class JSwingChessPainter implements ChessPainter {
         return panel;
     }
 
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public static final HashMap<Piece, Image> icons = new HashMap<>();
 
     static {

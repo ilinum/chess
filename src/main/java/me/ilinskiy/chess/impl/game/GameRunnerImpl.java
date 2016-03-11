@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.impl.game;
 
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.ui.ChessPainter;
@@ -30,7 +30,7 @@ public class GameRunnerImpl implements GameRunner {
      */
     @Override
     @NotNull
-    public PieceColor runGame(@NotNull Player p1, @NotNull Player p2) {
+    public PieceColor runGame(@org.jetbrains.annotations.NotNull Player p1, @org.jetbrains.annotations.NotNull Player p2) {
         Game g;
         g = new GameImpl(p1, p2, painter);
         while (!g.isGameOver()) {

@@ -1,7 +1,6 @@
 package me.ilinskiy.chess.impl.ui;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
@@ -31,7 +30,7 @@ final class BoardPanel extends JPanel {
 
     private final Board myBoard;
 
-    public BoardPanel(@NotNull Board board) {
+    public BoardPanel(@org.jetbrains.annotations.NotNull Board board) {
         super();
         myBoard = board;
     }
@@ -58,7 +57,7 @@ final class BoardPanel extends JPanel {
         }
     }
 
-    private static void setBGForCell(@NotNull Coordinates c, @NotNull Graphics graphics, @NotNull Board b) {
+    private static void setBGForCell(@org.jetbrains.annotations.NotNull Coordinates c, @org.jetbrains.annotations.NotNull Graphics graphics, @org.jetbrains.annotations.NotNull Board b) {
         Optional<Coordinates> selected = b.getSelected();
 
         if (c.equals(selected.orElse(null))) {
@@ -83,7 +82,7 @@ final class BoardPanel extends JPanel {
         }
     }
 
-    private static void drawCell(@NotNull Coordinates pos, @NotNull Graphics graphics, int heightAndWidth) {
+    private static void drawCell(@org.jetbrains.annotations.NotNull Coordinates pos, @org.jetbrains.annotations.NotNull Graphics graphics, int heightAndWidth) {
         int cellSize = heightAndWidth / BOARD_SIZE;
         int initX = pos.getX() * cellSize;
         int initY = pos.getY() * cellSize;
@@ -94,8 +93,8 @@ final class BoardPanel extends JPanel {
         graphics.setColor(oldColor);
     }
 
-    private static void drawImageForCell(@NotNull Coordinates pos, @NotNull Graphics graphics,
-                                         @NotNull Board board, int heightAndWidth) {
+    private static void drawImageForCell(@org.jetbrains.annotations.NotNull Coordinates pos, @org.jetbrains.annotations.NotNull Graphics graphics,
+                                         @org.jetbrains.annotations.NotNull Board board, int heightAndWidth) {
         int cellSize = heightAndWidth / BOARD_SIZE;
         ChessElement element = board.getPieceAt(pos);
         if (element instanceof Piece) {

@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.chessboard;
 
 
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 
@@ -31,7 +31,7 @@ public final class CoordinatesImpl implements Coordinates {
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public int[] toArray() {
         return new int[]{myX, myY};
     }

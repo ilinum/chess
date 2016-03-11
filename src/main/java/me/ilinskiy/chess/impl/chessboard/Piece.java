@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.chessboard;
 
 
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
@@ -31,7 +31,7 @@ public final class Piece implements ChessElement {
     }
 
     @NotNull
-    public static Piece createPiece(@NotNull PieceColor pColor, @NotNull PieceType pType) {
+    public static Piece createPiece(@NotNull PieceColor pColor, @org.jetbrains.annotations.NotNull PieceType pType) {
         Piece res = null;
         switch (pColor) {
             case Black:
@@ -67,7 +67,7 @@ public final class Piece implements ChessElement {
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public String toString() {
         return getColor() + " " + getType();
     }

@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.game;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 
 /**
@@ -14,7 +14,7 @@ public final class RegularMove extends MoveAdapter {
     @NotNull
     public final Coordinates newPosition;
 
-    public RegularMove(@NotNull Coordinates init, @NotNull Coordinates newC) {
+    public RegularMove(@NotNull Coordinates init, @org.jetbrains.annotations.NotNull Coordinates newC) {
         initialPosition = init;
         newPosition = newC;
     }
@@ -30,7 +30,7 @@ public final class RegularMove extends MoveAdapter {
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public Move copy() {
         return new RegularMove(initialPosition.copy(), newPosition.copy());
     }

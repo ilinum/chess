@@ -1,6 +1,5 @@
 package me.ilinskiy.chess.impl.chessboard;
 
-import me.ilinskiy.chess.api.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
@@ -17,13 +16,13 @@ public final class EmptyCell implements ChessElement {
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public PieceType getType() {
         return PieceType.Empty;
     }
 
     @Override
-    @NotNull
+    @org.jetbrains.annotations.NotNull
     public PieceColor getColor() {
         return PieceColor.Empty;
     }

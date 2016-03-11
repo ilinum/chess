@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.api.chessboard;
 
 import me.ilinskiy.chess.api.Move;
-import me.ilinskiy.chess.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -15,7 +15,7 @@ public interface BoardWrapper {
 
     void setPieceAccordingToMove(@NotNull Move move);
 
-    void movePiece(@NotNull Move m);
+    void movePiece(@org.jetbrains.annotations.NotNull Move m);
 
     Board getInner();
 }
