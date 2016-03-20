@@ -25,8 +25,7 @@ public class GameTest {
     @Test
     public void testGameInit() {
         Player p1 = new PlayerMock(PieceColor.White);
-        Player p2 = new PlayerMock(PieceColor.Black);
-        Game g = new GameImpl(p1, p2, null);
+        Game g = new GameImpl(p1.getPlayerColor(), null);
         assertTrue(!g.isGameOver());
         assertTrue(!g.getWinner().isPresent());
         assertTrue(g.getMovesMade().isEmpty());
@@ -45,8 +44,8 @@ public class GameTest {
             }
         };
         Player p2 = new PlayerMock(PieceColor.Black);
-        Game g = new GameImpl(p1, p2, null);
-        g.makeMove();
+        Game g = new GameImpl(p1.getPlayerColor(), null);
+        g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
         assertFalse(g.isGameOver());
         assertTrue(!g.getWinner().isPresent());
         assertTrue(g.getMovesMade().size() == 1);
@@ -64,8 +63,7 @@ public class GameTest {
                 return new RegularMove(new CoordinatesImpl(8, 8), new CoordinatesImpl(1, 1));
             }
         };
-        Player p2 = new PlayerMock(PieceColor.Black);
-        Game g = new GameImpl(p1, p2, null);
-        g.makeMove();
+        Game g = new GameImpl(p1.getPlayerColor(), null);
+        g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
     }
 }
