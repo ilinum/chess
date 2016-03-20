@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import static me.ilinskiy.chess.api.chessboard.Board.BOARD_SIZE;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -46,7 +47,7 @@ public class GameTest {
         Player p2 = new PlayerMock(PieceColor.Black);
         Game g = new GameImpl(p1, p2, null);
         g.makeMove();
-        assertTrue(!g.isGameOver());
+        assertFalse(g.isGameOver());
         assertTrue(!g.getWinner().isPresent());
         assertTrue(g.getMovesMade().size() == 1);
         assertTrue(g.getMovesMade().get(0).equals(move));

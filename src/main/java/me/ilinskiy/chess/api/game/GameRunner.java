@@ -9,8 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * Date: 3/10/16
  */
 public interface GameRunner {
-    @NotNull
-    PieceColor runGame(@NotNull Player p1, @NotNull Player p2);
+    @NotNull PieceColor runGame(@NotNull Player p1, @NotNull Player p2);
 
     boolean askToPlayAgain();
 

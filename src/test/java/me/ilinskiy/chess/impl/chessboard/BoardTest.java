@@ -125,19 +125,20 @@ public class BoardTest {
     @Test
     public void testSelected() {
         BoardImpl b = new BoardImpl();
-        assertTrue("selected should be empty!", !b.getSelected().isPresent());
+        assertTrue("selected should be empty!", b.getSelected() == null);
         CoordinatesImpl coordinates = new CoordinatesImpl(7, 7);
         assertTrue(b.setSelected(coordinates));
-        assertTrue(b.getSelected().get().equals(coordinates));
+        //noinspection ConstantConditions
+        assertTrue(b.getSelected().equals(coordinates));
         CoordinatesImpl newCoordinates = new CoordinatesImpl(5, 5);
         assertTrue(!b.setSelected(newCoordinates));
-        assertTrue(b.getSelected().get().equals(coordinates));
+        assertTrue(b.getSelected().equals(coordinates));
         b.movePiece(new RegularMove(coordinates, newCoordinates));
-        assertTrue("selected should be empty!", !b.getSelected().isPresent());
+        assertTrue("selected should be empty!", b.getSelected() == null);
         assertTrue(!b.setSelected(newCoordinates));
-        assertTrue(!b.getSelected().isPresent());
+        assertTrue(b.getSelected() == null);
         b.movePiece(new RegularMove(new CoordinatesImpl(0, 0), new CoordinatesImpl(4, 4)));
         assertTrue(b.setSelected(newCoordinates));
-        assertTrue(b.getSelected().get().equals(newCoordinates));
+        assertTrue(b.getSelected().equals(newCoordinates));
     }
 }

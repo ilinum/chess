@@ -15,8 +15,10 @@ public class JSwingMain {
         Player p2 = new JSwingUserPlayer(PieceColor.Black);
         GameRunner gameRunner = new GameRunnerImpl(new JSwingChessPainter());
         gameRunner.askTimeOut();
+        int[] wins = new int[PieceColor.values().length];
         do {
-            gameRunner.runGame(p1, p2);
+            PieceColor winner = gameRunner.runGame(p1, p2);
+            wins[winner.ordinal()]++; //collect statistics
         } while (gameRunner.askToPlayAgain());
         gameRunner.dispose();
     }

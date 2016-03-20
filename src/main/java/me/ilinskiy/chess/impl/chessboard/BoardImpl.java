@@ -29,21 +29,25 @@ import static me.ilinskiy.chess.api.chessboard.PieceType.Pawn;
  */
 public final class BoardImpl implements Board {
     private ChessElement[][] board;
-    private Optional<Coordinates> selected;
+    @Nullable
+    private Coordinates selected;
     private PieceColor turn;
     private List<Coordinates> piecesMoved;
-    private Optional<Move> lastMove;
-    public final Optional<ChessPainter> myPainter;
+    @Nullable
+    private Move lastMove;
+    private final ChessPainter myPainter;
 
-    public BoardImpl(@Nullable ChessPainter painter) {
-        selected = Optional.empty();
+    BoardImpl(@Nullable ChessPainter painter) {
+        selected = null;
         putPiecesOnBoard();
-        myPainter = Optional.ofNullable(painter);
-        myPainter.ifPresent(p -> p.initialize(this));
+        myPainter = painter;
         turn = PieceColor.White;
+        if (myPainter != null) {
+            myPainter.initialize(this);
+        }
     }
 
-    public BoardImpl() {
+    BoardImpl() {
         this(null);
     }
 
@@ -52,7 +56,7 @@ public final class BoardImpl implements Board {
         board = new ChessElement[BOARD_SIZE][BOARD_SIZE];
         int currRow = 0;
         assert ChessBoardUtil.backRowPieceTypes.length == BOARD_SIZE;
-        lastMove = Optional.empty();
+        lastMove = null;
         PieceColor topPieceColor;
         PieceColor bottomPieceColor;
         if (BLACK_DIRECTION == 1) {
@@ -100,7 +104,7 @@ public final class BoardImpl implements Board {
      * @param move move that was made
      */
     void movePiece(@NotNull Move move) {
-        lastMove = Optional.of(move);
+        lastMove = move;
         List<Coordinates> cellsToRepaint = new LinkedList<>();
         for (Coordinates coordinates : move.getInitialPositions()) {
             cellsToRepaint.addAll(GameUtil.getAvailableNewPositions(coordinates, this));
@@ -125,7 +129,7 @@ public final class BoardImpl implements Board {
             makeActualMove(rm.initialPosition, rm.newPosition);
         }
         turn = turn.inverse();
-        selected = Optional.empty();
+        selected = null;
         cellsToRepaint.forEach(this::paintCell);
     }
 
@@ -148,10 +152,9 @@ public final class BoardImpl implements Board {
     }
 
     @Override
-    @NotNull
-    public Optional<Coordinates> getSelected() {
-        if (selected == null) throw new RuntimeException("selected is null!");
-        return selected; //can return selected without copying because both Optional and Coordinates are immutable
+    @Nullable
+    public Coordinates getSelected() {
+        return selected;
     }
 
     void setPieceAt(@NotNull Coordinates pos, @NotNull ChessElement element) {
@@ -176,8 +179,8 @@ public final class BoardImpl implements Board {
         if (getPieceAt(newSelected).getColor() != whoseTurnIsIt()) {
             return false;
         }
-        @Nullable Coordinates selectedCopy = selected.orElse(null);
-        selected = Optional.of(newSelected);
+        @Nullable Coordinates selectedCopy = selected;
+        selected = newSelected;
         if (selectedCopy != null) {
             paintCell(selectedCopy);
             GameUtil.getAvailableNewPositions(selectedCopy, this).forEach(this::paintCell);
@@ -232,7 +235,10 @@ public final class BoardImpl implements Board {
                     }
                 }
             }
-            return turn == other.turn && selected.equals(other.selected);
+            boolean selectedEqual =
+                    (selected == null && other.selected == null) ||
+                            (selected != null && selected.equals(other.selected));
+            return turn == other.turn && selectedEqual;
         } else {
             return false;
         }
@@ -240,22 +246,24 @@ public final class BoardImpl implements Board {
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(board) * 31 + selected.hashCode() + turn.hashCode();
+        return Arrays.deepHashCode(board) * 31 + Objects.hashCode(selected) + turn.hashCode();
     }
 
     @Override
     public void paintCell(@NotNull Coordinates pos) {
-        myPainter.ifPresent(painter -> painter.paintCell(pos));
+        if (myPainter != null) {
+            myPainter.paintCell(pos);
+        }
     }
 
     @Override
     @NotNull
     public Optional<Move> getLastMove() {
-        return lastMove;
+        return Optional.ofNullable(lastMove);
     }
 
     @Override
     public ChessPainter getPainter() {
-        return myPainter.orElse(null);
+        return myPainter;
     }
 }

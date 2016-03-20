@@ -51,6 +51,9 @@ public final class JSwingChessPainter implements ChessPainter {
             myFrame.setVisible(true);
         } else {
             //playing again
+            myFrame.remove(panel);
+            panel = new BoardPanel(board);
+            myFrame.add(panel, BorderLayout.CENTER);
             myFrame.revalidate();
             myFrame.repaint();
         }
@@ -117,7 +120,7 @@ public final class JSwingChessPainter implements ChessPainter {
         repaintBoard();
     }
 
-    public void repaintBoard() {
+    private void repaintBoard() {
         panel.repaint();
     }
 
@@ -136,12 +139,12 @@ public final class JSwingChessPainter implements ChessPainter {
         }
     }
 
-    public BoardPanel getPanel() {
+    BoardPanel getPanel() {
         return panel;
     }
 
     @NotNull
-    public static final HashMap<Piece, Image> icons = new HashMap<>();
+    static final HashMap<Piece, Image> icons = new HashMap<>();
 
     static {
         if (icons.isEmpty()) {

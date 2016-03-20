@@ -46,7 +46,7 @@ public class GameUtil {
         return allPiecesOfCorrectColor;
     }
 
-    public static int getDirectionForPlayer(@NotNull PieceColor color) {
+    static int getDirectionForPlayer(@NotNull PieceColor color) {
         if (color == PieceColor.White) {
             return WHITE_DIRECTION;
         } else {
@@ -113,6 +113,7 @@ public class GameUtil {
                         } else {
                             Optional<Move> lastMove = board.getLastMove();
                             if (!outOfBounds && lastMove.isPresent()) { //check for en passe
+                                @SuppressWarnings("OptionalGetWithoutIsPresent")
                                 Move move = lastMove.get();
                                 if (move instanceof RegularMove) {
                                     RegularMove rm = (RegularMove) move;
@@ -276,6 +277,7 @@ public class GameUtil {
         return false;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull Board board, boolean checkKing) {
         List<Coordinates> allOpponentPieces = getAllPieces(kingColor.inverse(), board);
         Coordinates kingPos = findKing(kingColor, board);
@@ -295,6 +297,7 @@ public class GameUtil {
         return false;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull Board board) {
         return kingIsAttacked(kingColor, board, true);
     }
@@ -349,9 +352,7 @@ public class GameUtil {
 
     public static <T> List<T> copy(List<T> toCopy) {
         List<T> res = new ArrayList<>(toCopy.size());
-        for (T c : toCopy) {
-            res.add(c);
-        }
+        res.addAll(toCopy);
         return res;
     }
 

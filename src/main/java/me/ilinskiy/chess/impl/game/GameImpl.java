@@ -25,14 +25,16 @@ public final class GameImpl implements Game {
     @NotNull
     private final BoardWrapper board;
     private Player turn;
-    private Optional<PieceColor> winner;
+    @Nullable
+    private PieceColor winner;
     @NotNull
     private final List<Move> movesMade;
     @NotNull
     private final Player player1;
     @NotNull
     private final Player player2;
-    private Optional<ChessPainter> myPainter;
+    @Nullable
+    private ChessPainter myPainter;
 
     public GameImpl(@NotNull Player p1, @NotNull Player p2, @Nullable ChessPainter painter) {
         if (p1.getPlayerColor().inverse() != p2.getPlayerColor()) {
@@ -43,8 +45,8 @@ public final class GameImpl implements Game {
         player1 = p1;
         player2 = p2;
         turn = p1.getPlayerColor() == PieceColor.White ? p1 : p2;
-        winner = Optional.empty();
-        myPainter = Optional.ofNullable(painter);
+        winner = null;
+        myPainter = painter;
     }
 
     @Override
@@ -55,7 +57,7 @@ public final class GameImpl implements Game {
         Optional<Move> moveOptional = getMove();
         if (!moveOptional.isPresent()) {
             //it timed out
-            winner = Optional.of(turn.getPlayerColor().inverse());
+            winner = turn.getPlayerColor().inverse();
             println("Timed out!");
         } else {
             Move m = moveOptional.get();
@@ -87,8 +89,8 @@ public final class GameImpl implements Game {
         Optional<Thread> updateTimeLeftThread = Optional.empty();
         try {
             if (GameRunnerImpl.TIMEOUT_IN_SECONDS > 0) {
-                if (myPainter.isPresent()) {
-                    updateTimeLeftThread = Optional.ofNullable(myPainter.get().getUpdateTimeLeftThread());
+                if (myPainter != null) {
+                    updateTimeLeftThread = Optional.ofNullable(myPainter.getUpdateTimeLeftThread());
                     updateTimeLeftThread.ifPresent(Thread::start);
                 }
                 result = future.get(GameRunnerImpl.TIMEOUT_IN_SECONDS + 1, TimeUnit.SECONDS); //be nice and add an extra second
@@ -144,17 +146,17 @@ public final class GameImpl implements Game {
 
     @Override
     public boolean isGameOver() {
-        return winner.isPresent();
+        return winner != null;
     }
 
     private void checkGameOver(@NotNull Player nextToMove) {
         if (GameUtil.getAvailableMoves(nextToMove.getPlayerColor(), board.getInner()).size() == 0) {
             //game is over
             if (GameUtil.kingIsAttacked(nextToMove.getPlayerColor(), board.getInner())) {
-                winner = Optional.of((nextToMove.inverse(player1, player2)).getPlayerColor());
+                winner = (nextToMove.inverse(player1, player2)).getPlayerColor();
             } else {
                 //it's a draw
-                winner = Optional.of(PieceColor.Empty);
+                winner = PieceColor.Empty;
             }
         }
     }
@@ -162,7 +164,7 @@ public final class GameImpl implements Game {
     @Override
     @NotNull
     public Optional<PieceColor> getWinner() {
-        return winner;
+        return Optional.ofNullable(winner);
     }
 
     @Override

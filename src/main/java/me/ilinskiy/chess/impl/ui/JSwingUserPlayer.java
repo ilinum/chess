@@ -10,6 +10,7 @@ import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.game.GameUtil;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +29,8 @@ import static me.ilinskiy.chess.impl.game.GameUtil.println;
  * Date: 7/20/15
  */
 public final class JSwingUserPlayer implements Player {
-    private Optional<Move> moveMade = Optional.empty();
+    @Nullable
+    private Move moveMade;
     @NotNull
     private final Lock mouseLock;
     @NotNull
@@ -36,6 +38,7 @@ public final class JSwingUserPlayer implements Player {
     private final PieceColor myColor;
 
     public JSwingUserPlayer(PieceColor color) {
+        moveMade = null;
         myColor = color;
         mouseLock = new ReentrantLock();
         moveIsMade = mouseLock.newCondition();
@@ -63,10 +66,10 @@ public final class JSwingUserPlayer implements Player {
                 int size = panel.getSize().width;
                 int cellSize = size / Board.BOARD_SIZE;
                 Coordinates location = new CoordinatesImpl((int) x / cellSize, (int) y / cellSize);
-                Optional<Coordinates> selected = board.getSelected();
-                if (selected.isPresent()) {
-                    Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(selected.get(), board);
-                    Move m = new RegularMove(selected.get(), location);
+                Coordinates selected = board.getSelected();
+                if (selected != null) {
+                    Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(selected, board);
+                    Move m = new RegularMove(selected, location);
                     Optional<Move> res = Optional.empty();
                     for (Move move : availableMovesForPiece) {
                         if (move.equals(m)) {
@@ -74,7 +77,7 @@ public final class JSwingUserPlayer implements Player {
                         }
                     }
                     if (res.isPresent()) {
-                        moveMade = res;
+                        moveMade = res.get();
                         moveIsMade.signal();
                     } else {
                         board.setSelected(location);
@@ -97,16 +100,16 @@ public final class JSwingUserPlayer implements Player {
 
         try {
             mouseLock.lock();
-            while (!moveMade.isPresent()) { //"You shall always wait in a while loop," - Alison Norman
+            while (moveMade == null) { //"You shall always wait in a while loop," - Alison Norman
                 try {
                     moveIsMade.await();
                 } catch (InterruptedException ignored) {
 
                 }
             }
-            Move move = moveMade.get();
+            Move move = moveMade;
             assert move != null;
-            moveMade = Optional.empty();
+            moveMade = null;
             return move;
         } finally {
             assert panel.getMouseListeners().length > 0;
@@ -130,8 +133,8 @@ public final class JSwingUserPlayer implements Player {
 }
 
 class ChoosePieceTypeForPromotedPawn extends JPanel {
-    @NotNull
-    private Optional<PieceType> selectedPiece = Optional.empty();
+    @Nullable
+    private PieceType selectedPiece;
     @NotNull
     private final Lock buttonLock;
     @NotNull
@@ -167,16 +170,16 @@ class ChoosePieceTypeForPromotedPawn extends JPanel {
                 if (button.isSelected()) {
                     switch (button.getText()) {
                         case "Queen":
-                            selectedPiece = Optional.of(PieceType.Queen);
+                            selectedPiece = PieceType.Queen;
                             break;
                         case "Rook":
-                            selectedPiece = Optional.of(PieceType.Rook);
+                            selectedPiece = PieceType.Rook;
                             break;
                         case "Bishop":
-                            selectedPiece = Optional.of(PieceType.Bishop);
+                            selectedPiece = PieceType.Bishop;
                             break;
                         case "Knight":
-                            selectedPiece = Optional.of(PieceType.Knight);
+                            selectedPiece = PieceType.Knight;
                             break;
                         default:
                             assert false;
@@ -198,17 +201,17 @@ class ChoosePieceTypeForPromotedPawn extends JPanel {
         frame.pack();
         frame.setVisible(true);
         try {
-            while (!selectedPiece.isPresent()) {
+            while (selectedPiece != null) {
                 try {
                     buttonPressed.await();
                 } catch (InterruptedException ignored) {
 
                 }
             }
-            PieceType selected = selectedPiece.get();
+            PieceType selected = selectedPiece;
             assert selected != null;
             println(selected.toString());
-            selectedPiece = Optional.empty();
+            selectedPiece = null;
             return selected;
         } finally {
             frame.dispose();

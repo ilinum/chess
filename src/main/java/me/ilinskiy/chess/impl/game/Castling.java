@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.game;
 
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -9,13 +9,13 @@ import me.ilinskiy.chess.api.chessboard.Coordinates;
  */
 public final class Castling extends MoveAdapter {
     @NotNull
-    public final Coordinates initialPosition;
+    private final Coordinates initialPosition;
     @NotNull
-    public final Coordinates newPosition;
+    private final Coordinates newPosition;
     @NotNull
-    public final Coordinates rookNewPosition;
+    private final Coordinates rookNewPosition;
     @NotNull
-    public final Coordinates rookInitPosition;
+    private final Coordinates rookInitPosition;
 
 
     public Castling(@NotNull Coordinates kingInitPos, @NotNull Coordinates kingNewPos, @NotNull Coordinates rookInitPos,

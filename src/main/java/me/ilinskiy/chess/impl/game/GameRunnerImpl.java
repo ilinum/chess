@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GameRunnerImpl implements GameRunner {
     private final ChessPainter painter;
-    public static final boolean DEBUG = false;
+    static final boolean DEBUG = false;
     public static int TIMEOUT_IN_SECONDS = 0; //if timeout is 0, the only limit is yourself
 
     public GameRunnerImpl(ChessPainter p) {
@@ -27,7 +27,6 @@ public class GameRunnerImpl implements GameRunner {
      *
      * @param p1 player 1
      * @param p2 player 2
-     * @return the piece color of the winner or PieceColor.Empty if it's a draw
      */
     @Override
     @NotNull
@@ -42,7 +41,8 @@ public class GameRunnerImpl implements GameRunner {
             }
         }
 
-        PieceColor winner = g.getWinner().get();
+        PieceColor winner = g.getWinner().orElse(null);
+        assert winner != null;
         painter.showWinner(winner);
         return winner;
     }

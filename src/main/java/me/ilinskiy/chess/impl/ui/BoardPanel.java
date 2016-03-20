@@ -9,10 +9,10 @@ import me.ilinskiy.chess.impl.chessboard.Piece;
 import me.ilinskiy.chess.impl.game.EnPasse;
 import me.ilinskiy.chess.impl.game.GameUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Optional;
 import java.util.Set;
 
 import static me.ilinskiy.chess.api.chessboard.Board.BOARD_SIZE;
@@ -31,7 +31,7 @@ final class BoardPanel extends JPanel {
 
     private final Board myBoard;
 
-    public BoardPanel(@NotNull Board board) {
+    BoardPanel(@NotNull Board board) {
         super();
         myBoard = board;
     }
@@ -59,13 +59,13 @@ final class BoardPanel extends JPanel {
     }
 
     private static void setBGForCell(@NotNull Coordinates c, @NotNull Graphics graphics, @NotNull Board b) {
-        Optional<Coordinates> selected = b.getSelected();
+        @Nullable Coordinates selected = b.getSelected();
 
-        if (c.equals(selected.orElse(null))) {
+        if (c.equals(selected)) {
             graphics.setColor(SELECT_COLOR);
-        } else if (selected.isPresent() && GameUtil.getAvailableNewPositions(selected.get(), b).contains(c)) {
+        } else if (selected != null && GameUtil.getAvailableNewPositions(selected, b).contains(c)) {
             boolean isEnPasse = false;
-            Set<Move> selectedMoves = GameUtil.getAvailableMovesForPiece(selected.get(), b);
+            Set<Move> selectedMoves = GameUtil.getAvailableMovesForPiece(selected, b);
             for (Move selectedMove : selectedMoves) {
                 if (selectedMove.getNewPositions()[0].equals(c) && selectedMove instanceof EnPasse) {
                     isEnPasse = true;
