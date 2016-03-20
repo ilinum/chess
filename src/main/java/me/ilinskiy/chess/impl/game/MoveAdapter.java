@@ -1,10 +1,10 @@
 package me.ilinskiy.chess.impl.game;
 
-import me.ilinskiy.chess.api.Move;
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
+import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.util.CollectionUtil;
 import me.ilinskiy.chess.impl.util.Tuple2;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;

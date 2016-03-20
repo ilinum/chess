@@ -1,15 +1,15 @@
 package me.ilinskiy.chess.game;
 
-import me.ilinskiy.chess.api.Move;
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
+import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.ui.Player;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.game.GameImpl;
 import me.ilinskiy.chess.impl.game.PlayerMock;
 import me.ilinskiy.chess.impl.game.RegularMove;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import static me.ilinskiy.chess.api.chessboard.Board.BOARD_SIZE;

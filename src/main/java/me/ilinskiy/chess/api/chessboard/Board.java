@@ -1,9 +1,9 @@
 package me.ilinskiy.chess.api.chessboard;
 
-import me.ilinskiy.chess.api.Move;
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.game.Copyable;
+import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.ui.ChessPainter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

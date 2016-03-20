@@ -1,10 +1,11 @@
 package me.ilinskiy.chess.impl.game;
 
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
+import me.ilinskiy.chess.api.game.GameRunner;
 import me.ilinskiy.chess.api.ui.ChessPainter;
 import me.ilinskiy.chess.api.ui.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: Svyatoslav Ilinskiy

@@ -1,7 +1,6 @@
-package me.ilinskiy.chess.api;
+package me.ilinskiy.chess.api.game;
 
 import me.ilinskiy.chess.api.chessboard.Coordinates;
-import me.ilinskiy.chess.api.game.Copyable;
 import me.ilinskiy.chess.impl.util.Tuple2;
 
 import java.util.List;

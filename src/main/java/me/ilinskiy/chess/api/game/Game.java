@@ -1,8 +1,7 @@
 package me.ilinskiy.chess.api.game;
 
-import me.ilinskiy.chess.api.Move;
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,8 +1,8 @@
 package me.ilinskiy.chess.impl.chessboard;
 
-import me.ilinskiy.chess.api.Move;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
+import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.junit.Test;
 

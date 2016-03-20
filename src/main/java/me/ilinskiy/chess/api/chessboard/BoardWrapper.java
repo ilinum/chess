@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.api.chessboard;
 
-import me.ilinskiy.chess.api.Move;
+import me.ilinskiy.chess.api.game.Move;
 import org.jetbrains.annotations.NotNull;
 
 /**

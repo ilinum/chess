@@ -1,9 +1,9 @@
 package me.ilinskiy.chess.impl.chessboard;
 
-import me.ilinskiy.chess.api.Move;
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.*;
+import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.ui.Player;
+import org.jetbrains.annotations.NotNull;
 
 import static me.ilinskiy.chess.api.chessboard.PieceType.*;
 

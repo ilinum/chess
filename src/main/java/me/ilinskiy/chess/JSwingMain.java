@@ -1,8 +1,8 @@
 package me.ilinskiy.chess;
 
 import me.ilinskiy.chess.api.chessboard.PieceColor;
+import me.ilinskiy.chess.api.game.GameRunner;
 import me.ilinskiy.chess.api.ui.Player;
-import me.ilinskiy.chess.impl.game.GameRunner;
 import me.ilinskiy.chess.impl.game.GameRunnerImpl;
 import me.ilinskiy.chess.impl.ui.JSwingChessPainter;
 import me.ilinskiy.chess.impl.ui.JSwingUserPlayer;

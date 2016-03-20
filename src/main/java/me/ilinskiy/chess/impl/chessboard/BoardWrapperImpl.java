@@ -1,14 +1,14 @@
 package me.ilinskiy.chess.impl.chessboard;
 
-import me.ilinskiy.chess.api.Move;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.BoardWrapper;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
+import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.ui.ChessPainter;
 import me.ilinskiy.chess.impl.util.Tuple2;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 

@@ -1,10 +1,10 @@
 package me.ilinskiy.chess.game;
 
-import me.ilinskiy.chess.api.Move;
 import me.ilinskiy.chess.api.chessboard.BoardWrapper;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
+import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.chessboard.BoardWrapperImpl;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.chessboard.EmptyCell;

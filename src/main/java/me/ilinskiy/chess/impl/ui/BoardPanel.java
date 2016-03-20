@@ -1,9 +1,9 @@
 package me.ilinskiy.chess.impl.ui;
 
-import me.ilinskiy.chess.api.Move;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
+import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import me.ilinskiy.chess.impl.game.EnPasse;
