@@ -16,7 +16,7 @@ public interface ChessPainter {
      */
     void initialize(@NotNull Board board);
 
-    void showWinner(@NotNull PieceColor winner);
+    void gameOver(@NotNull PieceColor winner);
 
     /**
      * @return true if user pressed yes

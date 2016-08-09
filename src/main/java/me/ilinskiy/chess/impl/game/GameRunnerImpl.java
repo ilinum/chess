@@ -63,7 +63,7 @@ public class GameRunnerImpl implements GameRunner {
                 e.printStackTrace();
             }
         }
-        painter.showWinner(winner);
+        painter.gameOver(winner);
         return winner;
     }
 
