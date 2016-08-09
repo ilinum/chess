@@ -3,6 +3,7 @@ package me.ilinskiy.chess.impl.ui;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
+import me.ilinskiy.chess.api.chessboard.PieceType;
 import me.ilinskiy.chess.api.ui.ChessPainter;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import me.ilinskiy.chess.impl.game.GameRunnerImpl;
@@ -35,8 +36,10 @@ public final class JSwingChessPainter implements ChessPainter {
     private BoardPanel panel;
 
     public JSwingChessPainter() {
+        Image icon = icons.get(Piece.createPiece(PieceColor.White, PieceType.Pawn));
         myFrame = new JFrame();
         myFrame.setTitle("Chess");
+        myFrame.setIconImage(icon);
         myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         myFrame.setResizable(false);
         myFrame.setLayout(new BorderLayout());
