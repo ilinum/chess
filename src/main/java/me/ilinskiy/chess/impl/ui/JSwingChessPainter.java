@@ -7,6 +7,7 @@ import me.ilinskiy.chess.api.ui.ChessPainter;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import me.ilinskiy.chess.impl.game.GameRunnerImpl;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,6 +28,9 @@ public final class JSwingChessPainter implements ChessPainter {
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
     @NotNull
     private final JFrame myFrame;
+
+    @Nullable
+    private Thread myUpdateTimeLeftThread = null;
 
     private BoardPanel panel;
 
@@ -94,9 +98,11 @@ public final class JSwingChessPainter implements ChessPainter {
         return newTimeout;
     }
 
-    @Override
-    @NotNull
-    public Thread getUpdateTimeLeftThread() {
+    @Nullable
+    private Thread createUpdateTimeLeftThread() {
+        if (GameRunnerImpl.TIMEOUT_IN_SECONDS <= 0) {
+            return null;
+        }
         long moveMustBeMadeByMillis = System.currentTimeMillis() + (GameRunnerImpl.TIMEOUT_IN_SECONDS + 1) * 1000;
         String oldName = myFrame.getTitle();
         return new Thread(() -> {
@@ -113,6 +119,23 @@ public final class JSwingChessPainter implements ChessPainter {
                 myFrame.setTitle(oldName);
             }
         });
+    }
+
+    @Override
+    public void moveStarted() {
+        assert myUpdateTimeLeftThread == null;
+        myUpdateTimeLeftThread = createUpdateTimeLeftThread();
+        if (myUpdateTimeLeftThread != null) {
+            myUpdateTimeLeftThread.start();
+        }
+    }
+
+    @Override
+    public void moveFinished() {
+        if (myUpdateTimeLeftThread != null) {
+            myUpdateTimeLeftThread.interrupt();
+            myUpdateTimeLeftThread = null;
+        }
     }
 
     @Override

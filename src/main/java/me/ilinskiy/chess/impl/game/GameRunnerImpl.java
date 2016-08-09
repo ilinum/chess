@@ -8,8 +8,8 @@ import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.ui.ChessPainter;
 import me.ilinskiy.chess.api.ui.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.concurrent.*;
 
 import static me.ilinskiy.chess.impl.game.GameUtil.println;
@@ -19,11 +19,12 @@ import static me.ilinskiy.chess.impl.game.GameUtil.println;
  * Date: 8/5/15.
  */
 public class GameRunnerImpl implements GameRunner {
+    @Nullable
     private final ChessPainter painter;
     static final boolean DEBUG = false;
     public static int TIMEOUT_IN_SECONDS = 0; //if timeout is 0, the only limit is yourself
 
-    public GameRunnerImpl(ChessPainter p) {
+    public GameRunnerImpl(@Nullable ChessPainter p) {
         painter = p;
     }
 
@@ -63,7 +64,9 @@ public class GameRunnerImpl implements GameRunner {
                 e.printStackTrace();
             }
         }
-        painter.gameOver(winner);
+        if (painter != null) {
+            painter.gameOver(winner);
+        }
         return winner;
     }
 
@@ -77,13 +80,11 @@ public class GameRunnerImpl implements GameRunner {
             return m;
         });
         Move result = null;
-        Optional<Thread> updateTimeLeftThread = Optional.empty();
         try {
+            if (painter != null) {
+                painter.moveStarted();
+            }
             if (GameRunnerImpl.TIMEOUT_IN_SECONDS > 0) {
-                if (painter != null) {
-                    updateTimeLeftThread = Optional.ofNullable(painter.getUpdateTimeLeftThread());
-                    updateTimeLeftThread.ifPresent(Thread::start);
-                }
                 result = future.get(GameRunnerImpl.TIMEOUT_IN_SECONDS + 1, TimeUnit.SECONDS); //be nice and add an extra second
             } else {
                 result = future.get();
@@ -93,7 +94,9 @@ public class GameRunnerImpl implements GameRunner {
         } catch (TimeoutException e) {
             future.cancel(true);
         } finally {
-            updateTimeLeftThread.ifPresent(Thread::interrupt);
+            if (painter != null) {
+                painter.moveFinished();
+            }
         }
         return result;
     }
@@ -106,7 +109,7 @@ public class GameRunnerImpl implements GameRunner {
      */
     @Override
     public boolean askToPlayAgain() {
-        return painter.askToPlayAgain();
+        return painter != null && painter.askToPlayAgain();
     }
 
     /**
@@ -114,7 +117,9 @@ public class GameRunnerImpl implements GameRunner {
      */
     @Override
     public void askTimeOut() {
-        TIMEOUT_IN_SECONDS = painter.askTimeOut();
+        if (painter != null) {
+            TIMEOUT_IN_SECONDS = painter.askTimeOut();
+        }
         if (TIMEOUT_IN_SECONDS < 0) {
             throw new RuntimeException("Timeout cannot be negative!");
         }
@@ -125,6 +130,8 @@ public class GameRunnerImpl implements GameRunner {
      */
     @Override
     public void dispose() {
-        painter.dispose();
+        if (painter != null) {
+            painter.dispose();
+        }
     }
 }

@@ -4,7 +4,6 @@ import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -36,15 +35,11 @@ public interface ChessPainter {
      */
     int askTimeOut();
 
-    /**
-     * NOTE: the thread will be started in the caller. DO NOT START IT IN IMPLEMENTATION OF THIS METHOD
-     *
-     * @return a thread that will update time left and interrupted after the move is over
-     */
-    @Nullable
-    Thread getUpdateTimeLeftThread();
+    void moveStarted();
 
-    /**
+    void moveFinished();
+
+     /**
      * A particular cell has been change and needs to be repainted
      */
     void paintCell(@NotNull Coordinates pos);
