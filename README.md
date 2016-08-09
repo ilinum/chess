@@ -1,4 +1,6 @@
-# Chess
+# Chess 
+<img src="https://travis-ci.org/ilinum/Chess.svg?branch=master">
+
 An implementation of chess in Java
 
 
