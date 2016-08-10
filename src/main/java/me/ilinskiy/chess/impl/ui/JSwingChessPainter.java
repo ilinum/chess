@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import static me.ilinskiy.chess.api.chessboard.PieceType.*;
@@ -27,8 +28,7 @@ import static me.ilinskiy.chess.api.chessboard.PieceType.*;
 public final class JSwingChessPainter implements ChessPainter {
     @SuppressWarnings("WeakerAccess")
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
-    @NotNull
-    private final JFrame myFrame;
+    private JFrame myFrame;
 
     @Nullable
     private Thread myUpdateTimeLeftThread = null;
@@ -37,15 +37,21 @@ public final class JSwingChessPainter implements ChessPainter {
 
     public JSwingChessPainter() {
         Image icon = icons.get(Piece.createPiece(PieceColor.White, PieceType.Pawn));
-        myFrame = new JFrame();
-        myFrame.setTitle("Chess");
-        myFrame.setIconImage(icon);
-        myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        myFrame.setResizable(false);
-        myFrame.setLayout(new BorderLayout());
-        myFrame.setSize(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH);
-        myFrame.getContentPane().setPreferredSize(new Dimension(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH));
-        myFrame.pack();
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                myFrame = new JFrame();
+                myFrame.setTitle("Chess");
+                myFrame.setIconImage(icon);
+                myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                myFrame.setResizable(false);
+                myFrame.setLayout(new BorderLayout());
+                myFrame.setSize(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH);
+                myFrame.getContentPane().setPreferredSize(new Dimension(INIT_HEIGHT_AND_WIDTH, INIT_HEIGHT_AND_WIDTH));
+                myFrame.pack();
+            });
+        } catch (InterruptedException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
