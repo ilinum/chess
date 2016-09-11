@@ -1,5 +1,5 @@
 # Chess 
-<img src="https://travis-ci.org/ilinum/Chess.svg?branch=master">
+[![Build Status](https://travis-ci.org/ilinum/Chess.svg?branch=master)](https://travis-ci.org/ilinum/Chess)
 
 An implementation of chess in Java
 
