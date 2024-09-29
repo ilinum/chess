@@ -12,15 +12,13 @@ import me.ilinskiy.chess.impl.chessboard.Piece;
 import me.ilinskiy.chess.impl.game.Castling;
 import me.ilinskiy.chess.impl.game.GameUtil;
 import me.ilinskiy.chess.impl.game.RegularMove;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.util.*;
 
 import static me.ilinskiy.chess.impl.chessboard.BoardImpl.*;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -28,7 +26,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class GameUtilTest {
 
-    @Test(timeout = 1000)
+    @Test
+    @Timeout(value = 1)
     public void testGetAvailableMovesInitialPositionWhite() {
         BoardWrapper b = new BoardWrapperImpl();
         List<Move> actual = GameUtil.getAvailableMoves(PieceColor.White, b.getInner());
@@ -47,10 +46,11 @@ public class GameUtilTest {
         expected.add(new RegularMove(bishopPos, new CoordinatesImpl(BOARD_SIZE - 1, BOARD_SIZE - 3)));
         Collections.sort(expected);
         Collections.sort(actual);
-        assertThat(expected, is(actual));
+        assertEquals(expected, actual);
     }
 
-    @Test(timeout = 1000)
+    @Test
+    @Timeout(value = 1)
     public void testGetAvailableMovesInitialPositionBlack() {
         BoardWrapper b = new BoardWrapperImpl();
         List<Move> actual = GameUtil.getAvailableMoves(PieceColor.Black, b.getInner());
@@ -69,20 +69,21 @@ public class GameUtilTest {
         expected.add(new RegularMove(bishopPos, new CoordinatesImpl(BOARD_SIZE - 1, 2)));
         Collections.sort(expected);
         Collections.sort(actual);
-        assertThat(expected, is(actual));
+        assertEquals(expected, actual);
     }
 
-    @Test(timeout = 1000)
+    @Test
+    @Timeout(1)
     public void testAvailableMovesAfterMove() {
         BoardWrapper b = new BoardWrapperImpl();
 
         Coordinates newPos = new CoordinatesImpl(0, BOARD_SIZE - 3);
-        assertTrue(b.getPieceAt(newPos) instanceof EmptyCell);
+        assertInstanceOf(EmptyCell.class, b.getPieceAt(newPos));
         Piece knight = Piece.createPiece(PieceColor.White, PieceType.Knight);
         b.setPieceAt(newPos, knight);
 
         Coordinates initPos = new CoordinatesImpl(1, BOARD_SIZE - 1);
-        Assert.assertEquals(knight, b.getPieceAt(initPos));
+        assertEquals(knight, b.getPieceAt(initPos));
         b.setPieceAt(initPos, EmptyCell.INSTANCE);
         GameUtil.getAvailableMoves(PieceColor.White, b.getInner());
         GameUtil.getAvailableMoves(PieceColor.Black, b.getInner());
@@ -95,29 +96,30 @@ public class GameUtilTest {
         CoordinatesImpl whiteLoc = new CoordinatesImpl(3, 4);
         b.setPieceAt(blackLoc, Piece.createPiece(PieceColor.Black, PieceType.Pawn));
         b.setPieceAt(whiteLoc, Piece.createPiece(PieceColor.White, PieceType.Pawn));
-        assertThat(new HashSet<>(), is(GameUtil.getAvailableMovesForPiece(whiteLoc, b.getInner())));
-        assertThat(new HashSet<>(), is(GameUtil.getAvailableMovesForPiece(blackLoc, b.getInner())));
+        assertEquals(new HashSet<>(), GameUtil.getAvailableMovesForPiece(whiteLoc, b.getInner()));
+        assertEquals(new HashSet<>(), GameUtil.getAvailableMovesForPiece(blackLoc, b.getInner()));
     }
 
     @Test
     public void testCastling() {
         BoardWrapper b = new BoardWrapperImpl();
         List<Coordinates> blackKings = GameUtil.findPiecesByTypeAndColor(PieceType.King, PieceColor.Black, b.getInner());
-        assertTrue(blackKings.size() == 1);
+        assertEquals(1, blackKings.size());
         Coordinates kingPos = blackKings.get(0);
 
-        assertThat(GameUtil.getAvailableMovesForPiece(kingPos, b.getInner()), is(new HashSet<>()));
+        assertEquals(GameUtil.getAvailableMovesForPiece(kingPos, b.getInner()), new HashSet<>());
+
         b.setPieceAt(new CoordinatesImpl(BOARD_SIZE - 2, 0), EmptyCell.INSTANCE);
         b.setPieceAt(new CoordinatesImpl(BOARD_SIZE - 3, 0), EmptyCell.INSTANCE);
         LinkedList<Move> expected = new LinkedList<>();
         CoordinatesImpl rookInitPos = new CoordinatesImpl(BOARD_SIZE - 1, 0);
-        assertTrue(b.getPieceAt(rookInitPos).getType() == PieceType.Rook);
+        assertSame(b.getPieceAt(rookInitPos).getType(), PieceType.Rook);
         CoordinatesImpl rookNewPos = new CoordinatesImpl(BOARD_SIZE - 3, 0);
         expected.add(new Castling(kingPos, new CoordinatesImpl(BOARD_SIZE - 2, 0), rookInitPos, rookNewPos));
         expected.add(new RegularMove(kingPos, new CoordinatesImpl(BOARD_SIZE - 3, 0)));
         LinkedList<Move> actual = new LinkedList<>(GameUtil.getAvailableMovesForPiece(kingPos, b.getInner()));
         Collections.sort(actual);
         Collections.sort(expected);
-        assertThat(actual, is(expected));
+        assertEquals(actual, expected);
     }
 }

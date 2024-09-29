@@ -10,11 +10,11 @@ import me.ilinskiy.chess.impl.game.GameImpl;
 import me.ilinskiy.chess.impl.game.PlayerMock;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import static me.ilinskiy.chess.api.chessboard.Board.BOARD_SIZE;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -26,14 +26,15 @@ public class GameTest {
     public void testGameInit() {
         Player p1 = new PlayerMock(PieceColor.White);
         Game g = new GameImpl(p1.getPlayerColor(), null);
-        assertTrue(!g.isGameOver());
-        assertTrue(!g.getWinner().isPresent());
+        assertFalse(g.isGameOver());
+        assertFalse(g.getWinner().isPresent());
         assertTrue(g.getMovesMade().isEmpty());
-        assertTrue(g.numberOfMovesMade() == 0);
-        assertTrue(g.whoseTurnIsIt() == p1.getPlayerColor());
+        assertEquals(0, g.numberOfMovesMade());
+        assertSame(g.whoseTurnIsIt(), p1.getPlayerColor());
     }
 
-    @Test(timeout = 1000)
+    @Test
+    @Timeout(value = 1)
     public void testMakeMove() {
         Move move = new RegularMove(new CoordinatesImpl(1, BOARD_SIZE - 1), new CoordinatesImpl(2, BOARD_SIZE - 3));
         Player p1 = new PlayerMock(PieceColor.White) {
@@ -47,14 +48,14 @@ public class GameTest {
         Game g = new GameImpl(p1.getPlayerColor(), null);
         g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
         assertFalse(g.isGameOver());
-        assertTrue(!g.getWinner().isPresent());
-        assertTrue(g.getMovesMade().size() == 1);
-        assertTrue(g.getMovesMade().get(0).equals(move));
-        assertTrue(g.numberOfMovesMade() == 1);
-        assertTrue(g.whoseTurnIsIt() == p2.getPlayerColor());
+        assertFalse(g.getWinner().isPresent());
+        assertEquals(1, g.getMovesMade().size());
+        assertEquals(g.getMovesMade().get(0), move);
+        assertEquals(1, g.numberOfMovesMade());
+        assertSame(g.whoseTurnIsIt(), p2.getPlayerColor());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testIllegalMove() {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
@@ -64,6 +65,9 @@ public class GameTest {
             }
         };
         Game g = new GameImpl(p1.getPlayerColor(), null);
-        g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
+        assertThrows(RuntimeException.class, () -> {
+            g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
+        });
+
     }
 }
