@@ -18,7 +18,7 @@ public class ChessBoardUtilTest {
     @Test
     public void testMoveAndEvaluate() {
         Board b = new BoardImpl();
-        assertSame(b.whoseTurnIsIt(), PieceColor.White);
+        assertSame(b.whoseTurnIsIt(), PieceColor.Black);
         Board copy = b.copy();
         Move m = new RegularMove(new CoordinatesImpl(BOARD_SIZE - 1, BOARD_SIZE - 1), new CoordinatesImpl(1, 1));
         ChessBoardUtil.makeMoveAndEvaluate(b, m, b1 -> false);
