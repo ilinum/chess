@@ -2,3 +2,5 @@
 target/
 Chess.iml
 *.jar
+.gradle
+build

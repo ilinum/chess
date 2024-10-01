@@ -181,18 +181,18 @@ public final class JSwingChessPainter implements ChessPainter {
     static {
         if (icons.isEmpty()) {
             InputStream[] images = new InputStream[]{
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/white-pawn.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/white-knight.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/white-bishop.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/white-rook.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/white-queen.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/white-king.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/black-pawn.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/black-knight.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/black-bishop.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/black-rook.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/black-queen.png"),
-                    JSwingChessPainter.class.getResourceAsStream("/resources/ChessPieces/black-king.png")
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/white-pawn.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/white-knight.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/white-bishop.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/white-rook.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/white-queen.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/white-king.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/black-pawn.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/black-knight.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/black-bishop.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/black-rook.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/black-queen.png"),
+                    JSwingChessPainter.class.getResourceAsStream("/ChessPieces/black-king.png")
             };
             Piece[] pieces = new Piece[]{
                     Piece.createPiece(PieceColor.White, Pawn),
