@@ -1,9 +1,8 @@
-package me.ilinskiy.chess.api.ui;
+package me.ilinskiy.chess.api.game;
 
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
-import me.ilinskiy.chess.api.game.Move;
 import org.jetbrains.annotations.NotNull;
 
 /**

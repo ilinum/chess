@@ -5,7 +5,7 @@ import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.GameRunner;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.api.ui.Player;
+import me.ilinskiy.chess.api.game.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.*;

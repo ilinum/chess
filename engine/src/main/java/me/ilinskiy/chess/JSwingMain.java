@@ -2,8 +2,7 @@ package me.ilinskiy.chess;
 
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.GameRunner;
-import me.ilinskiy.chess.api.ui.Player;
-import me.ilinskiy.chess.impl.chessboard.BoardImpl;
+import me.ilinskiy.chess.api.game.Player;
 import me.ilinskiy.chess.impl.chessboard.BoardWrapperImpl;
 import me.ilinskiy.chess.impl.game.GameRunnerImpl;
 import me.ilinskiy.chess.impl.ui.JSwingChessPainter;

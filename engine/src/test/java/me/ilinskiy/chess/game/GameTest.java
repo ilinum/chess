@@ -4,7 +4,7 @@ import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.api.ui.Player;
+import me.ilinskiy.chess.api.game.Player;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.game.GameImpl;
 import me.ilinskiy.chess.impl.game.PlayerMock;

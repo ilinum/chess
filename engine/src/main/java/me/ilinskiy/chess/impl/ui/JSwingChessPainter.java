@@ -4,7 +4,6 @@ import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
-import me.ilinskiy.chess.api.ui.ChessPainter;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import me.ilinskiy.chess.impl.game.GameRunnerImpl;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +24,7 @@ import static me.ilinskiy.chess.api.chessboard.PieceType.*;
  * Author: Svyatoslav Ilinskiy
  * Date: 9/27/15.
  */
-public final class JSwingChessPainter implements ChessPainter {
+public final class JSwingChessPainter {
     @SuppressWarnings("WeakerAccess")
     public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
     private JFrame myFrame;
@@ -59,35 +58,29 @@ public final class JSwingChessPainter implements ChessPainter {
         repaintBoard();
     }
 
-    @Override
     public void gameOver(@NotNull PieceColor winner) {
         this.repaint();
         JOptionPane.showMessageDialog(myFrame, getWinPhrase(winner));
     }
 
-    @Override
     public boolean askToPlayAgain() {
         return JOptionPane.showConfirmDialog(myFrame, "Would you like to play again?") == 0;
     }
 
-    @Override
     public void dispose() {
         myFrame.dispose();
     }
 
-    @Override
     public void setSelected(@Nullable Coordinates coordinates) {
         panel.setSelected(coordinates);
         repaint();
     }
 
-    @Override
     @Nullable
     public Coordinates getSelected() {
         return panel.getSelected();
     }
 
-    @Override
     public int askTimeOut() {
         int newTimeout = -1;
         while (newTimeout < 0) {
@@ -129,7 +122,6 @@ public final class JSwingChessPainter implements ChessPainter {
         });
     }
 
-    @Override
     public void moveStarted() {
         assert myUpdateTimeLeftThread == null;
         myUpdateTimeLeftThread = createUpdateTimeLeftThread();
@@ -138,7 +130,6 @@ public final class JSwingChessPainter implements ChessPainter {
         }
     }
 
-    @Override
     public void moveFinished() {
         if (myUpdateTimeLeftThread != null) {
             myUpdateTimeLeftThread.interrupt();
@@ -146,7 +137,6 @@ public final class JSwingChessPainter implements ChessPainter {
         }
     }
 
-    @Override
     public void repaint() {
         repaintBoard();
     }
