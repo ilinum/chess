@@ -111,13 +111,13 @@ public final class JSwingChessPainter implements ChessPainter {
         if (GameRunnerImpl.timeoutInSeconds <= 0) {
             return null;
         }
-        long moveMustBeMadeByMillis = System.currentTimeMillis() + (GameRunnerImpl.timeoutInSeconds + 1) * 1000;
+        long deadlineMillis = System.currentTimeMillis() + (GameRunnerImpl.timeoutInSeconds) * 1000;
         String oldName = myFrame.getTitle();
         return new Thread(() -> {
             try {
                 int secondsLeft = GameRunnerImpl.timeoutInSeconds - 1;
                 while (secondsLeft > 0) {
-                    secondsLeft = (int) (moveMustBeMadeByMillis - System.currentTimeMillis()) / 1000;
+                    secondsLeft = (int) (deadlineMillis - System.currentTimeMillis()) / 1000;
                     myFrame.setTitle("Chess. Time left: " + secondsLeft);
                     Thread.sleep(1000);
                 }

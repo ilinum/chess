@@ -3,7 +3,6 @@ package me.ilinskiy.chess.impl.game;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.api.ui.ChessPainter;
 import me.ilinskiy.chess.impl.chessboard.BoardWrapperImpl;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.chessboard.Piece;

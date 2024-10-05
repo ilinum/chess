@@ -49,6 +49,7 @@ public final class JSwingUserPlayer implements Player {
     @NotNull
     @Override
     public Move getMove(@NotNull Board board) {
+        painter.moveStarted();
         BoardPanel panel = painter.getPanel();
         panel.setBoard(board);
         this.painter.repaint();
@@ -120,6 +121,7 @@ public final class JSwingUserPlayer implements Player {
             panel.removeMouseListener(mouseListener);
             assert panel.getMouseListeners().length == 0;
             mouseLock.unlock();
+            painter.moveFinished();
         }
     }
 

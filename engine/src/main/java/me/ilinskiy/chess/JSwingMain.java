@@ -21,7 +21,7 @@ public class JSwingMain {
             painter = new JSwingChessPainter(new BoardWrapperImpl().getInner());
             Player p1 = new JSwingUserPlayer(PieceColor.White, painter);
             Player p2 = new JSwingUserPlayer(PieceColor.Black, painter);
-            GameRunner gameRunner = new GameRunnerImpl(painter, painter.askTimeOut());
+            GameRunner gameRunner = new GameRunnerImpl(painter.askTimeOut());
             PieceColor winner = gameRunner.runGame(p1, p2);
             painter.gameOver(winner);
         } while (painter.askToPlayAgain());

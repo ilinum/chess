@@ -5,10 +5,8 @@ import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.GameRunner;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.api.ui.ChessPainter;
 import me.ilinskiy.chess.api.ui.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.*;
 
@@ -19,13 +17,10 @@ import static me.ilinskiy.chess.impl.game.GameUtil.println;
  * Date: 8/5/15.
  */
 public class GameRunnerImpl implements GameRunner {
-    @Nullable
-    private final ChessPainter painter;
     static final boolean DEBUG = false;
     public static int timeoutInSeconds = 0; //if timeout is 0, the only limit is yourself
 
-    public GameRunnerImpl(@Nullable ChessPainter p, int timeoutSeconds) {
-        painter = p;
+    public GameRunnerImpl(int timeoutSeconds) {
         timeoutInSeconds = timeoutSeconds;
     }
 
@@ -79,9 +74,6 @@ public class GameRunnerImpl implements GameRunner {
         });
         Move result = null;
         try {
-            if (painter != null) {
-                painter.moveStarted();
-            }
             if (GameRunnerImpl.timeoutInSeconds > 0) {
                 result = future.get(GameRunnerImpl.timeoutInSeconds + 1, TimeUnit.SECONDS); //be nice and add an extra second
             } else {
@@ -91,10 +83,6 @@ public class GameRunnerImpl implements GameRunner {
 
         } catch (TimeoutException e) {
             future.cancel(true);
-        } finally {
-            if (painter != null) {
-                painter.moveFinished();
-            }
         }
         return result;
     }
