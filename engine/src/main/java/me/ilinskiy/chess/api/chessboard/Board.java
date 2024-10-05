@@ -2,7 +2,6 @@ package me.ilinskiy.chess.api.chessboard;
 
 import me.ilinskiy.chess.api.game.Copyable;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.api.ui.ChessPainter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,11 +33,8 @@ public interface Board extends Copyable {
     @Override
     Board copy();
 
-    void paintCell(@NotNull Coordinates pos);
+    void repaint();
 
     @NotNull
     Optional<Move> getLastMove();
-
-    @Nullable
-    ChessPainter getPainter();
 }

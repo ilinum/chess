@@ -42,5 +42,5 @@ public interface ChessPainter {
      /**
      * A particular cell has been change and needs to be repainted
      */
-    void paintCell(@NotNull Coordinates pos);
+    void repaint();
 }

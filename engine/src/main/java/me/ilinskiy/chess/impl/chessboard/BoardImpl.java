@@ -105,15 +105,8 @@ public final class BoardImpl implements Board {
      */
     void movePiece(@NotNull Move move) {
         lastMove = move;
-        List<Coordinates> cellsToRepaint = new LinkedList<>();
-        for (Coordinates coordinates : move.getInitialPositions()) {
-            cellsToRepaint.addAll(GameUtil.getAvailableNewPositions(coordinates, this));
-            cellsToRepaint.add(coordinates);
-        }
         if (move instanceof Castling) {
             Castling c = (Castling) move;
-            cellsToRepaint.add(c.getRookInitialPosition());
-            cellsToRepaint.add(c.getRookNewPosition());
             makeActualMove(c.getKingInitialPosition(), c.getKingNewPosition());
             makeActualMove(c.getRookInitialPosition(), c.getRookNewPosition());
         } else if (move instanceof EnPasse) {
@@ -122,15 +115,13 @@ public final class BoardImpl implements Board {
             assert getPieceAt(eaten).getType() == Pawn;
             setPieceAt(eaten, EmptyCell.INSTANCE);
             makeActualMove(enPasse.initialPosition, enPasse.newPosition);
-            cellsToRepaint.add(eaten);
-            cellsToRepaint.add(enPasse.newPosition);
         } else {
             RegularMove rm = ((RegularMove) move);
             makeActualMove(rm.initialPosition, rm.newPosition);
         }
         turn = turn.inverse();
         selected = null;
-        cellsToRepaint.forEach(this::paintCell);
+        this.repaint();
     }
 
     private void makeActualMove(@NotNull Coordinates initialPosition, @NotNull Coordinates newPosition) {
@@ -182,11 +173,9 @@ public final class BoardImpl implements Board {
         @Nullable Coordinates selectedCopy = selected;
         selected = newSelected;
         if (selectedCopy != null) {
-            paintCell(selectedCopy);
-            GameUtil.getAvailableNewPositions(selectedCopy, this).forEach(this::paintCell);
+            repaint();
         }
-        paintCell(newSelected);
-        GameUtil.getAvailableNewPositions(newSelected, this).forEach(this::paintCell);
+        repaint();
         return true;
     }
 
@@ -250,9 +239,9 @@ public final class BoardImpl implements Board {
     }
 
     @Override
-    public void paintCell(@NotNull Coordinates pos) {
+    public void repaint() {
         if (myPainter != null) {
-            myPainter.paintCell(pos);
+            myPainter.repaint();
         }
     }
 
@@ -260,10 +249,5 @@ public final class BoardImpl implements Board {
     @NotNull
     public Optional<Move> getLastMove() {
         return Optional.ofNullable(lastMove);
-    }
-
-    @Override
-    public ChessPainter getPainter() {
-        return myPainter;
     }
 }

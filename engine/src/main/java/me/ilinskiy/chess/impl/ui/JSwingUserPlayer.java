@@ -36,10 +36,12 @@ public final class JSwingUserPlayer implements Player {
     @NotNull
     private final Condition moveIsMade;
     private final PieceColor myColor;
+    private final JSwingChessPainter painter;
 
-    public JSwingUserPlayer(PieceColor color) {
+    public JSwingUserPlayer(PieceColor color, JSwingChessPainter painter) {
         moveMade = null;
         myColor = color;
+        this.painter = painter;
         mouseLock = new ReentrantLock();
         moveIsMade = mouseLock.newCondition();
     }
@@ -47,8 +49,7 @@ public final class JSwingUserPlayer implements Player {
     @NotNull
     @Override
     public Move getMove(@NotNull Board board) {
-        assert board.getPainter() != null;
-        BoardPanel panel = ((JSwingChessPainter) board.getPainter()).getPanel();
+        BoardPanel panel = painter.getPanel();
         MouseListener mouseListener = new MouseListener() {
             @Override
             public void mouseClicked(@NotNull MouseEvent mouseEvent) {

@@ -83,7 +83,7 @@ public final class GameImpl implements Game {
                     }
                     Piece promoted = Piece.createPiece(madeLastMove, promotedTo);
                     board.setPieceAt(newPosition, promoted);
-                    board.getInner().paintCell(newPosition);
+                    board.getInner().repaint();
                 }
             }
         }

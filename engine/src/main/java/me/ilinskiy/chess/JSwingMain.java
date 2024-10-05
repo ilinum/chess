@@ -11,9 +11,10 @@ import me.ilinskiy.chess.impl.ui.JSwingUserPlayer;
 public class JSwingMain {
 
     public static void main(String[] args) {
-        Player p1 = new JSwingUserPlayer(PieceColor.White);
-        Player p2 = new JSwingUserPlayer(PieceColor.Black);
-        GameRunner gameRunner = new GameRunnerImpl(new JSwingChessPainter());
+        JSwingChessPainter painter = new JSwingChessPainter();
+        Player p1 = new JSwingUserPlayer(PieceColor.White, painter);
+        Player p2 = new JSwingUserPlayer(PieceColor.Black, painter);
+        GameRunner gameRunner = new GameRunnerImpl(painter);
         gameRunner.askTimeOut();
         int[] wins = new int[PieceColor.values().length];
         do {

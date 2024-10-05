@@ -148,7 +148,7 @@ public final class JSwingChessPainter implements ChessPainter {
     }
 
     @Override
-    public void paintCell(@NotNull Coordinates pos) {
+    public void repaint() {
         repaintBoard();
     }
 
