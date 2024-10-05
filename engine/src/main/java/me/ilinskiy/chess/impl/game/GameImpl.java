@@ -27,9 +27,9 @@ public final class GameImpl implements Game {
     @NotNull
     private final List<Move> movesMade;
 
-    public GameImpl(@NotNull PieceColor startPieceColor, @Nullable ChessPainter painter) {
+    public GameImpl(@NotNull PieceColor startPieceColor) {
         assert startPieceColor != PieceColor.Empty;
-        board = new BoardWrapperImpl(painter);
+        board = new BoardWrapperImpl();
         movesMade = new ArrayList<>();
         turn = startPieceColor;
         winner = null;

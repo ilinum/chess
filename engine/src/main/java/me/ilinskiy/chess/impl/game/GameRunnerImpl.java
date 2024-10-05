@@ -39,7 +39,10 @@ public class GameRunnerImpl implements GameRunner {
     @Override
     @NotNull
     public PieceColor runGame(@NotNull Player p1, @NotNull Player p2) {
-        Game g = new GameImpl(p1.getPlayerColor(), painter);
+        Game g = new GameImpl(p1.getPlayerColor());
+        if (painter != null) {
+            painter.initialize(g.getBoard());
+        }
         PieceColor winner = null;
         Player current = p1;
         while (winner == null) {

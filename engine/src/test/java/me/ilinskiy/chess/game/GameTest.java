@@ -25,7 +25,7 @@ public class GameTest {
     @Test
     public void testGameInit() {
         Player p1 = new PlayerMock(PieceColor.White);
-        Game g = new GameImpl(p1.getPlayerColor(), null);
+        Game g = new GameImpl(p1.getPlayerColor());
         assertFalse(g.isGameOver());
         assertFalse(g.getWinner().isPresent());
         assertTrue(g.getMovesMade().isEmpty());
@@ -45,7 +45,7 @@ public class GameTest {
             }
         };
         Player p2 = new PlayerMock(PieceColor.Black);
-        Game g = new GameImpl(p1.getPlayerColor(), null);
+        Game g = new GameImpl(p1.getPlayerColor());
         g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
         assertFalse(g.isGameOver());
         assertFalse(g.getWinner().isPresent());
@@ -68,7 +68,7 @@ public class GameTest {
         };
         Exception exc = assertThrows(RuntimeException.class, () -> {
             // Moving wrong player.
-            Game g = new GameImpl(p1.getPlayerColor(), null);
+            Game g = new GameImpl(p1.getPlayerColor());
             g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
         });
         assertEquals(exc.getMessage(), "You can only move pieces of your color!");
@@ -83,7 +83,7 @@ public class GameTest {
                 return new RegularMove(new CoordinatesImpl(8, 8), new CoordinatesImpl(1, 1));
             }
         };
-        Game g = new GameImpl(p1.getPlayerColor(), null);
+        Game g = new GameImpl(p1.getPlayerColor());
         assertThrows(RuntimeException.class, () -> {
             g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
         });

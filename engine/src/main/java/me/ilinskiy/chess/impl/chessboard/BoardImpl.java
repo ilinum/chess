@@ -33,19 +33,10 @@ public final class BoardImpl implements Board {
     private List<Coordinates> piecesMoved;
     @Nullable
     private Move lastMove;
-    private final ChessPainter myPainter;
-
-    BoardImpl(@Nullable ChessPainter painter) {
-        putPiecesOnBoard();
-        myPainter = painter;
-        turn = PieceColor.White;
-        if (myPainter != null) {
-            myPainter.initialize(this);
-        }
-    }
 
     BoardImpl() {
-        this(null);
+        putPiecesOnBoard();
+        turn = PieceColor.White;
     }
 
     @SuppressWarnings("ConstantConditions")

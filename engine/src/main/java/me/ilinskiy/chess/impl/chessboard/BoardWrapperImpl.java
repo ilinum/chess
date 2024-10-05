@@ -5,10 +5,8 @@ import me.ilinskiy.chess.api.chessboard.BoardWrapper;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.api.ui.ChessPainter;
 import me.ilinskiy.chess.impl.util.Tuple2;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -19,12 +17,8 @@ import java.util.List;
 public final class BoardWrapperImpl implements BoardWrapper {
     private final BoardImpl inner;
 
-    public BoardWrapperImpl(@Nullable ChessPainter painter) {
-        inner = new BoardImpl(painter);
-    }
-
     public BoardWrapperImpl() {
-        this((ChessPainter) null);
+        inner = new BoardImpl();
     }
 
     private BoardWrapperImpl(BoardImpl b) {
