@@ -68,7 +68,7 @@ public class GameRunnerImpl implements GameRunner {
         Future<Move> future = executorService.submit(() -> {
             Move m = null;
             while (m == null) {
-                m = p.getMove(b);
+                m = p.getMove(b, GameUtil.getAvailableMoves(p.getPlayerColor(), b));
             }
             return m;
         });

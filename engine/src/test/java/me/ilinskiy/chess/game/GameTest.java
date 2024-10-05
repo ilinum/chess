@@ -13,6 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static me.ilinskiy.chess.api.chessboard.Board.BOARD_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,13 +43,13 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull Board b) {
+            public Move getMove(@NotNull Board b, @NotNull List<Move> availableMoves) {
                 return move;
             }
         };
         Player p2 = new PlayerMock(PieceColor.Black);
         Game g = new GameImpl(p1.getPlayerColor());
-        g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
+        g.makeMove(p1.getMove(g.getBoard(), new ArrayList<>()), p1::getPieceTypeForPromotedPawn);
         assertFalse(g.isGameOver());
         assertFalse(g.getWinner().isPresent());
         assertEquals(1, g.getMovesMade().size());
@@ -62,14 +65,14 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull Board b) {
+            public Move getMove(@NotNull Board b, @NotNull List<Move> availableMoves) {
                 return move;
             }
         };
         Exception exc = assertThrows(RuntimeException.class, () -> {
             // Moving wrong player.
             Game g = new GameImpl(p1.getPlayerColor());
-            g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
+            g.makeMove(p1.getMove(g.getBoard(), new ArrayList<>()), p1::getPieceTypeForPromotedPawn);
         });
         assertEquals(exc.getMessage(), "You can only move pieces of your color!");
     }
@@ -79,13 +82,13 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull Board b) {
+            public Move getMove(@NotNull Board b, @NotNull List<Move> availableMoves) {
                 return new RegularMove(new CoordinatesImpl(8, 8), new CoordinatesImpl(1, 1));
             }
         };
         Game g = new GameImpl(p1.getPlayerColor());
         assertThrows(RuntimeException.class, () -> {
-            g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
+            g.makeMove(p1.getMove(g.getBoard(), new ArrayList<>()), p1::getPieceTypeForPromotedPawn);
         });
 
     }

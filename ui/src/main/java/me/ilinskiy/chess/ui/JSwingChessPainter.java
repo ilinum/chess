@@ -5,7 +5,6 @@ import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
 import me.ilinskiy.chess.impl.chessboard.Piece;
-import me.ilinskiy.chess.impl.game.GameRunnerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +32,7 @@ public final class JSwingChessPainter {
     private Thread myUpdateTimeLeftThread = null;
 
     private final BoardPanel panel;
+    private int timeoutSeconds;
 
     public JSwingChessPainter(@NotNull Board board) {
         Image icon = icons.get(Piece.createPiece(PieceColor.White, PieceType.Pawn));
@@ -96,19 +96,20 @@ public final class JSwingChessPainter {
                 }
             }
         }
-        return newTimeout;
+        timeoutSeconds = newTimeout;
+        return timeoutSeconds;
     }
 
     @Nullable
     private Thread createUpdateTimeLeftThread() {
-        if (GameRunnerImpl.timeoutInSeconds <= 0) {
+        if (timeoutSeconds <= 0) {
             return null;
         }
-        long deadlineMillis = System.currentTimeMillis() + (GameRunnerImpl.timeoutInSeconds) * 1000;
+        long deadlineMillis = System.currentTimeMillis() + timeoutSeconds * 1000;
         String oldName = myFrame.getTitle();
         return new Thread(() -> {
             try {
-                int secondsLeft = GameRunnerImpl.timeoutInSeconds - 1;
+                int secondsLeft = timeoutSeconds - 1;
                 while (secondsLeft > 0) {
                     secondsLeft = (int) (deadlineMillis - System.currentTimeMillis()) / 1000;
                     myFrame.setTitle("Chess. Time left: " + secondsLeft);

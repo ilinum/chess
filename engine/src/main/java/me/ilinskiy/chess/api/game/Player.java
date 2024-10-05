@@ -5,6 +5,8 @@ import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Author: Svyatoslav Ilinskiy
  * Date: 7/17/15
@@ -12,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public interface Player {
 
     @NotNull
-    Move getMove(@NotNull Board b);
+    Move getMove(@NotNull Board b, @NotNull List<Move> availableMoves);
 
     @NotNull
     PieceColor getPlayerColor();

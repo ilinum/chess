@@ -113,8 +113,7 @@ final class BoardPanel extends JPanel {
                                          @NotNull Board board, int heightAndWidth) {
         int cellSize = heightAndWidth / BOARD_SIZE;
         ChessElement element = board.getPieceAt(pos);
-        if (element instanceof Piece) {
-            Piece piece = (Piece) element;
+        if (element instanceof Piece piece) {
             Image image = JSwingChessPainter.icons.get(piece);
             if (image != null) {
                 int initX = pos.getX() * cellSize;

@@ -16,11 +16,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static me.ilinskiy.chess.impl.game.GameUtil.println;
 
@@ -48,7 +50,7 @@ public final class JSwingUserPlayer implements Player {
 
     @NotNull
     @Override
-    public Move getMove(@NotNull Board board) {
+    public Move getMove(@NotNull Board board, @NotNull List<Move> availableMoves) {
         painter.moveStarted();
         BoardPanel panel = painter.getPanel();
         panel.setBoard(board);
@@ -72,7 +74,7 @@ public final class JSwingUserPlayer implements Player {
                 Coordinates location = new CoordinatesImpl((int) x / cellSize, (int) y / cellSize);
                 Coordinates selected = painter.getSelected();
                 if (selected != null) {
-                    Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(selected, board);
+                    Set<Move> availableMovesForPiece = getMovesStartingAt(availableMoves, selected);
                     Move m = new RegularMove(selected, location);
                     Optional<Move> res = Optional.empty();
                     for (Move move : availableMovesForPiece) {
@@ -135,6 +137,11 @@ public final class JSwingUserPlayer implements Player {
     @NotNull
     public PieceType getPieceTypeForPromotedPawn() {
         return new ChoosePieceTypeForPromotedPawn().getChosenPiece();
+    }
+
+    private static Set<Move> getMovesStartingAt(List<Move> moves, Coordinates start) {
+        Stream<Move> availableMoves = moves.stream().filter((move) -> Arrays.asList(move.getInitialPositions()).contains(start));
+        return new HashSet<>(availableMoves.toList());
     }
 }
 
