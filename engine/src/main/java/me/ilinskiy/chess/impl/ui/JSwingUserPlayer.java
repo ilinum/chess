@@ -207,7 +207,7 @@ class ChoosePieceTypeForPromotedPawn extends JPanel {
         frame.pack();
         frame.setVisible(true);
         try {
-            while (selectedPiece != null) {
+            while (selectedPiece == null) {
                 try {
                     buttonPressed.await();
                 } catch (InterruptedException ignored) {

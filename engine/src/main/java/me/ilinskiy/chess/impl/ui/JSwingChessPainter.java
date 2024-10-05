@@ -32,7 +32,7 @@ public final class JSwingChessPainter {
     @Nullable
     private Thread myUpdateTimeLeftThread = null;
 
-    private BoardPanel panel;
+    private final BoardPanel panel;
 
     public JSwingChessPainter(@NotNull Board board) {
         Image icon = icons.get(Piece.createPiece(PieceColor.White, PieceType.Pawn));
