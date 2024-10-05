@@ -5,10 +5,9 @@ import me.ilinskiy.chess.api.game.GameRunner;
 import me.ilinskiy.chess.api.game.Player;
 import me.ilinskiy.chess.impl.chessboard.BoardWrapperImpl;
 import me.ilinskiy.chess.impl.game.GameRunnerImpl;
-import me.ilinskiy.chess.impl.ui.JSwingChessPainter;
-import me.ilinskiy.chess.impl.ui.JSwingUserPlayer;
+import me.ilinskiy.chess.ui.JSwingChessPainter;
+import me.ilinskiy.chess.ui.JSwingUserPlayer;
 
-@SuppressWarnings("WeakerAccess")
 public class JSwingMain {
 
     public static void main(String[] args) {

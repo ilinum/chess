@@ -1,4 +1,4 @@
-package me.ilinskiy.chess.impl.ui;
+package me.ilinskiy.chess.ui;
 
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;

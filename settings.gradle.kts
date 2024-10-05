@@ -1,2 +1,2 @@
 rootProject.name = "chess"
-include("engine")
+include("engine", "ui")
