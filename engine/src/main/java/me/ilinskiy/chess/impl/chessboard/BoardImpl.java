@@ -12,7 +12,10 @@ import me.ilinskiy.chess.impl.game.RegularMove;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static me.ilinskiy.chess.api.chessboard.PieceType.Pawn;
 
@@ -21,8 +24,9 @@ import static me.ilinskiy.chess.api.chessboard.PieceType.Pawn;
  * and which elements have moved.
  * BoardImpl can (and should) be only modified using BoardWrapperImpl. The actual BoardWrapperImpl instance used for making moves
  * is held by GameImpl instance. So there is no way to modify this board from an outside package.
- * @see {@link ChessBoardUtil#makeMoveAndEvaluate}
  *
+ * @see {@link ChessBoardUtil#makeMoveAndEvaluate}
+ * <p>
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */

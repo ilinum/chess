@@ -1,9 +1,9 @@
 package me.ilinskiy.chess.impl.game;
 
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.game.Copyable;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: Svyatoslav Ilinskiy

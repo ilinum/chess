@@ -58,7 +58,7 @@ public final class Castling extends MoveAdapter {
             boolean rookInitPosEqual = other.rookInitPosition.equals(rookInitPosition);
             boolean rookNewPosEqual = other.rookNewPosition.equals(rookNewPosition);
             return kingInitPosEqual && kingNewPosEqual && rookInitPosEqual && rookNewPosEqual;
-        } else if (o instanceof RegularMove){
+        } else if (o instanceof RegularMove) {
             RegularMove regularMove = (RegularMove) o;
             return initialPosition.equals(regularMove.initialPosition) && newPosition.equals(regularMove.newPosition);
         }

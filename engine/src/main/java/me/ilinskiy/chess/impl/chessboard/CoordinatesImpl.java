@@ -1,9 +1,9 @@
 package me.ilinskiy.chess.impl.chessboard;
 
 
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 

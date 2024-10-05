@@ -7,7 +7,6 @@ import me.ilinskiy.chess.api.chessboard.PieceType;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
-import me.ilinskiy.chess.impl.game.GameUtil;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,12 +15,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static me.ilinskiy.chess.impl.game.GameUtil.println;
@@ -88,7 +86,7 @@ public final class JSwingUserPlayer implements Player {
                     } else if (board.getPieceAt(location).getColor() == myColor) {
                         painter.setSelected(location);
                     }
-                } else if (board.getPieceAt(location).getColor() == myColor){
+                } else if (board.getPieceAt(location).getColor() == myColor) {
                     painter.setSelected(location);
                 }
                 mouseLock.unlock();

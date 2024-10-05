@@ -39,7 +39,7 @@ public final class GameImpl implements Game {
         if (isGameOver()) {
             throw new RuntimeException("Game is over! Cannot make more moves!");
         }
-        for (Coordinates c: m.getInitialPositions()) {
+        for (Coordinates c : m.getInitialPositions()) {
             if (board.getPieceAt(c).getColor() != whoseTurnIsIt()) {
                 throw new RuntimeException("You can only move pieces of your color!");
             }

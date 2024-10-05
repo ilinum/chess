@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for BoardWrapperImpl and BoardImpl classes
- *
+ * <p>
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */

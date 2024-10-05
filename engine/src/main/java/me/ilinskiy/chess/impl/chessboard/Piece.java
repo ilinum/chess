@@ -1,10 +1,10 @@
 package me.ilinskiy.chess.impl.chessboard;
 
 
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 

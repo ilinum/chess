@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.api.chessboard;
 
-import org.jetbrains.annotations.NotNull;
 import me.ilinskiy.chess.api.game.Copyable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: Svyatoslav Ilinskiy
