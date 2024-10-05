@@ -28,8 +28,6 @@ public interface Board extends Copyable {
     @Override
     Board copy();
 
-    void repaint();
-
     @NotNull
     Optional<Move> getLastMove();
 }

@@ -117,7 +117,6 @@ public final class BoardImpl implements Board {
             makeActualMove(rm.initialPosition, rm.newPosition);
         }
         turn = turn.inverse();
-        this.repaint();
     }
 
     private void makeActualMove(@NotNull Coordinates initialPosition, @NotNull Coordinates newPosition) {
@@ -202,13 +201,6 @@ public final class BoardImpl implements Board {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(board) * 31 + turn.hashCode();
-    }
-
-    @Override
-    public void repaint() {
-        if (myPainter != null) {
-            myPainter.repaint();
-        }
     }
 
     @Override

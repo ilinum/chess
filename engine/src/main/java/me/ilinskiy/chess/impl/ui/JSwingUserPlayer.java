@@ -49,6 +49,7 @@ public final class JSwingUserPlayer implements Player {
     @NotNull
     @Override
     public Move getMove(@NotNull Board board) {
+        this.painter.repaint();
         BoardPanel panel = painter.getPanel();
         MouseListener mouseListener = new MouseListener() {
             @Override
@@ -80,10 +81,10 @@ public final class JSwingUserPlayer implements Player {
                     if (res.isPresent()) {
                         moveMade = res.get();
                         moveIsMade.signal();
-                    } else {
+                    } else if (board.getPieceAt(location).getColor() == myColor) {
                         painter.setSelected(location);
                     }
-                } else {
+                } else if (board.getPieceAt(location).getColor() == myColor){
                     painter.setSelected(location);
                 }
                 mouseLock.unlock();

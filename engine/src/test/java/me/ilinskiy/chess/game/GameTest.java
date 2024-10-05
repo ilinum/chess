@@ -56,6 +56,25 @@ public class GameTest {
     }
 
     @Test
+    @Timeout(value = 1)
+    public void testMakeMoveWrongPlayer() {
+        Move move = new RegularMove(new CoordinatesImpl(1, 1), new CoordinatesImpl(1, 3));
+        Player p1 = new PlayerMock(PieceColor.White) {
+            @NotNull
+            @Override
+            public Move getMove(@NotNull Board b) {
+                return move;
+            }
+        };
+        Exception exc = assertThrows(RuntimeException.class, () -> {
+            // Moving wrong player.
+            Game g = new GameImpl(p1.getPlayerColor(), null);
+            g.makeMove(p1.getMove(g.getBoard()), p1::getPieceTypeForPromotedPawn);
+        });
+        assertEquals(exc.getMessage(), "You can only move pieces of your color!");
+    }
+
+    @Test
     public void testIllegalMove() {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull

@@ -75,6 +75,7 @@ public final class JSwingChessPainter implements ChessPainter {
 
     @Override
     public void gameOver(@NotNull PieceColor winner) {
+        this.repaint();
         JOptionPane.showMessageDialog(myFrame, getWinPhrase(winner));
     }
 
