@@ -11,11 +11,6 @@ import org.jetbrains.annotations.Nullable;
  * Date: 9/27/15.
  */
 public interface ChessPainter {
-    /**
-     * Initialize the Painter with the board
-     */
-    void initialize(@NotNull Board board);
-
     void gameOver(@NotNull PieceColor winner);
 
     /**

@@ -22,10 +22,11 @@ public class GameRunnerImpl implements GameRunner {
     @Nullable
     private final ChessPainter painter;
     static final boolean DEBUG = false;
-    public static int TIMEOUT_IN_SECONDS = 0; //if timeout is 0, the only limit is yourself
+    public static int timeoutInSeconds = 0; //if timeout is 0, the only limit is yourself
 
-    public GameRunnerImpl(@Nullable ChessPainter p) {
+    public GameRunnerImpl(@Nullable ChessPainter p, int timeoutSeconds) {
         painter = p;
+        timeoutInSeconds = timeoutSeconds;
     }
 
     /**
@@ -40,9 +41,6 @@ public class GameRunnerImpl implements GameRunner {
     @NotNull
     public PieceColor runGame(@NotNull Player p1, @NotNull Player p2) {
         Game g = new GameImpl(p1.getPlayerColor());
-        if (painter != null) {
-            painter.initialize(g.getBoard());
-        }
         PieceColor winner = null;
         Player current = p1;
         while (winner == null) {
@@ -67,9 +65,6 @@ public class GameRunnerImpl implements GameRunner {
                 e.printStackTrace();
             }
         }
-        if (painter != null) {
-            painter.gameOver(winner);
-        }
         return winner;
     }
 
@@ -87,8 +82,8 @@ public class GameRunnerImpl implements GameRunner {
             if (painter != null) {
                 painter.moveStarted();
             }
-            if (GameRunnerImpl.TIMEOUT_IN_SECONDS > 0) {
-                result = future.get(GameRunnerImpl.TIMEOUT_IN_SECONDS + 1, TimeUnit.SECONDS); //be nice and add an extra second
+            if (GameRunnerImpl.timeoutInSeconds > 0) {
+                result = future.get(GameRunnerImpl.timeoutInSeconds + 1, TimeUnit.SECONDS); //be nice and add an extra second
             } else {
                 result = future.get();
             }
@@ -102,39 +97,5 @@ public class GameRunnerImpl implements GameRunner {
             }
         }
         return result;
-    }
-
-
-    /**
-     * creates a dialog that asks if user wants to play again
-     *
-     * @return true if play again
-     */
-    @Override
-    public boolean askToPlayAgain() {
-        return painter != null && painter.askToPlayAgain();
-    }
-
-    /**
-     * Ask the user the timeout they want to use. It sets the timeout according to the answer
-     */
-    @Override
-    public void askTimeOut() {
-        if (painter != null) {
-            TIMEOUT_IN_SECONDS = painter.askTimeOut();
-        }
-        if (TIMEOUT_IN_SECONDS < 0) {
-            throw new RuntimeException("Timeout cannot be negative!");
-        }
-    }
-
-    /**
-     * Disposes of the frame
-     */
-    @Override
-    public void dispose() {
-        if (painter != null) {
-            painter.dispose();
-        }
     }
 }

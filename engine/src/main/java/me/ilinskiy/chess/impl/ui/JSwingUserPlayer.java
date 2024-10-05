@@ -49,8 +49,9 @@ public final class JSwingUserPlayer implements Player {
     @NotNull
     @Override
     public Move getMove(@NotNull Board board) {
-        this.painter.repaint();
         BoardPanel panel = painter.getPanel();
+        panel.setBoard(board);
+        this.painter.repaint();
         MouseListener mouseListener = new MouseListener() {
             @Override
             public void mouseClicked(@NotNull MouseEvent mouseEvent) {

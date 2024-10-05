@@ -10,10 +10,4 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface GameRunner {
     @NotNull PieceColor runGame(@NotNull Player p1, @NotNull Player p2);
-
-    boolean askToPlayAgain();
-
-    void askTimeOut();
-
-    void dispose();
 }

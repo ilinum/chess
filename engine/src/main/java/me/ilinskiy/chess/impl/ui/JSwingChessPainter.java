@@ -35,7 +35,7 @@ public final class JSwingChessPainter implements ChessPainter {
 
     private BoardPanel panel;
 
-    public JSwingChessPainter() {
+    public JSwingChessPainter(@NotNull Board board) {
         Image icon = icons.get(Piece.createPiece(PieceColor.White, PieceType.Pawn));
         try {
             SwingUtilities.invokeAndWait(() -> {
@@ -52,24 +52,10 @@ public final class JSwingChessPainter implements ChessPainter {
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void initialize(@NotNull Board board) {
-        if (panel == null) {
-            //playing for the first time
-            panel = new BoardPanel(board);
-            myFrame.add(panel, BorderLayout.CENTER);
-            myFrame.setLocationRelativeTo(null);
-            myFrame.setVisible(true);
-        } else {
-            //playing again
-            myFrame.remove(panel);
-            panel = new BoardPanel(board);
-            myFrame.add(panel, BorderLayout.CENTER);
-            myFrame.revalidate();
-            myFrame.repaint();
-        }
+        panel = new BoardPanel(board);
+        myFrame.add(panel, BorderLayout.CENTER);
+        myFrame.setLocationRelativeTo(null);
+        myFrame.setVisible(true);
         repaintBoard();
     }
 
@@ -122,14 +108,14 @@ public final class JSwingChessPainter implements ChessPainter {
 
     @Nullable
     private Thread createUpdateTimeLeftThread() {
-        if (GameRunnerImpl.TIMEOUT_IN_SECONDS <= 0) {
+        if (GameRunnerImpl.timeoutInSeconds <= 0) {
             return null;
         }
-        long moveMustBeMadeByMillis = System.currentTimeMillis() + (GameRunnerImpl.TIMEOUT_IN_SECONDS + 1) * 1000;
+        long moveMustBeMadeByMillis = System.currentTimeMillis() + (GameRunnerImpl.timeoutInSeconds + 1) * 1000;
         String oldName = myFrame.getTitle();
         return new Thread(() -> {
             try {
-                int secondsLeft = GameRunnerImpl.TIMEOUT_IN_SECONDS - 1;
+                int secondsLeft = GameRunnerImpl.timeoutInSeconds - 1;
                 while (secondsLeft > 0) {
                     secondsLeft = (int) (moveMustBeMadeByMillis - System.currentTimeMillis()) / 1000;
                     myFrame.setTitle("Chess. Time left: " + secondsLeft);

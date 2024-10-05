@@ -29,12 +29,16 @@ final class BoardPanel extends JPanel {
     private static final Color SELECT_COLOR = new Color(0xFA1843);
     private static final Color BORDER_COLOR = Color.BLACK;
 
-    private final Board myBoard;
+    private Board myBoard;
     @Nullable
     private Coordinates selected;
 
     BoardPanel(@NotNull Board board) {
         super();
+        setBoard(board);
+    }
+
+    void setBoard(@NotNull Board board) {
         myBoard = board;
     }
 
