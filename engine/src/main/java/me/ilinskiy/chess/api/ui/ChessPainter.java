@@ -4,6 +4,7 @@ import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -29,6 +30,10 @@ public interface ChessPainter {
      * At the same time, dispose is not guaranteed to be called
      */
     void dispose();
+
+    void setSelected(@Nullable Coordinates cell);
+
+    @Nullable Coordinates getSelected();
 
     /**
      * @return the desired timeout in seconds or 0 for default

@@ -21,11 +21,6 @@ public interface Board extends Copyable {
 
     boolean pieceHasNotMovedSinceStartOfGame(@NotNull Coordinates pos);
 
-    @Nullable
-    Coordinates getSelected();
-
-    boolean setSelected(@NotNull Coordinates newSelected);
-
     @NotNull
     PieceColor whoseTurnIsIt();
 

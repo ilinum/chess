@@ -67,7 +67,7 @@ public final class JSwingUserPlayer implements Player {
                 int size = panel.getSize().width;
                 int cellSize = size / Board.BOARD_SIZE;
                 Coordinates location = new CoordinatesImpl((int) x / cellSize, (int) y / cellSize);
-                Coordinates selected = board.getSelected();
+                Coordinates selected = painter.getSelected();
                 if (selected != null) {
                     Set<Move> availableMovesForPiece = GameUtil.getAvailableMovesForPiece(selected, board);
                     Move m = new RegularMove(selected, location);
@@ -81,10 +81,10 @@ public final class JSwingUserPlayer implements Player {
                         moveMade = res.get();
                         moveIsMade.signal();
                     } else {
-                        board.setSelected(location);
+                        painter.setSelected(location);
                     }
                 } else {
-                    board.setSelected(location);
+                    painter.setSelected(location);
                 }
                 mouseLock.unlock();
             }
@@ -111,6 +111,7 @@ public final class JSwingUserPlayer implements Player {
             Move move = moveMade;
             assert move != null;
             moveMade = null;
+            panel.setSelected(null);
             return move;
         } finally {
             assert panel.getMouseListeners().length > 0;

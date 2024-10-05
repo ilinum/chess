@@ -122,24 +122,4 @@ public class BoardTest {
             b.movePiece(new RegularMove(initPos, newPos));
         });
     }
-
-    @Test
-    public void testSelected() {
-        BoardImpl b = new BoardImpl();
-        assertNull(b.getSelected(), "selected should be empty!");
-        CoordinatesImpl coordinates = new CoordinatesImpl(7, 7);
-        assertTrue(b.setSelected(coordinates));
-        //noinspection ConstantConditions
-        assertEquals(b.getSelected(), coordinates);
-        CoordinatesImpl newCoordinates = new CoordinatesImpl(5, 5);
-        assertFalse(b.setSelected(newCoordinates));
-        assertEquals(b.getSelected(), coordinates);
-        b.movePiece(new RegularMove(coordinates, newCoordinates));
-        assertNull(b.getSelected(), "selected should be empty!");
-        assertFalse(b.setSelected(newCoordinates));
-        assertNull(b.getSelected());
-        b.movePiece(new RegularMove(new CoordinatesImpl(0, 0), new CoordinatesImpl(4, 4)));
-        assertTrue(b.setSelected(newCoordinates));
-        assertEquals(b.getSelected(), newCoordinates);
-    }
 }

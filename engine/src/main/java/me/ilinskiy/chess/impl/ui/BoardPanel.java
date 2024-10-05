@@ -30,6 +30,8 @@ final class BoardPanel extends JPanel {
     private static final Color BORDER_COLOR = Color.BLACK;
 
     private final Board myBoard;
+    @Nullable
+    private Coordinates selected;
 
     BoardPanel(@NotNull Board board) {
         super();
@@ -58,8 +60,17 @@ final class BoardPanel extends JPanel {
         }
     }
 
-    private static void setBGForCell(@NotNull Coordinates c, @NotNull Graphics graphics, @NotNull Board b) {
-        @Nullable Coordinates selected = b.getSelected();
+    public void setSelected(@Nullable Coordinates coordinates) {
+        selected = coordinates;
+    }
+
+    @Nullable
+    public Coordinates getSelected() {
+        return selected;
+    }
+
+    private void setBGForCell(@NotNull Coordinates c, @NotNull Graphics graphics, @NotNull Board b) {
+        @Nullable Coordinates selected = getSelected();
 
         if (c.equals(selected)) {
             graphics.setColor(SELECT_COLOR);

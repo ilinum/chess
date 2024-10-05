@@ -29,8 +29,6 @@ import static me.ilinskiy.chess.api.chessboard.PieceType.Pawn;
  */
 public final class BoardImpl implements Board {
     private ChessElement[][] board;
-    @Nullable
-    private Coordinates selected;
     private PieceColor turn;
     private List<Coordinates> piecesMoved;
     @Nullable
@@ -38,7 +36,6 @@ public final class BoardImpl implements Board {
     private final ChessPainter myPainter;
 
     BoardImpl(@Nullable ChessPainter painter) {
-        selected = null;
         putPiecesOnBoard();
         myPainter = painter;
         turn = PieceColor.White;
@@ -120,7 +117,6 @@ public final class BoardImpl implements Board {
             makeActualMove(rm.initialPosition, rm.newPosition);
         }
         turn = turn.inverse();
-        selected = null;
         this.repaint();
     }
 
@@ -142,12 +138,6 @@ public final class BoardImpl implements Board {
         return !piecesMoved.contains(pos);
     }
 
-    @Override
-    @Nullable
-    public Coordinates getSelected() {
-        return selected;
-    }
-
     void setPieceAt(@NotNull Coordinates pos, @NotNull ChessElement element) {
         checkBounds(pos);
         board[pos.getY()][pos.getX()] = element;
@@ -157,26 +147,6 @@ public final class BoardImpl implements Board {
         if (c.isOutOfBounds()) {
             throw new IllegalArgumentException("Index out of bounds: " + c);
         }
-    }
-
-    /**
-     * set the cell at c selected
-     *
-     * @return true if a piece is there. False if it's an empty cell and nothing is done
-     */
-    @Override
-    public boolean setSelected(@NotNull Coordinates newSelected) {
-        checkBounds(newSelected);
-        if (getPieceAt(newSelected).getColor() != whoseTurnIsIt()) {
-            return false;
-        }
-        @Nullable Coordinates selectedCopy = selected;
-        selected = newSelected;
-        if (selectedCopy != null) {
-            repaint();
-        }
-        repaint();
-        return true;
     }
 
     @Override
@@ -204,7 +174,6 @@ public final class BoardImpl implements Board {
     public BoardImpl copy() {
         BoardImpl result = new BoardImpl();
 
-        result.selected = this.selected;
         result.turn = this.turn;
         result.piecesMoved = GameUtil.copy(piecesMoved);
         for (int row = 0; row < board.length; row++) {
@@ -224,10 +193,7 @@ public final class BoardImpl implements Board {
                     }
                 }
             }
-            boolean selectedEqual =
-                    (selected == null && other.selected == null) ||
-                            (selected != null && selected.equals(other.selected));
-            return turn == other.turn && selectedEqual;
+            return turn == other.turn;
         } else {
             return false;
         }
@@ -235,7 +201,7 @@ public final class BoardImpl implements Board {
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(board) * 31 + Objects.hashCode(selected) + turn.hashCode();
+        return Arrays.deepHashCode(board) * 31 + turn.hashCode();
     }
 
     @Override

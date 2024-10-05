@@ -89,6 +89,18 @@ public final class JSwingChessPainter implements ChessPainter {
     }
 
     @Override
+    public void setSelected(@Nullable Coordinates coordinates) {
+        panel.setSelected(coordinates);
+        repaint();
+    }
+
+    @Override
+    @Nullable
+    public Coordinates getSelected() {
+        return panel.getSelected();
+    }
+
+    @Override
     public int askTimeOut() {
         int newTimeout = -1;
         while (newTimeout < 0) {
