@@ -126,7 +126,7 @@ public class GameUtil {
                                             boolean wasALongMove = Math.abs(initPos.getY() - newPos.getY()) == 2;
                                             if (wasALongMove) {
                                                 Coordinates c = new CoordinatesImpl(initPos.getX(), initPos.getY() + enemyDir);
-                                                result.add(new EnPasse(pos, c));
+                                                result.add(new EnPassant(pos, c));
                                             }
                                         }
                                     }

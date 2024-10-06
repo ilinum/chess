@@ -6,7 +6,7 @@ import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.chessboard.Piece;
-import me.ilinskiy.chess.impl.game.EnPasse;
+import me.ilinskiy.chess.impl.game.EnPassant;
 import me.ilinskiy.chess.impl.game.GameUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,14 +79,14 @@ final class BoardPanel extends JPanel {
         if (c.equals(selected)) {
             graphics.setColor(SELECT_COLOR);
         } else if (selected != null && GameUtil.getAvailableNewPositions(selected, b).contains(c)) {
-            boolean isEnPasse = false;
+            boolean isEnPassant = false;
             Set<Move> selectedMoves = GameUtil.getAvailableMovesForPiece(selected, b);
             for (Move selectedMove : selectedMoves) {
-                if (selectedMove.getNewPositions()[0].equals(c) && selectedMove instanceof EnPasse) {
-                    isEnPasse = true;
+                if (selectedMove.getNewPositions()[0].equals(c) && selectedMove instanceof EnPassant) {
+                    isEnPassant = true;
                 }
             }
-            if (b.getPieceAt(c) instanceof Piece || isEnPasse) {
+            if (b.getPieceAt(c) instanceof Piece || isEnPassant) {
                 graphics.setColor(EAT_COLOR);
             } else {
                 graphics.setColor(MOVE_COLOR);

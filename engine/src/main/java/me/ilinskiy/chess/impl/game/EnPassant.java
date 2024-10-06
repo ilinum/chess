@@ -9,13 +9,13 @@ import org.jetbrains.annotations.NotNull;
  * Author: Svyatoslav Ilinskiy
  * Date: 8/7/15.
  */
-public final class EnPasse extends MoveAdapter {
+public final class EnPassant extends MoveAdapter {
     @NotNull
     public final Coordinates initialPosition;
     @NotNull
     public final Coordinates newPosition;
 
-    public EnPasse(@NotNull Coordinates init, @NotNull Coordinates newC) {
+    public EnPassant(@NotNull Coordinates init, @NotNull Coordinates newC) {
         initialPosition = init;
         newPosition = newC;
     }

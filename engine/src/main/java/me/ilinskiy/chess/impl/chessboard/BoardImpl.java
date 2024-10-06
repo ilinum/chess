@@ -6,7 +6,7 @@ import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.game.Castling;
-import me.ilinskiy.chess.impl.game.EnPasse;
+import me.ilinskiy.chess.impl.game.EnPassant;
 import me.ilinskiy.chess.impl.game.GameUtil;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.jetbrains.annotations.NotNull;
@@ -100,12 +100,12 @@ public final class BoardImpl implements Board {
             Castling c = (Castling) move;
             makeActualMove(c.getKingInitialPosition(), c.getKingNewPosition());
             makeActualMove(c.getRookInitialPosition(), c.getRookNewPosition());
-        } else if (move instanceof EnPasse) {
-            EnPasse enPasse = (EnPasse) move;
-            Coordinates eaten = enPasse.eatenPiece();
+        } else if (move instanceof EnPassant) {
+            EnPassant enPassant = (EnPassant) move;
+            Coordinates eaten = enPassant.eatenPiece();
             assert getPieceAt(eaten).getType() == Pawn;
             setPieceAt(eaten, EmptyCell.INSTANCE);
-            makeActualMove(enPasse.initialPosition, enPasse.newPosition);
+            makeActualMove(enPassant.initialPosition, enPassant.newPosition);
         } else {
             RegularMove rm = ((RegularMove) move);
             makeActualMove(rm.initialPosition, rm.newPosition);
