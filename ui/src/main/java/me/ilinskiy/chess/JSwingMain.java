@@ -9,7 +9,6 @@ import me.ilinskiy.chess.ui.JSwingChessPainter;
 import me.ilinskiy.chess.ui.JSwingUserPlayer;
 
 public class JSwingMain {
-
     public static void main(String[] args) {
         JSwingChessPainter painter = null;
         do {

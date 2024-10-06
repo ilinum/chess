@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Set;
 
 import static me.ilinskiy.chess.api.chessboard.Board.BOARD_SIZE;
 
@@ -29,7 +28,7 @@ final class BoardPanel extends JPanel {
     private static final Color SELECT_COLOR = new Color(0xFA1843);
     private static final Color BORDER_COLOR = Color.BLACK;
 
-    private Board myBoard;
+    private Board board;
     @Nullable
     private Coordinates selected;
 
@@ -39,7 +38,7 @@ final class BoardPanel extends JPanel {
     }
 
     void setBoard(@NotNull Board board) {
-        myBoard = board;
+        this.board = board;
     }
 
     @Override
@@ -52,14 +51,14 @@ final class BoardPanel extends JPanel {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 Coordinates c = new CoordinatesImpl(col, row);
-                setBGForCell(c, graphics, myBoard);
+                graphics.setColor(getBGForCell(c, getSelected(), board));
                 drawCell(c, graphics, heightAndWidth);
             }
         }
 
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                drawImageForCell(new CoordinatesImpl(col, row), graphics, myBoard, heightAndWidth);
+                drawImageForCell(new CoordinatesImpl(col, row), graphics, board, heightAndWidth);
             }
         }
     }
@@ -73,32 +72,29 @@ final class BoardPanel extends JPanel {
         return selected;
     }
 
-    private void setBGForCell(@NotNull Coordinates c, @NotNull Graphics graphics, @NotNull Board b) {
-        @Nullable Coordinates selected = getSelected();
-
+    private static Color getBGForCell(Coordinates c, @Nullable Coordinates selected, Board board) {
         if (c.equals(selected)) {
-            graphics.setColor(SELECT_COLOR);
-        } else if (selected != null && GameUtil.getAvailableNewPositions(selected, b).contains(c)) {
-            boolean isEnPassant = false;
-            Set<Move> selectedMoves = GameUtil.getAvailableMovesForPiece(selected, b);
-            for (Move selectedMove : selectedMoves) {
+            return SELECT_COLOR;
+        }
+        if (selected != null && GameUtil.getAvailableNewPositions(selected, board).contains(c)) {
+            for (Move selectedMove : GameUtil.getAvailableMovesForPiece(selected, board)) {
                 if (selectedMove.getNewPositions()[0].equals(c) && selectedMove instanceof EnPassant) {
-                    isEnPassant = true;
+                    // En Passant.
+                    return EAT_COLOR;
                 }
             }
-            if (b.getPieceAt(c) instanceof Piece || isEnPassant) {
-                graphics.setColor(EAT_COLOR);
-            } else {
-                graphics.setColor(MOVE_COLOR);
+            if (board.getPieceAt(c) instanceof Piece) {
+                return EAT_COLOR;
             }
-        } else if (((c.getX() + c.getY()) % 2) == 0) {
-            graphics.setColor(WHITE_BG);
-        } else {
-            graphics.setColor(BLACK_BG);
+            return MOVE_COLOR;
         }
+        if (((c.getX() + c.getY()) % 2) == 0) {
+            return WHITE_BG;
+        }
+        return BLACK_BG;
     }
 
-    private static void drawCell(@NotNull Coordinates pos, @NotNull Graphics graphics, int heightAndWidth) {
+    private static void drawCell(Coordinates pos, Graphics graphics, int heightAndWidth) {
         int cellSize = heightAndWidth / BOARD_SIZE;
         int initX = pos.getX() * cellSize;
         int initY = pos.getY() * cellSize;
@@ -109,8 +105,11 @@ final class BoardPanel extends JPanel {
         graphics.setColor(oldColor);
     }
 
-    private static void drawImageForCell(@NotNull Coordinates pos, @NotNull Graphics graphics,
-                                         @NotNull Board board, int heightAndWidth) {
+    private static void drawImageForCell(
+            @NotNull Coordinates pos,
+            @NotNull Graphics graphics,
+            @NotNull Board board,
+            int heightAndWidth) {
         int cellSize = heightAndWidth / BOARD_SIZE;
         ChessElement element = board.getPieceAt(pos);
         if (element instanceof Piece piece) {
