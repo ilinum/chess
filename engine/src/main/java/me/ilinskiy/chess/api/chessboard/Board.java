@@ -21,9 +21,6 @@ public interface Board extends Copyable {
     boolean pieceHasNotMovedSinceStartOfGame(@NotNull Coordinates pos);
 
     @NotNull
-    PieceColor whoseTurnIsIt();
-
-    @NotNull
     @Override
     Board copy();
 

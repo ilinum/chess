@@ -32,14 +32,12 @@ import static me.ilinskiy.chess.api.chessboard.PieceType.Pawn;
  */
 public final class BoardImpl implements Board {
     private ChessElement[][] board;
-    private PieceColor turn;
     private List<Coordinates> piecesMoved;
     @Nullable
     private Move lastMove;
 
     BoardImpl() {
         putPiecesOnBoard();
-        turn = PieceColor.White;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -110,7 +108,6 @@ public final class BoardImpl implements Board {
             RegularMove rm = ((RegularMove) move);
             makeActualMove(rm.initialPosition, rm.newPosition);
         }
-        turn = turn.inverse();
     }
 
     private void makeActualMove(@NotNull Coordinates initialPosition, @NotNull Coordinates newPosition) {
@@ -142,12 +139,6 @@ public final class BoardImpl implements Board {
         }
     }
 
-    @Override
-    @NotNull
-    public PieceColor whoseTurnIsIt() {
-        return turn;
-    }
-
     @NotNull
     @Override
     public String toString() {
@@ -167,7 +158,6 @@ public final class BoardImpl implements Board {
     public BoardImpl copy() {
         BoardImpl result = new BoardImpl();
 
-        result.turn = this.turn;
         result.piecesMoved = GameUtil.copy(piecesMoved);
         for (int row = 0; row < board.length; row++) {
             System.arraycopy(this.board[row], 0, result.board[row], 0, board.length);
@@ -177,8 +167,7 @@ public final class BoardImpl implements Board {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof BoardImpl) {
-            BoardImpl other = ((BoardImpl) o);
+        if (o instanceof BoardImpl other) {
             for (int i = 0; i < BOARD_SIZE; i++) {
                 for (int j = 0; j < BOARD_SIZE; j++) {
                     if (!this.board[i][j].equals(other.board[i][j])) {
@@ -186,15 +175,14 @@ public final class BoardImpl implements Board {
                     }
                 }
             }
-            return turn == other.turn;
-        } else {
-            return false;
+            return true;
         }
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(board) * 31 + turn.hashCode();
+        return Arrays.deepHashCode(board);
     }
 
     @Override
