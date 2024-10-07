@@ -2,12 +2,9 @@ package me.ilinskiy.chess.impl.game;
 
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.impl.util.CollectionUtil;
-import me.ilinskiy.chess.impl.util.Tuple2;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -68,10 +65,5 @@ public abstract class MoveAdapter implements Move {
             }
         }
         return 0;
-    }
-
-    @Override
-    public List<Tuple2<Coordinates, Coordinates>> zippedPositions() {
-        return CollectionUtil.zip(getInitialPositions(), getNewPositions());
     }
 }
