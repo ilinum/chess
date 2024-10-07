@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.impl.chessboard;
 
-import me.ilinskiy.chess.api.chessboard.Board;
+import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.game.RegularMove;
@@ -17,8 +17,8 @@ public class ChessBoardUtilTest {
 
     @Test
     public void testMoveAndEvaluate() {
-        Board b = new BoardImpl();
-        Board copy = b.copy();
+        MoveAwareBoard b = new MoveAwareBoardImpl();
+        MoveAwareBoard copy = b.copy();
         Move m = new RegularMove(new CoordinatesImpl(BOARD_SIZE - 1, BOARD_SIZE - 1), new CoordinatesImpl(1, 1));
         ChessBoardUtil.makeMoveAndEvaluate(b, m, b1 -> false);
         assertEquals(copy, b);

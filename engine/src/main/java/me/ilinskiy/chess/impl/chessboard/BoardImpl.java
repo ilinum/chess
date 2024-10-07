@@ -4,48 +4,23 @@ import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
-import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.impl.game.Castling;
-import me.ilinskiy.chess.impl.game.EnPassant;
-import me.ilinskiy.chess.impl.game.GameUtil;
-import me.ilinskiy.chess.impl.game.RegularMove;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 import static me.ilinskiy.chess.api.chessboard.PieceType.Pawn;
 
-/**
- * A class that represents chess board. It keeps track of the elements, where they are on the board, whose turn it is
- * and which elements have moved.
- * BoardImpl can (and should) be only modified using BoardWrapperImpl. The actual BoardWrapperImpl instance used for making moves
- * is held by GameImpl instance. So there is no way to modify this board from an outside package.
- *
- * @see {@link ChessBoardUtil#makeMoveAndEvaluate}
- * <p>
- * Author: Svyatoslav Ilinskiy
- * Date: 7/16/15
- */
 public final class BoardImpl implements Board {
     private ChessElement[][] board;
-    private List<Coordinates> piecesMoved;
-    @Nullable
-    private Move lastMove;
 
-    BoardImpl() {
+    public BoardImpl() {
         putPiecesOnBoard();
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void putPiecesOnBoard() {
         board = new ChessElement[BOARD_SIZE][BOARD_SIZE];
         int currRow = 0;
         assert ChessBoardUtil.backRowPieceTypes.length == BOARD_SIZE;
-        lastMove = null;
         PieceColor topPieceColor;
         PieceColor bottomPieceColor;
         if (BLACK_DIRECTION == 1) {
@@ -76,59 +51,17 @@ public final class BoardImpl implements Board {
         for (int i = 0; i < board[currRow].length; i++) {
             board[currRow][i] = Piece.createPiece(bottomPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
         }
-        piecesMoved = new ArrayList<>();
     }
 
     @Override
     @NotNull
-    public ChessElement getPieceAt(@NotNull Coordinates c) {
+    public ChessElement get(@NotNull Coordinates c) {
         checkBounds(c);
         return board[c.getY()][c.getX()];
     }
 
-    /**
-     * Method that lets you change position of a piece on the board
-     * NOTE! This will overwrite anything at the position move.getNewPosition!!!
-     *
-     * @param move move that was made
-     */
-    void movePiece(@NotNull Move move) {
-        lastMove = move;
-        if (move instanceof Castling) {
-            Castling c = (Castling) move;
-            makeActualMove(c.getKingInitialPosition(), c.getKingNewPosition());
-            makeActualMove(c.getRookInitialPosition(), c.getRookNewPosition());
-        } else if (move instanceof EnPassant) {
-            EnPassant enPassant = (EnPassant) move;
-            Coordinates eaten = enPassant.eatenPiece();
-            assert getPieceAt(eaten).getType() == Pawn;
-            setPieceAt(eaten, EmptyCell.INSTANCE);
-            makeActualMove(enPassant.initialPosition, enPassant.newPosition);
-        } else {
-            RegularMove rm = ((RegularMove) move);
-            makeActualMove(rm.initialPosition, rm.newPosition);
-        }
-    }
-
-    private void makeActualMove(@NotNull Coordinates initialPosition, @NotNull Coordinates newPosition) {
-        checkBounds(initialPosition);
-        checkBounds(newPosition);
-        piecesMoved.remove(initialPosition);
-        piecesMoved.add(newPosition);
-        ChessElement initialPositionPiece = board[initialPosition.getY()][initialPosition.getX()];
-        if (initialPositionPiece instanceof EmptyCell) {
-            throw new IllegalStateException("Cannot move an empty cell!");
-        }
-        board[newPosition.getY()][newPosition.getX()] = initialPositionPiece;
-        board[initialPosition.getY()][initialPosition.getX()] = EmptyCell.INSTANCE;
-    }
-
     @Override
-    public boolean pieceHasNotMovedSinceStartOfGame(@NotNull Coordinates pos) {
-        return !piecesMoved.contains(pos);
-    }
-
-    void setPieceAt(@NotNull Coordinates pos, @NotNull ChessElement element) {
+    public void set(@NotNull Coordinates pos, @NotNull ChessElement element) {
         checkBounds(pos);
         board[pos.getY()][pos.getX()] = element;
     }
@@ -150,15 +83,10 @@ public final class BoardImpl implements Board {
         return res.toString();
     }
 
-    /**
-     * @return a deep copy of this immutable board
-     */
     @NotNull
     @Override
     public BoardImpl copy() {
         BoardImpl result = new BoardImpl();
-
-        result.piecesMoved = GameUtil.copy(piecesMoved);
         for (int row = 0; row < board.length; row++) {
             System.arraycopy(this.board[row], 0, result.board[row], 0, board.length);
         }
@@ -183,11 +111,5 @@ public final class BoardImpl implements Board {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(board);
-    }
-
-    @Override
-    @NotNull
-    public Optional<Move> getLastMove() {
-        return Optional.ofNullable(lastMove);
     }
 }

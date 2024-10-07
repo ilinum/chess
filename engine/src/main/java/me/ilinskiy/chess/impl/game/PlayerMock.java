@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.game;
 
-import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
+import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
 import me.ilinskiy.chess.api.game.Move;
@@ -25,7 +25,7 @@ public class PlayerMock implements Player {
 
     @Override
     @NotNull
-    public Move getMove(@NotNull Board b, @NotNull List<Move> availableMoves) {
+    public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
         Coordinates c = new CoordinatesImpl(0, 0);
         return new RegularMove(c, c);
     }

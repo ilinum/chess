@@ -1,9 +1,6 @@
 package me.ilinskiy.chess.ui;
 
-import me.ilinskiy.chess.api.chessboard.Board;
-import me.ilinskiy.chess.api.chessboard.Coordinates;
-import me.ilinskiy.chess.api.chessboard.PieceColor;
-import me.ilinskiy.chess.api.chessboard.PieceType;
+import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +31,7 @@ public final class JSwingChessPainter {
     private final BoardPanel panel;
     private int timeoutSeconds;
 
-    public JSwingChessPainter(@NotNull Board board) {
+    public JSwingChessPainter(@NotNull MoveAwareBoard board) {
         Image icon = icons.get(Piece.createPiece(PieceColor.White, PieceType.Pawn));
         try {
             SwingUtilities.invokeAndWait(() -> {
@@ -85,7 +82,7 @@ public final class JSwingChessPainter {
         int newTimeout = -1;
         while (newTimeout < 0) {
             String input = JOptionPane.showInputDialog(myFrame, "Enter timeout in seconds \n(0 for no timeout)",
-                    "Timeout", JOptionPane.QUESTION_MESSAGE);
+                                                       "Timeout", JOptionPane.QUESTION_MESSAGE);
             if (input == null) {
                 newTimeout = 0;
             } else {

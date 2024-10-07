@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.api.game;
 
-import me.ilinskiy.chess.api.chessboard.Board;
+import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ import java.util.List;
 public interface Player {
 
     @NotNull
-    Move getMove(@NotNull Board b, @NotNull List<Move> availableMoves);
+    Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves);
 
     @NotNull
     PieceColor getPlayerColor();

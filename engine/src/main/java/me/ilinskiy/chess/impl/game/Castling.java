@@ -18,8 +18,9 @@ public final class Castling extends MoveAdapter {
     private final Coordinates rookInitPosition;
 
 
-    public Castling(@NotNull Coordinates kingInitPos, @NotNull Coordinates kingNewPos, @NotNull Coordinates rookInitPos,
-                    @NotNull Coordinates rookNewPos) {
+    public Castling(
+            @NotNull Coordinates kingInitPos, @NotNull Coordinates kingNewPos, @NotNull Coordinates rookInitPos,
+            @NotNull Coordinates rookNewPos) {
         initialPosition = kingInitPos;
         newPosition = kingNewPos;
         rookInitPosition = rookInitPos;
@@ -46,7 +47,10 @@ public final class Castling extends MoveAdapter {
     @NotNull
     @Override
     public Castling copy() {
-        return new Castling(getKingInitialPosition(), getKingNewPosition(), getRookInitialPosition(), getRookNewPosition());
+        return new Castling(getKingInitialPosition(),
+                            getKingNewPosition(),
+                            getRookInitialPosition(),
+                            getRookNewPosition());
     }
 
     @Override

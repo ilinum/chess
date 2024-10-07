@@ -1,8 +1,8 @@
 package me.ilinskiy.chess.ui;
 
-import me.ilinskiy.chess.api.chessboard.Board;
 import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
+import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.chessboard.Piece;
@@ -28,16 +28,16 @@ final class BoardPanel extends JPanel {
     private static final Color SELECT_COLOR = new Color(0xFA1843);
     private static final Color BORDER_COLOR = Color.BLACK;
 
-    private Board board;
+    private MoveAwareBoard board;
     @Nullable
     private Coordinates selected;
 
-    BoardPanel(@NotNull Board board) {
+    BoardPanel(@NotNull MoveAwareBoard board) {
         super();
         setBoard(board);
     }
 
-    void setBoard(@NotNull Board board) {
+    void setBoard(@NotNull MoveAwareBoard board) {
         this.board = board;
     }
 
@@ -72,7 +72,7 @@ final class BoardPanel extends JPanel {
         return selected;
     }
 
-    private static Color getBGForCell(Coordinates c, @Nullable Coordinates selected, Board board) {
+    private static Color getBGForCell(Coordinates c, @Nullable Coordinates selected, MoveAwareBoard board) {
         if (c.equals(selected)) {
             return SELECT_COLOR;
         }
@@ -83,7 +83,7 @@ final class BoardPanel extends JPanel {
                     return EAT_COLOR;
                 }
             }
-            if (board.getPieceAt(c) instanceof Piece) {
+            if (board.getPiece(c) instanceof Piece) {
                 return EAT_COLOR;
             }
             return MOVE_COLOR;
@@ -108,10 +108,10 @@ final class BoardPanel extends JPanel {
     private static void drawImageForCell(
             @NotNull Coordinates pos,
             @NotNull Graphics graphics,
-            @NotNull Board board,
+            @NotNull MoveAwareBoard board,
             int heightAndWidth) {
         int cellSize = heightAndWidth / BOARD_SIZE;
-        ChessElement element = board.getPieceAt(pos);
+        ChessElement element = board.getPiece(pos);
         if (element instanceof Piece piece) {
             Image image = JSwingChessPainter.icons.get(piece);
             if (image != null) {

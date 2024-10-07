@@ -1,9 +1,6 @@
 package me.ilinskiy.chess.ui;
 
-import me.ilinskiy.chess.api.chessboard.Board;
-import me.ilinskiy.chess.api.chessboard.Coordinates;
-import me.ilinskiy.chess.api.chessboard.PieceColor;
-import me.ilinskiy.chess.api.chessboard.PieceType;
+import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
@@ -48,7 +45,7 @@ public final class JSwingUserPlayer implements Player {
 
     @NotNull
     @Override
-    public Move getMove(@NotNull Board board, @NotNull List<Move> availableMoves) {
+    public Move getMove(@NotNull MoveAwareBoard board, @NotNull List<Move> availableMoves) {
         painter.moveStarted();
         BoardPanel panel = painter.getPanel();
         panel.setBoard(board);
@@ -83,10 +80,10 @@ public final class JSwingUserPlayer implements Player {
                     if (res.isPresent()) {
                         moveMade = res.get();
                         moveIsMade.signal();
-                    } else if (board.getPieceAt(location).getColor() == myColor) {
+                    } else if (board.getPiece(location).getColor() == myColor) {
                         painter.setSelected(location);
                     }
-                } else if (board.getPieceAt(location).getColor() == myColor) {
+                } else if (board.getPiece(location).getColor() == myColor) {
                     painter.setSelected(location);
                 }
                 mouseLock.unlock();
@@ -138,7 +135,8 @@ public final class JSwingUserPlayer implements Player {
     }
 
     private static Set<Move> getMovesStartingAt(List<Move> moves, Coordinates start) {
-        Stream<Move> availableMoves = moves.stream().filter((move) -> Arrays.asList(move.getInitialPositions()).contains(start));
+        Stream<Move> availableMoves = moves.stream().filter((move) -> Arrays.asList(move.getInitialPositions()).contains(
+                start));
         return new HashSet<>(availableMoves.toList());
     }
 }

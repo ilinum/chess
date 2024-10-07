@@ -13,12 +13,6 @@ import static me.ilinskiy.chess.api.chessboard.Board.BOARD_SIZE;
 import static me.ilinskiy.chess.api.chessboard.PieceType.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Tests for BoardWrapperImpl and BoardImpl classes
- * <p>
- * Author: Svyatoslav Ilinskiy
- * Date: 7/16/15
- */
 public class BoardTest {
 
     @Test
@@ -27,8 +21,7 @@ public class BoardTest {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 Coordinates c = new CoordinatesImpl(i, j);
-                //noinspection ConstantConditions
-                assertNotNull(b.getPieceAt(c), "Element at (" + c + ") is null!");
+                assertNotNull(b.get(c), "Element at (" + c + ") is null!");
             }
         }
     }
@@ -43,33 +36,33 @@ public class BoardTest {
                 if (row == 1 || row == (BOARD_SIZE - 2)) {
                     String message = "A pawn should be here: " + coordinates;
                     allElements.add(coordinates);
-                    assertSame(b.getPieceAt(coordinates).getType(), Pawn, message);
+                    assertSame(b.get(coordinates).getType(), Pawn, message);
                 } else if (row > 1 && row < BOARD_SIZE - 2) {
-                    assertInstanceOf(EmptyCell.class, b.getPieceAt(coordinates), "Should be an empty cell: ");
+                    assertInstanceOf(EmptyCell.class, b.get(coordinates), "Should be an empty cell: ");
                 } else {
                     switch (col) {
                         case 0:
                         case (BOARD_SIZE - 1):
                             String message = "Rook should be here: " + coordinates;
-                            assertSame(b.getPieceAt(coordinates).getType(), Rook, message);
+                            assertSame(b.get(coordinates).getType(), Rook, message);
                             break;
                         case 1:
                         case (BOARD_SIZE - 2):
                             message = "Knight should be here: " + coordinates;
-                            assertSame(b.getPieceAt(coordinates).getType(), Knight, message);
+                            assertSame(b.get(coordinates).getType(), Knight, message);
                             break;
                         case 2:
                         case (BOARD_SIZE - 3):
                             message = "Bishop should be here: " + coordinates;
-                            assertSame(b.getPieceAt(coordinates).getType(), Bishop, message);
+                            assertSame(b.get(coordinates).getType(), Bishop, message);
                             break;
                         case 3:
                             message = "Queen should be here: " + coordinates;
-                            assertSame(b.getPieceAt(coordinates).getType(), Queen, message);
+                            assertSame(b.get(coordinates).getType(), Queen, message);
                             break;
                         case 4:
                             message = "King should be here: " + coordinates;
-                            assertSame(b.getPieceAt(coordinates).getType(), King, message);
+                            assertSame(b.get(coordinates).getType(), King, message);
                             break;
                         default:
                             throw new IllegalStateException("Column is wrong: " + col);
@@ -80,14 +73,14 @@ public class BoardTest {
                 //check color
                 if (row < 2 || row > (BOARD_SIZE - 3)) {
                     String message = "Empty cell where it shouldn't be: " + coordinates;
-                    assertInstanceOf(Piece.class, b.getPieceAt(coordinates), message);
+                    assertInstanceOf(Piece.class, b.get(coordinates), message);
                     PieceColor expected;
                     if (row < 2) {
                         expected = PieceColor.Black;
                     } else {
                         expected = PieceColor.White;
                     }
-                    PieceColor actualColor = b.getPieceAt(coordinates).getColor();
+                    PieceColor actualColor = b.get(coordinates).getColor();
                     message = "Wrong color " + actualColor + ", coordinates: " + coordinates;
                     assertSame(actualColor, expected, message);
                 }
@@ -102,24 +95,24 @@ public class BoardTest {
 
     @Test
     public void testPieceMove() {
-        BoardWrapper b = new BoardWrapperImpl();
+        MoveAwareBoard b = new MoveAwareBoardImpl();
         CoordinatesImpl knightPos = new CoordinatesImpl(1, 0);
         CoordinatesImpl newPos = new CoordinatesImpl(3, 4);
-        ChessElement element = b.getPieceAt(knightPos);
+        ChessElement element = b.getPiece(knightPos);
         assertSame(element.getType(), Knight, "Should be a knight " + knightPos);
         assertSame(element.getColor(), PieceColor.Black, "Should be black " + knightPos);
-        b.movePiece(new RegularMove(knightPos, newPos));
-        assertInstanceOf(EmptyCell.class, b.getPieceAt(knightPos), "Just moved piece from here! Should be empty!");
-        assertSame(b.getPieceAt(newPos).getType(), Knight, "Just moved a knight here: " + newPos);
+        b.makeMove(new RegularMove(knightPos, newPos));
+        assertInstanceOf(EmptyCell.class, b.getPiece(knightPos), "Just moved piece from here! Should be empty!");
+        assertSame(b.getPiece(newPos).getType(), Knight, "Just moved a knight here: " + newPos);
     }
 
     @Test
     public void testMoveEmptyCell() {
-        BoardWrapper b = new BoardWrapperImpl();
+        MoveAwareBoard b = new MoveAwareBoardImpl();
         CoordinatesImpl initPos = new CoordinatesImpl(4, 4);
         CoordinatesImpl newPos = new CoordinatesImpl(0, 0);
         assertThrows(IllegalStateException.class, () -> {
-            b.movePiece(new RegularMove(initPos, newPos));
+            b.makeMove(new RegularMove(initPos, newPos));
         });
     }
 }

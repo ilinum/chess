@@ -6,5 +6,5 @@ package me.ilinskiy.chess.api.chessboard;
  */
 @FunctionalInterface
 public interface BoardOperation<V> {
-    V run(Board b);
+    V run(MoveAwareBoard b);
 }

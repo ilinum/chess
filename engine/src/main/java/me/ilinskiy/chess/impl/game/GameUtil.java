@@ -2,17 +2,14 @@ package me.ilinskiy.chess.impl.game;
 
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.impl.chessboard.ChessBoardUtil;
-import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
-import me.ilinskiy.chess.impl.chessboard.EmptyCell;
-import me.ilinskiy.chess.impl.chessboard.Piece;
+import me.ilinskiy.chess.impl.chessboard.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static me.ilinskiy.chess.api.chessboard.Board.*;
 import static me.ilinskiy.chess.api.chessboard.PieceColor.Black;
 import static me.ilinskiy.chess.api.chessboard.PieceColor.White;
-import static me.ilinskiy.chess.impl.chessboard.BoardImpl.*;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -21,9 +18,9 @@ import static me.ilinskiy.chess.impl.chessboard.BoardImpl.*;
 public class GameUtil {
 
     @NotNull
-    public static synchronized List<Move> getAvailableMoves(@NotNull PieceColor color, @NotNull Board board) {
+    public static synchronized List<Move> getAvailableMoves(@NotNull PieceColor color, @NotNull MoveAwareBoard board) {
         List<Move> result = new ArrayList<>();
-        List<Coordinates> allPiecesOfCorrectColor = getAllPieces(color, board);
+        List<Coordinates> allPiecesOfCorrectColor = getAllPieces(color, board.getBoardCopy());
 
         for (Coordinates pos : allPiecesOfCorrectColor) {
             result.addAll(getAvailableMovesForPiece(pos, board));
@@ -38,7 +35,7 @@ public class GameUtil {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 Coordinates c = new CoordinatesImpl(row, col);
-                if (board.getPieceAt(c).getColor() == color) {
+                if (board.get(c).getColor() == color) {
                     allPiecesOfCorrectColor.add(c);
                 }
             }
@@ -59,20 +56,20 @@ public class GameUtil {
      * If board.getPieceAt(pos) is EmptyCell returns an empty list
      */
     @NotNull
-    public static Set<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull Board board) {
+    public static Set<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull MoveAwareBoard board) {
         Set<Move> result = getAllMovesForPiece(pos, board);
 
         //filter out the ones when king is attacked
         Iterator<Move> moveIterator = result.iterator();
         while (moveIterator.hasNext()) {
-            if (kingIsAttackedAfterMove(board.getPieceAt(pos).getColor(), board, moveIterator.next())) {
+            if (kingIsAttackedAfterMove(board.getPiece(pos).getColor(), board, moveIterator.next())) {
                 moveIterator.remove();
             }
         }
         return result;
     }
 
-    public static Set<Coordinates> getAvailableNewPositions(@NotNull Coordinates pos, @NotNull Board board) {
+    public static Set<Coordinates> getAvailableNewPositions(@NotNull Coordinates pos, @NotNull MoveAwareBoard board) {
         Set<Move> moves = getAvailableMovesForPiece(pos, board);
         Set<Coordinates> res = new HashSet<>(moves.size());
         for (Move move : moves) {
@@ -85,8 +82,8 @@ public class GameUtil {
      * Get all available moves for piece without considering if the king will be attacked
      */
     @NotNull
-    private static Set<Move> getAllMovesForPiece(@NotNull Coordinates pos, @NotNull Board board) {
-        ChessElement element = board.getPieceAt(pos);
+    private static Set<Move> getAllMovesForPiece(@NotNull Coordinates pos, @NotNull MoveAwareBoard board) {
+        ChessElement element = board.getPiece(pos);
         Set<Move> result = new HashSet<>();
         PieceColor color = element.getColor();
         switch (element.getType()) {
@@ -95,37 +92,41 @@ public class GameUtil {
                 int dir = getDirectionForPlayer(color);
                 Coordinates newC = new CoordinatesImpl(pos.getX(), pos.getY() + dir);
                 if (!newC.isOutOfBounds()) { //should've been promoted
-                    if (board.getPieceAt(newC) instanceof EmptyCell) {
+                    if (board.getPiece(newC) instanceof EmptyCell) {
                         result.add(new RegularMove(pos, newC));
                         boolean hasNotMoved = new CoordinatesImpl(pos.getX(), pos.getY() - 2 * dir).isOutOfBounds();
                         Coordinates longMove = new CoordinatesImpl(pos.getX(), pos.getY() + 2 * dir);
-                        if (hasNotMoved && (board.getPieceAt(longMove) instanceof EmptyCell)) {
+                        if (hasNotMoved && (board.getPiece(longMove) instanceof EmptyCell)) {
                             result.add(new RegularMove(pos, longMove));
                         }
                     }
-                    Coordinates[] eatLocations = new Coordinates[]{new CoordinatesImpl(pos.getX() + 1, pos.getY() + dir),
+                    Coordinates[] eatLocations = new Coordinates[]{new CoordinatesImpl(pos.getX() + 1,
+                                                                                       pos.getY() + dir),
                             new CoordinatesImpl(pos.getX() - 1, pos.getY() + dir)};
                     for (Coordinates eatLocation : eatLocations) {
                         boolean outOfBounds = eatLocation.isOutOfBounds();
                         PieceColor enemyColor = color.inverse();
-                        if (!outOfBounds && board.getPieceAt(eatLocation).getColor() == enemyColor) {
+                        if (!outOfBounds && board.getPiece(eatLocation).getColor() == enemyColor) {
                             result.add(new RegularMove(pos, eatLocation));
                         } else {
-                            Optional<Move> lastMove = board.getLastMove();
-                            if (!outOfBounds && lastMove.isPresent()) { //check for en passe
-                                @SuppressWarnings("OptionalGetWithoutIsPresent")
-                                Move move = lastMove.get();
-                                if (move instanceof RegularMove) {
-                                    RegularMove rm = (RegularMove) move;
+                            List<Move> moves = board.getMoves();
+                            Move lastMove = null;
+                            if (!moves.isEmpty()) {
+                                lastMove = moves.getLast();
+                            }
+                            if (!outOfBounds && lastMove != null) { //check for en passe
+                                if (lastMove instanceof RegularMove rm) {
                                     Coordinates newPos = rm.newPosition;
                                     Coordinates initPos = rm.initialPosition;
                                     int enemyDir = getDirectionForPlayer(color.inverse());
-                                    if (eatLocation.equals(new CoordinatesImpl(initPos.getX(), initPos.getY() + enemyDir))) {
-                                        ChessElement piece = board.getPieceAt(newPos);
+                                    if (eatLocation.equals(new CoordinatesImpl(initPos.getX(),
+                                                                               initPos.getY() + enemyDir))) {
+                                        ChessElement piece = board.getPiece(newPos);
                                         if (piece.getType() == PieceType.Pawn && piece.getColor() == enemyColor) {
                                             boolean wasALongMove = Math.abs(initPos.getY() - newPos.getY()) == 2;
                                             if (wasALongMove) {
-                                                Coordinates c = new CoordinatesImpl(initPos.getX(), initPos.getY() + enemyDir);
+                                                Coordinates c = new CoordinatesImpl(initPos.getX(),
+                                                                                    initPos.getY() + enemyDir);
                                                 result.add(new EnPassant(pos, c));
                                             }
                                         }
@@ -142,7 +143,7 @@ public class GameUtil {
                 assert xChange.length == yChange.length;
                 for (int c = 0; c < xChange.length; c++) {
                     Coordinates newPos = new CoordinatesImpl(pos.getX() + xChange[c], pos.getY() + yChange[c]);
-                    if (!newPos.isOutOfBounds() && board.getPieceAt(newPos).getColor() != color) {
+                    if (!newPos.isOutOfBounds() && board.getPiece(newPos).getColor() != color) {
                         result.add(new RegularMove(pos, newPos));
                     }
                 }
@@ -167,40 +168,41 @@ public class GameUtil {
     }
 
     @NotNull
-    private static Set<Move> getRookMoves(@NotNull Coordinates pos, @NotNull Board board) {
+    private static Set<Move> getRookMoves(@NotNull Coordinates pos, @NotNull MoveAwareBoard board) {
         int[] xChange = new int[]{0, 0, 1, -1};
         int[] yChange = new int[]{1, -1, 0, 0};
         return getBishopOrRookMoves(pos, board, xChange, yChange);
     }
 
     @NotNull
-    private static Set<Move> getBishopMoves(@NotNull Coordinates pos, @NotNull Board board) {
+    private static Set<Move> getBishopMoves(@NotNull Coordinates pos, @NotNull MoveAwareBoard board) {
         int[] xChange = new int[]{-1, -1, 1, 1};
         int[] yChange = new int[]{1, -1, 1, -1};
         return getBishopOrRookMoves(pos, board, xChange, yChange);
     }
 
-    private static Set<Move> getBishopOrRookMoves(@NotNull Coordinates pos, @NotNull Board board,
-                                                  @NotNull int[] xChange, @NotNull int[] yChange) {
+    private static Set<Move> getBishopOrRookMoves(
+            @NotNull Coordinates pos, @NotNull MoveAwareBoard board,
+            @NotNull int[] xChange, @NotNull int[] yChange) {
         assert xChange.length == yChange.length;
         Set<Move> result = new HashSet<>();
-        assert board.getPieceAt(pos) instanceof Piece;
-        Piece p = (Piece) board.getPieceAt(pos);
+        assert board.getPiece(pos) instanceof Piece;
+        Piece p = (Piece) board.getPiece(pos);
         for (int i = 0; i < xChange.length; i++) {
             Coordinates c = new CoordinatesImpl(pos.getX() + xChange[i], pos.getY() + yChange[i]);
-            while (!c.isOutOfBounds() && board.getPieceAt(c) instanceof EmptyCell) {
+            while (!c.isOutOfBounds() && board.getPiece(c) instanceof EmptyCell) {
                 result.add(new RegularMove(pos, c));
                 c = new CoordinatesImpl(c.getX() + xChange[i], c.getY() + yChange[i]);
             }
             if (!c.isOutOfBounds() &&
-                    board.getPieceAt(c).getColor() == board.getPieceAt(pos).getColor().inverse()) {
+                    board.getPiece(c).getColor() == board.getPiece(pos).getColor().inverse()) {
                 //can eat
                 result.add(new RegularMove(pos, c));
             }
 
             c = pos; //restore
             if (!c.isOutOfBounds()) {
-                PieceColor color = board.getPieceAt(c).getColor();
+                PieceColor color = board.getPiece(c).getColor();
                 if (!c.isOutOfBounds() && color == p.getColor().inverse()) {
                     result.add(new RegularMove(pos, c));
                 }
@@ -210,27 +212,30 @@ public class GameUtil {
     }
 
     @NotNull
-    private static Set<Move> getKingMoves(@NotNull Coordinates kingPos, @NotNull Board board) {
+    private static Set<Move> getKingMoves(@NotNull Coordinates kingPos, @NotNull MoveAwareBoard board) {
         int[] xChange = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
         int[] yChange = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
         Set<Move> result = new HashSet<>();
         assert xChange.length == yChange.length;
-        assert board.getPieceAt(kingPos) instanceof Piece;
-        PieceColor kingColor = board.getPieceAt(kingPos).getColor();
+        assert board.getPiece(kingPos) instanceof Piece;
+        PieceColor kingColor = board.getPiece(kingPos).getColor();
         for (int i = 0; i < xChange.length; i++) {
             Coordinates c = new CoordinatesImpl(kingPos.getX() + xChange[i], kingPos.getY() + yChange[i]);
             if (!c.isOutOfBounds()) {
-                boolean correctColor = board.getPieceAt(c).getColor() != kingColor;
+                boolean correctColor = board.getPiece(c).getColor() != kingColor;
                 if (correctColor && !kingAround(c, board, kingColor.inverse())) {
-                    result.add(new RegularMove(kingPos, c)); //all the situation when king is attacked will be filtered out later
+                    result.add(new RegularMove(kingPos,
+                                               c)); //all the situation when king is attacked will be filtered out later
                 }
             }
         }
-        if (board.pieceHasNotMovedSinceStartOfGame(kingPos) && !kingIsAttacked(kingColor, board, false)) {
+        if (!MoveAwareBoardImpl.pieceHasMovedSinceStartOfGame(board.getMoves(), kingPos) && !kingIsAttacked(kingColor,
+                                                                                                            board,
+                                                                                                            false)) {
             //check for castling
             List<Coordinates> rooks = findPiecesByTypeAndColor(PieceType.Rook, kingColor, board);
             for (Coordinates rookPos : rooks) {
-                if (board.pieceHasNotMovedSinceStartOfGame(rookPos)) {
+                if (!MoveAwareBoardImpl.pieceHasMovedSinceStartOfGame(board.getMoves(), rookPos)) {
                     assert rookPos.getY() == kingPos.getY();
                     int direction;
                     if (rookPos.getX() > kingPos.getX()) {
@@ -243,8 +248,8 @@ public class GameUtil {
                     boolean canCastle = true;
                     Coordinates castleCells = kingPos;
                     while (!castleCells.equals(rookPos) && canCastle) {
-                        ChessElement piece = board.getPieceAt(castleCells);
-                        if (!(piece instanceof EmptyCell) && piece != board.getPieceAt(kingPos)) {
+                        ChessElement piece = board.getPiece(castleCells);
+                        if (!(piece instanceof EmptyCell) && piece != board.getPiece(kingPos)) {
                             canCastle = false;
                         }
                         castleCells = new CoordinatesImpl(castleCells.getX() + direction, castleCells.getY());
@@ -261,14 +266,17 @@ public class GameUtil {
         return result;
     }
 
-    private static boolean kingAround(@NotNull Coordinates pos, @NotNull Board board, PieceColor opposingKingColor) {
+    private static boolean kingAround(
+            @NotNull Coordinates pos,
+            @NotNull MoveAwareBoard board,
+            PieceColor opposingKingColor) {
         int[] xChange = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
         int[] yChange = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
         assert xChange.length == yChange.length;
         for (int i = 0; i < xChange.length; i++) {
             Coordinates c = new CoordinatesImpl(pos.getX() + xChange[i], pos.getY() + yChange[i]);
             if (!c.isOutOfBounds()) {
-                ChessElement elem = board.getPieceAt(c);
+                ChessElement elem = board.getPiece(c);
                 if (elem.getType() == PieceType.King && elem.getColor() == opposingKingColor) {
                     return true;
                 }
@@ -278,12 +286,15 @@ public class GameUtil {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull Board board, boolean checkKing) {
-        List<Coordinates> allOpponentPieces = getAllPieces(kingColor.inverse(), board);
+    public static boolean kingIsAttacked(
+            @NotNull PieceColor kingColor,
+            @NotNull MoveAwareBoard board,
+            boolean checkKing) {
+        List<Coordinates> allOpponentPieces = getAllPieces(kingColor.inverse(), board.getBoardCopy());
         Coordinates kingPos = findKing(kingColor, board);
 
         for (Coordinates pos : allOpponentPieces) {
-            if (checkKing || board.getPieceAt(pos).getType() != PieceType.King) {
+            if (checkKing || board.getPiece(pos).getType() != PieceType.King) {
                 Set<Move> availableMovesForPiece = getAllMovesForPiece(pos, board);
                 for (Move m : availableMovesForPiece) {
                     for (Coordinates c : m.getNewPositions()) {
@@ -298,12 +309,13 @@ public class GameUtil {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull Board board) {
+    public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull MoveAwareBoard board) {
         return kingIsAttacked(kingColor, board, true);
     }
 
-    private static boolean kingIsAttackedAfterMove(@NotNull PieceColor color, @NotNull Board b,
-                                                   @NotNull Move m) {
+    private static boolean kingIsAttackedAfterMove(
+            @NotNull PieceColor color, @NotNull MoveAwareBoard b,
+            @NotNull Move m) {
         if (m instanceof Castling) {
             Castling castling = (Castling) m;
             Coordinates kingInitialPosition = castling.getKingInitialPosition();
@@ -316,7 +328,8 @@ public class GameUtil {
                 dir = -1;
             }
             assert kingInitialPosition.getY() == rookInitialPosition.getY();
-            for (Coordinates c = kingInitialPosition; c.getX() != rookInitialPosition.getX(); c = new CoordinatesImpl(c.getX() + dir, c.getY())) {
+            for (Coordinates c = kingInitialPosition; c.getX() != rookInitialPosition.getX(); c = new CoordinatesImpl(c.getX() + dir,
+                                                                                                                      c.getY())) {
                 if (ChessBoardUtil.makeMoveAndEvaluate(b, m, board -> kingIsAttacked(color, board))) {
                     return true;
                 }
@@ -328,21 +341,22 @@ public class GameUtil {
     }
 
     @NotNull
-    private static Coordinates findKing(@NotNull PieceColor kingColor, @NotNull Board board) {
+    private static Coordinates findKing(@NotNull PieceColor kingColor, @NotNull MoveAwareBoard board) {
         List<Coordinates> kingLocation = findPiecesByTypeAndColor(PieceType.King, kingColor, board);
         assert kingLocation.size() == 1 : "Wrong number of kings on the board: " + kingLocation;
         return kingLocation.get(0);
     }
 
     @NotNull
-    public static List<Coordinates> findPiecesByTypeAndColor(@NotNull PieceType type, @NotNull PieceColor color,
-                                                             @NotNull Board board) {
+    public static List<Coordinates> findPiecesByTypeAndColor(
+            @NotNull PieceType type, @NotNull PieceColor color,
+            @NotNull MoveAwareBoard board) {
         ChessElement elemToFind = Piece.createPiece(color, type);
         List<Coordinates> result = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 Coordinates coordinates = new CoordinatesImpl(i, j);
-                if (board.getPieceAt(coordinates).equals(elemToFind)) {
+                if (board.getPiece(coordinates).equals(elemToFind)) {
                     result.add(coordinates);
                 }
             }

@@ -3,8 +3,8 @@ package me.ilinskiy.chess.impl.game;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.impl.chessboard.BoardWrapperImpl;
 import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
+import me.ilinskiy.chess.impl.chessboard.MoveAwareBoardImpl;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,17 +19,14 @@ import java.util.concurrent.Callable;
 @SuppressWarnings("WeakerAccess")
 public final class GameImpl implements Game {
     @NotNull
-    private final BoardWrapper board;
+    private MoveAwareBoard board;
     private PieceColor turn;
     @Nullable
     private PieceColor winner;
-    @NotNull
-    private final List<Move> movesMade;
 
     public GameImpl(@NotNull PieceColor startPieceColor) {
         assert startPieceColor != PieceColor.Empty;
-        board = new BoardWrapperImpl();
-        movesMade = new ArrayList<>();
+        board = new MoveAwareBoardImpl();
         turn = startPieceColor;
         winner = null;
     }
@@ -40,20 +37,19 @@ public final class GameImpl implements Game {
             throw new RuntimeException("Game is over! Cannot make more moves!");
         }
         for (Coordinates c : m.getInitialPositions()) {
-            if (board.getPieceAt(c).getColor() != whoseTurnIsIt()) {
+            if (board.getPiece(c).getColor() != whoseTurnIsIt()) {
                 throw new RuntimeException("You can only move pieces of your color!");
             }
         }
         Set<Move> availableMoves = new HashSet<>();
         for (Coordinates coordinates : m.getInitialPositions()) {
-            availableMoves.addAll(GameUtil.getAvailableMovesForPiece(coordinates, board.getInner()));
+            availableMoves.addAll(GameUtil.getAvailableMovesForPiece(coordinates, board));
         }
         if (!availableMoves.contains(m)) {
             throw new RuntimeException("Illegal move: " + m);
         }
-        board.movePiece(m);
+        board.makeMove(m);
         checkPawnPromoted(m, turn, pieceTypeForPromotedPawn);
-        movesMade.add(m);
         turn = turn.inverse();
         checkGameOver(turn);
     }
@@ -63,10 +59,12 @@ public final class GameImpl implements Game {
      *
      * @param move that has been made
      */
-    private void checkPawnPromoted(@NotNull Move move, @NotNull PieceColor madeLastMove,
-                                   @NotNull Callable<PieceType> pieceTypeForPromotedPawn) {
+    private void checkPawnPromoted(
+            @NotNull Move move,
+            @NotNull PieceColor madeLastMove,
+            @NotNull Callable<PieceType> pieceTypeForPromotedPawn) {
         for (Coordinates newPosition : move.getNewPositions()) {
-            ChessElement piece = board.getPieceAt(newPosition);
+            ChessElement piece = board.getPiece(newPosition);
             if (piece.getType() == PieceType.Pawn) {
                 int x = newPosition.getX();
                 int y = newPosition.getY();
@@ -86,7 +84,10 @@ public final class GameImpl implements Game {
                         }
                     }
                     Piece promoted = Piece.createPiece(madeLastMove, promotedTo);
-                    board.setPieceAt(newPosition, promoted);
+                    Board board = this.board.getBoardCopy();
+                    board.set(newPosition, promoted);
+                    // todo(stas): make this less hacky
+                    this.board = new MoveAwareBoardImpl(board, this.board.getMoves());
                 }
             }
         }
@@ -104,9 +105,9 @@ public final class GameImpl implements Game {
     }
 
     private void checkGameOver(@NotNull PieceColor nextToMove) {
-        if (GameUtil.getAvailableMoves(nextToMove, board.getInner()).size() == 0) {
+        if (GameUtil.getAvailableMoves(nextToMove, board).size() == 0) {
             //game is over
-            if (GameUtil.kingIsAttacked(nextToMove, board.getInner())) {
+            if (GameUtil.kingIsAttacked(nextToMove, board)) {
                 winner = nextToMove.inverse();
             } else {
                 //it's a draw
@@ -124,17 +125,18 @@ public final class GameImpl implements Game {
     @Override
     @NotNull
     public List<Move> getMovesMade() {
-        return movesMade;
+        return board.getMoves();
     }
 
     @Override
     public int numberOfMovesMade() {
-        return movesMade.size();
+        // todo(stas): this is not necessary
+        return board.getMoves().size();
     }
 
     @Override
     @NotNull
-    public Board getBoard() {
-        return board.getInner();
+    public MoveAwareBoard getBoard() {
+        return board.copy();
     }
 }

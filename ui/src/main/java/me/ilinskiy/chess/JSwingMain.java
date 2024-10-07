@@ -3,7 +3,7 @@ package me.ilinskiy.chess;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.GameRunner;
 import me.ilinskiy.chess.api.game.Player;
-import me.ilinskiy.chess.impl.chessboard.BoardWrapperImpl;
+import me.ilinskiy.chess.impl.chessboard.MoveAwareBoardImpl;
 import me.ilinskiy.chess.impl.game.GameRunnerImpl;
 import me.ilinskiy.chess.ui.JSwingChessPainter;
 import me.ilinskiy.chess.ui.JSwingUserPlayer;
@@ -15,7 +15,7 @@ public class JSwingMain {
             if (painter != null) {
                 painter.dispose();
             }
-            painter = new JSwingChessPainter(new BoardWrapperImpl().getInner());
+            painter = new JSwingChessPainter(new MoveAwareBoardImpl());
             Player p1 = new JSwingUserPlayer(PieceColor.White, painter);
             Player p2 = new JSwingUserPlayer(PieceColor.Black, painter);
             GameRunner gameRunner = new GameRunnerImpl(painter.askTimeOut());

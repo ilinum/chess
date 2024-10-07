@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.impl.game;
 
-import me.ilinskiy.chess.api.chessboard.Board;
+import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.GameRunner;
@@ -63,7 +63,7 @@ public class GameRunnerImpl implements GameRunner {
         return winner;
     }
 
-    private Move getMove(@NotNull Player p, @NotNull Board b) {
+    private Move getMove(@NotNull Player p, @NotNull MoveAwareBoard b) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<Move> future = executorService.submit(() -> {
             Move m = null;
@@ -75,7 +75,8 @@ public class GameRunnerImpl implements GameRunner {
         Move result = null;
         try {
             if (GameRunnerImpl.timeoutInSeconds > 0) {
-                result = future.get(GameRunnerImpl.timeoutInSeconds + 1, TimeUnit.SECONDS); //be nice and add an extra second
+                result = future.get(GameRunnerImpl.timeoutInSeconds + 1,
+                                    TimeUnit.SECONDS); //be nice and add an extra second
             } else {
                 result = future.get();
             }

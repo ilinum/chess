@@ -1,6 +1,6 @@
 package me.ilinskiy.chess.game;
 
-import me.ilinskiy.chess.api.chessboard.Board;
+import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.Move;
@@ -43,7 +43,7 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull Board b, @NotNull List<Move> availableMoves) {
+            public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
                 return move;
             }
         };
@@ -65,7 +65,7 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull Board b, @NotNull List<Move> availableMoves) {
+            public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
                 return move;
             }
         };
@@ -82,7 +82,7 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull Board b, @NotNull List<Move> availableMoves) {
+            public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
                 return new RegularMove(new CoordinatesImpl(8, 8), new CoordinatesImpl(1, 1));
             }
         };
