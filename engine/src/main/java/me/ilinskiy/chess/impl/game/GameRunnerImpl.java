@@ -10,14 +10,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.*;
 
-import static me.ilinskiy.chess.impl.game.GameUtil.println;
 
 /**
  * Author: Svyatoslav Ilinskiy
  * Date: 8/5/15.
  */
 public class GameRunnerImpl implements GameRunner {
-    static final boolean DEBUG = false;
     public static int timeoutInSeconds = 0; //if timeout is 0, the only limit is yourself
 
     public GameRunnerImpl(int timeoutSeconds) {
@@ -43,17 +41,16 @@ public class GameRunnerImpl implements GameRunner {
                 Move move = getMove(current, g.getBoard());
                 if (move == null) {
                     //it timed out
-                    winner = g.whoseTurnIsIt().inverse();
-                    println("Timed out!");
+                    winner = g.getTurn().inverse();
                 } else {
-                    assert current.getColor() == g.whoseTurnIsIt();
+                    assert current.getColor() == g.getTurn();
                     g.makeMove(move);
                     if (g.isGameOver()) {
                         winner = g.getWinner().orElse(null);
                         assert winner != null;
                     } else {
                         current = current.inverse(p1, p2);
-                        assert current.getColor() == g.whoseTurnIsIt();
+                        assert current.getColor() == g.getTurn();
                     }
                 }
             } catch (Exception e) {

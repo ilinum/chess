@@ -19,7 +19,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Stream;
 
-import static me.ilinskiy.chess.impl.game.GameUtil.println;
 
 /**
  * Author: Svyatoslav Ilinskiy
@@ -255,7 +254,6 @@ class ChoosePieceTypeForPromotedPawn extends JPanel {
             }
             PieceType selected = selectedPiece;
             assert selected != null;
-            println(selected.toString());
             selectedPiece = null;
             return selected;
         } finally {

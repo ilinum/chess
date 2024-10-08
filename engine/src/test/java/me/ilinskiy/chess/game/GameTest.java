@@ -13,9 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static me.ilinskiy.chess.api.chessboard.Board.BOARD_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,9 +28,8 @@ public class GameTest {
         Game g = new GameImpl(p1.getColor());
         assertFalse(g.isGameOver());
         assertFalse(g.getWinner().isPresent());
-        assertTrue(g.getMovesMade().isEmpty());
-        assertEquals(0, g.numberOfMovesMade());
-        assertSame(g.whoseTurnIsIt(), p1.getColor());
+        assertTrue(g.getBoard().getMoves().isEmpty());
+        assertSame(g.getTurn(), p1.getColor());
     }
 
     @Test
@@ -52,10 +48,10 @@ public class GameTest {
         g.makeMove(p1.getMove(g.getBoard()));
         assertFalse(g.isGameOver());
         assertFalse(g.getWinner().isPresent());
-        assertEquals(1, g.getMovesMade().size());
-        assertEquals(g.getMovesMade().get(0), move);
-        assertEquals(1, g.numberOfMovesMade());
-        assertSame(g.whoseTurnIsIt(), p2.getColor());
+        assertEquals(1, g.getBoard().getMoves().size());
+        assertEquals(g.getBoard().getMoves().getFirst(), move);
+        assertEquals(1, g.getBoard().getMoves().size());
+        assertSame(g.getTurn(), p2.getColor());
     }
 
     @Test

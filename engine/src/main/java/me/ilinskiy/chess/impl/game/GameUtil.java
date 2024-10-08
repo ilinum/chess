@@ -96,7 +96,7 @@ public class GameUtil {
                 Coordinates newC = new Coordinates(pos.getX(), pos.getY() + dir);
                 if (!newC.isOutOfBounds()) { //should've been promoted
                     if (board.getPiece(newC) instanceof EmptyCell) {
-                        if (newC.getY() == 0 || newC.getY() == BOARD_SIZE-1) {
+                        if (newC.getY() == 0 || newC.getY() == BOARD_SIZE - 1) {
                             for (PieceType pt : PawnPromotion.PROMOTION_ALLOWED_TO) {
                                 result.add(new PawnPromotion(pos, newC, pt));
                             }
@@ -116,7 +116,7 @@ public class GameUtil {
                         boolean outOfBounds = eatLocation.isOutOfBounds();
                         PieceColor enemyColor = color.inverse();
                         if (!outOfBounds && board.getPiece(eatLocation).getColor() == enemyColor) {
-                            if (eatLocation.getY() == 0 || eatLocation.getY() == BOARD_SIZE-1) {
+                            if (eatLocation.getY() == 0 || eatLocation.getY() == BOARD_SIZE - 1) {
                                 for (PieceType pt : PawnPromotion.PROMOTION_ALLOWED_TO) {
                                     result.add(new PawnPromotion(pos, eatLocation, pt));
                                 }
@@ -377,17 +377,5 @@ public class GameUtil {
             }
         }
         return result;
-    }
-
-    public static <T> List<T> copy(List<T> toCopy) {
-        List<T> res = new ArrayList<>(toCopy.size());
-        res.addAll(toCopy);
-        return res;
-    }
-
-    public static void println(Object s) {
-        if (GameRunnerImpl.DEBUG) {
-            System.out.println(s);
-        }
     }
 }

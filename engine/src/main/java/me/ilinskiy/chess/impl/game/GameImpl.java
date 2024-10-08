@@ -1,21 +1,22 @@
 package me.ilinskiy.chess.impl.game;
 
-import me.ilinskiy.chess.api.chessboard.*;
+import me.ilinskiy.chess.api.chessboard.Coordinates;
+import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
+import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.chessboard.MoveAwareBoardImpl;
-import me.ilinskiy.chess.impl.chessboard.Piece;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Author: Svyatoslav Ilinskiy
  * Date: 7/16/15
  */
-@SuppressWarnings("WeakerAccess")
 public final class GameImpl implements Game {
     @NotNull
     private final MoveAwareBoard board;
@@ -36,7 +37,7 @@ public final class GameImpl implements Game {
             throw new RuntimeException("Game is over! Cannot make more moves!");
         }
         for (Coordinates c : m.getInitialPositions()) {
-            if (board.getPiece(c).getColor() != whoseTurnIsIt()) {
+            if (board.getPiece(c).getColor() != getTurn()) {
                 throw new RuntimeException("You can only move pieces of your color!");
             }
         }
@@ -54,17 +55,12 @@ public final class GameImpl implements Game {
 
     @Override
     @NotNull
-    public PieceColor whoseTurnIsIt() {
+    public PieceColor getTurn() {
         return turn;
     }
 
-    @Override
-    public boolean isGameOver() {
-        return winner != null;
-    }
-
     private void checkGameOver(@NotNull PieceColor nextToMove) {
-        if (GameUtil.getAvailableMoves(nextToMove, board).size() == 0) {
+        if (GameUtil.getAvailableMoves(nextToMove, board).isEmpty()) {
             //game is over
             if (GameUtil.kingIsAttacked(nextToMove, board)) {
                 winner = nextToMove.inverse();
@@ -82,15 +78,8 @@ public final class GameImpl implements Game {
     }
 
     @Override
-    @NotNull
-    public List<Move> getMovesMade() {
-        return board.getMoves();
-    }
-
-    @Override
-    public int numberOfMovesMade() {
-        // todo(stas): this is not necessary
-        return board.getMoves().size();
+    public boolean isGameOver() {
+        return winner != null;
     }
 
     @Override
