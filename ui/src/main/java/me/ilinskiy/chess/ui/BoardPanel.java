@@ -36,12 +36,12 @@ final class BoardPanel extends JPanel {
         setBoard(board);
     }
 
-    void setBoard(@NotNull MoveAwareBoard board) {
+    synchronized void setBoard(@NotNull MoveAwareBoard board) {
         this.board = board;
     }
 
     @Override
-    public void paint(Graphics graphics) {
+    public synchronized void paint(Graphics graphics) {
         super.paint(graphics);
         int heightAndWidth = getSize().width;
         graphics.setColor(BORDER_COLOR);
@@ -62,12 +62,12 @@ final class BoardPanel extends JPanel {
         }
     }
 
-    public void setSelected(@Nullable Coordinates coordinates) {
+    public synchronized void setSelected(@Nullable Coordinates coordinates) {
         selected = coordinates;
     }
 
     @Nullable
-    public Coordinates getSelected() {
+    public synchronized Coordinates getSelected() {
         return selected;
     }
 
