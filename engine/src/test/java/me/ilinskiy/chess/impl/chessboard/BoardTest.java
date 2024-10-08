@@ -1,7 +1,7 @@
 package me.ilinskiy.chess.impl.chessboard;
 
 import me.ilinskiy.chess.api.chessboard.*;
-import me.ilinskiy.chess.impl.game.GameUtil;
+import me.ilinskiy.chess.impl.game.BoardAnalyzer;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.junit.jupiter.api.Test;
 
@@ -86,8 +86,8 @@ public class BoardTest {
                 }
             }
         }
-        List<Coordinates> gameUtilAllPieces = GameUtil.getAllPieces(PieceColor.White, b);
-        gameUtilAllPieces.addAll(GameUtil.getAllPieces(PieceColor.Black, b));
+        List<Coordinates> gameUtilAllPieces = BoardAnalyzer.getAllPieces(PieceColor.White, b);
+        gameUtilAllPieces.addAll(BoardAnalyzer.getAllPieces(PieceColor.Black, b));
         Collections.sort(gameUtilAllPieces);
         Collections.sort(allElements);
         assertEquals(allElements, gameUtilAllPieces);

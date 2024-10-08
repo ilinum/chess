@@ -3,8 +3,8 @@ package me.ilinskiy.chess.game;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.chessboard.*;
+import me.ilinskiy.chess.impl.game.BoardAnalyzer;
 import me.ilinskiy.chess.impl.game.Castling;
-import me.ilinskiy.chess.impl.game.GameUtil;
 import me.ilinskiy.chess.impl.game.PawnPromotion;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.junit.jupiter.api.Test;
@@ -19,13 +19,13 @@ import static org.junit.jupiter.api.Assertions.*;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/30/15.
  */
-public class GameUtilTest {
+public class BoardAnalyzerTest {
 
     @Test
     @Timeout(value = 1)
     public void testGetAvailableMovesInitialPositionWhite() {
         MoveAwareBoard b = new MoveAwareBoardImpl();
-        List<Move> actual = GameUtil.getAvailableMoves(PieceColor.White, b);
+        List<Move> actual = BoardAnalyzer.getAvailableMoves(PieceColor.White, b);
         List<Move> expected = new ArrayList<>();
         int row = BOARD_SIZE - 2;
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -48,7 +48,7 @@ public class GameUtilTest {
     @Timeout(value = 1)
     public void testGetAvailableMovesInitialPositionBlack() {
         MoveAwareBoard b = new MoveAwareBoardImpl();
-        List<Move> actual = GameUtil.getAvailableMoves(PieceColor.Black, b);
+        List<Move> actual = BoardAnalyzer.getAvailableMoves(PieceColor.Black, b);
         List<Move> expected = new ArrayList<>();
         int row = 1;
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -80,8 +80,8 @@ public class GameUtilTest {
         Coordinates initPos = new Coordinates(1, BOARD_SIZE - 1);
         assertEquals(knight, board.get(initPos));
         board.set(initPos, EmptyCell.INSTANCE);
-        GameUtil.getAvailableMoves(PieceColor.White, new MoveAwareBoardImpl(board));
-        GameUtil.getAvailableMoves(PieceColor.Black, new MoveAwareBoardImpl(board));
+        BoardAnalyzer.getAvailableMoves(PieceColor.White, new MoveAwareBoardImpl(board));
+        BoardAnalyzer.getAvailableMoves(PieceColor.Black, new MoveAwareBoardImpl(board));
     }
 
     @Test
@@ -91,20 +91,20 @@ public class GameUtilTest {
         Coordinates whiteLoc = new Coordinates(3, 4);
         b.set(blackLoc, Piece.createPiece(PieceColor.Black, PieceType.Pawn));
         b.set(whiteLoc, Piece.createPiece(PieceColor.White, PieceType.Pawn));
-        assertEquals(new HashSet<>(), GameUtil.getAvailableMovesForPiece(whiteLoc, new MoveAwareBoardImpl(b)));
-        assertEquals(new HashSet<>(), GameUtil.getAvailableMovesForPiece(blackLoc, new MoveAwareBoardImpl(b)));
+        assertEquals(new HashSet<>(), BoardAnalyzer.getAvailableMovesForPiece(whiteLoc, new MoveAwareBoardImpl(b)));
+        assertEquals(new HashSet<>(), BoardAnalyzer.getAvailableMovesForPiece(blackLoc, new MoveAwareBoardImpl(b)));
     }
 
     @Test
     public void testCastling() {
         Board b = new BoardImpl();
-        List<Coordinates> blackKings = GameUtil.findPiecesByTypeAndColor(PieceType.King,
-                                                                         PieceColor.Black,
-                                                                         new MoveAwareBoardImpl(b));
+        List<Coordinates> blackKings = BoardAnalyzer.findPiecesByTypeAndColor(PieceType.King,
+                                                                              PieceColor.Black,
+                                                                              new MoveAwareBoardImpl(b));
         assertEquals(1, blackKings.size());
         Coordinates kingPos = blackKings.get(0);
 
-        assertEquals(GameUtil.getAvailableMovesForPiece(kingPos, new MoveAwareBoardImpl(b)), new HashSet<>());
+        assertEquals(BoardAnalyzer.getAvailableMovesForPiece(kingPos, new MoveAwareBoardImpl(b)), new HashSet<>());
 
         b.set(new Coordinates(BOARD_SIZE - 2, 0), EmptyCell.INSTANCE);
         b.set(new Coordinates(BOARD_SIZE - 3, 0), EmptyCell.INSTANCE);
@@ -114,8 +114,8 @@ public class GameUtilTest {
         Coordinates rookNewPos = new Coordinates(BOARD_SIZE - 3, 0);
         expected.add(new Castling(kingPos, new Coordinates(BOARD_SIZE - 2, 0), rookInitPos, rookNewPos));
         expected.add(new RegularMove(kingPos, new Coordinates(BOARD_SIZE - 3, 0)));
-        LinkedList<Move> actual = new LinkedList<>(GameUtil.getAvailableMovesForPiece(kingPos,
-                                                                                      new MoveAwareBoardImpl(b)));
+        LinkedList<Move> actual = new LinkedList<>(BoardAnalyzer.getAvailableMovesForPiece(kingPos,
+                                                                                           new MoveAwareBoardImpl(b)));
         Collections.sort(actual);
         Collections.sort(expected);
         assertEquals(actual, expected);
@@ -130,7 +130,7 @@ public class GameUtilTest {
         b.set(new Coordinates(0, 0), EmptyCell.INSTANCE);
 
         // Execute.
-        List<Move> moves = new ArrayList<>(GameUtil.getAvailableMovesForPiece(c, new MoveAwareBoardImpl(b)));
+        List<Move> moves = new ArrayList<>(BoardAnalyzer.getAvailableMovesForPiece(c, new MoveAwareBoardImpl(b)));
 
         // Verify.
         List<Move> expected = new ArrayList<>();

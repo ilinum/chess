@@ -3,7 +3,7 @@ package me.ilinskiy.chess.ui;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
-import me.ilinskiy.chess.impl.game.GameUtil;
+import me.ilinskiy.chess.impl.game.BoardAnalyzer;
 import me.ilinskiy.chess.impl.game.PawnPromotion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +53,7 @@ public final class JSwingUserPlayer implements Player {
                     continue;
                 }
                 if (selected != null) {
-                    Set<Move> availableMoves = GameUtil.getAvailableMovesForPiece(selected, board);
+                    Set<Move> availableMoves = BoardAnalyzer.getAvailableMovesForPiece(selected, board);
                     move = getMoveFromSelection(selected, location, availableMoves);
                     if (move == null && board.getPiece(location).getColor() == myColor) {
                         painter.setSelected(location);

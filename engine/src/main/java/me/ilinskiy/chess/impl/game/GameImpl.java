@@ -43,7 +43,7 @@ public final class GameImpl implements Game {
         }
         Set<Move> availableMoves = new HashSet<>();
         for (Coordinates coordinates : m.getInitialPositions()) {
-            availableMoves.addAll(GameUtil.getAvailableMovesForPiece(coordinates, board));
+            availableMoves.addAll(BoardAnalyzer.getAvailableMovesForPiece(coordinates, board));
         }
         if (!availableMoves.contains(m)) {
             throw new RuntimeException("Illegal move: " + m);
@@ -60,9 +60,9 @@ public final class GameImpl implements Game {
     }
 
     private void checkGameOver(@NotNull PieceColor nextToMove) {
-        if (GameUtil.getAvailableMoves(nextToMove, board).isEmpty()) {
+        if (BoardAnalyzer.getAvailableMoves(nextToMove, board).isEmpty()) {
             //game is over
-            if (GameUtil.kingIsAttacked(nextToMove, board)) {
+            if (BoardAnalyzer.kingIsAttacked(nextToMove, board)) {
                 winner = nextToMove.inverse();
             } else {
                 //it's a draw

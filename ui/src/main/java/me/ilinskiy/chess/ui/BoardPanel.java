@@ -6,12 +6,15 @@ import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import me.ilinskiy.chess.impl.game.EnPassant;
-import me.ilinskiy.chess.impl.game.GameUtil;
+import me.ilinskiy.chess.impl.game.BoardAnalyzer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static me.ilinskiy.chess.api.chessboard.Board.BOARD_SIZE;
 
@@ -75,8 +78,8 @@ final class BoardPanel extends JPanel {
         if (c.equals(selected)) {
             return SELECT_COLOR;
         }
-        if (selected != null && GameUtil.getAvailableNewPositions(selected, board).contains(c)) {
-            for (Move selectedMove : GameUtil.getAvailableMovesForPiece(selected, board)) {
+        if (selected != null && getAvailableNewPositions(selected, board).contains(c)) {
+            for (Move selectedMove : BoardAnalyzer.getAvailableMovesForPiece(selected, board)) {
                 if (selectedMove.getNewPositions()[0].equals(c) && selectedMove instanceof EnPassant) {
                     // En Passant.
                     return EAT_COLOR;
@@ -92,6 +95,17 @@ final class BoardPanel extends JPanel {
         }
         return BLACK_BG;
     }
+
+
+    private static Set<Coordinates> getAvailableNewPositions(@NotNull Coordinates pos, @NotNull MoveAwareBoard board) {
+        Set<Move> moves = BoardAnalyzer.getAvailableMovesForPiece(pos, board);
+        Set<Coordinates> res = new HashSet<>(moves.size());
+        for (Move move : moves) {
+            Collections.addAll(res, move.getNewPositions());
+        }
+        return res;
+    }
+
 
     private static void drawCell(Coordinates pos, Graphics graphics, int heightAndWidth) {
         int cellSize = heightAndWidth / BOARD_SIZE;

@@ -2,13 +2,13 @@ package me.ilinskiy.chess.impl.game;
 
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.impl.chessboard.ChessBoardUtil;
 import me.ilinskiy.chess.impl.chessboard.EmptyCell;
 import me.ilinskiy.chess.impl.chessboard.MoveAwareBoardImpl;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static me.ilinskiy.chess.api.chessboard.Board.*;
 import static me.ilinskiy.chess.api.chessboard.PieceColor.Black;
@@ -18,8 +18,7 @@ import static me.ilinskiy.chess.api.chessboard.PieceColor.White;
  * Author: Svyatoslav Ilinskiy
  * Date: 7/18/15
  */
-public class GameUtil {
-
+public class BoardAnalyzer {
     @NotNull
     public static synchronized List<Move> getAvailableMoves(@NotNull PieceColor color, @NotNull MoveAwareBoard board) {
         List<Move> result = new ArrayList<>();
@@ -29,6 +28,20 @@ public class GameUtil {
             result.addAll(getAvailableMovesForPiece(pos, board));
         }
 
+        return result;
+    }
+
+    @NotNull
+    public static Set<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull MoveAwareBoard board) {
+        Set<Move> result = getAllMovesForPiece(pos, board);
+
+        //filter out the ones when king is attacked
+        Iterator<Move> moveIterator = result.iterator();
+        while (moveIterator.hasNext()) {
+            if (kingIsAttackedAfterMove(board.getPiece(pos).getColor(), board, moveIterator.next())) {
+                moveIterator.remove();
+            }
+        }
         return result;
     }
 
@@ -46,39 +59,13 @@ public class GameUtil {
         return allPiecesOfCorrectColor;
     }
 
-    static int getDirectionForPlayer(@NotNull PieceColor color) {
+    private static int getDirectionForPlayer(@NotNull PieceColor color) {
         if (color == PieceColor.White) {
             return WHITE_DIRECTION;
         } else {
             assert color == PieceColor.Black;
             return BLACK_DIRECTION;
         }
-    }
-
-    /**
-     * If board.getPieceAt(pos) is EmptyCell returns an empty list
-     */
-    @NotNull
-    public static Set<Move> getAvailableMovesForPiece(@NotNull Coordinates pos, @NotNull MoveAwareBoard board) {
-        Set<Move> result = getAllMovesForPiece(pos, board);
-
-        //filter out the ones when king is attacked
-        Iterator<Move> moveIterator = result.iterator();
-        while (moveIterator.hasNext()) {
-            if (kingIsAttackedAfterMove(board.getPiece(pos).getColor(), board, moveIterator.next())) {
-                moveIterator.remove();
-            }
-        }
-        return result;
-    }
-
-    public static Set<Coordinates> getAvailableNewPositions(@NotNull Coordinates pos, @NotNull MoveAwareBoard board) {
-        Set<Move> moves = getAvailableMovesForPiece(pos, board);
-        Set<Coordinates> res = new HashSet<>(moves.size());
-        for (Move move : moves) {
-            Collections.addAll(res, move.getNewPositions());
-        }
-        return res;
     }
 
     /**
@@ -300,8 +287,7 @@ public class GameUtil {
         return false;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public static boolean kingIsAttacked(
+    private static boolean kingIsAttacked(
             @NotNull PieceColor kingColor,
             @NotNull MoveAwareBoard board,
             boolean checkKing) {
@@ -323,8 +309,7 @@ public class GameUtil {
         return false;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull MoveAwareBoard board) {
+    static boolean kingIsAttacked(@NotNull PieceColor kingColor, @NotNull MoveAwareBoard board) {
         return kingIsAttacked(kingColor, board, true);
     }
 
@@ -345,14 +330,22 @@ public class GameUtil {
             assert kingInitialPosition.getY() == rookInitialPosition.getY();
             for (Coordinates c = kingInitialPosition; c.getX() != rookInitialPosition.getX(); c = new Coordinates(c.getX() + dir,
                                                                                                                   c.getY())) {
-                if (ChessBoardUtil.makeMoveAndEvaluate(b, m, board -> kingIsAttacked(color, board))) {
+                if (makeMoveAndEvaluate(b, m, board -> kingIsAttacked(color, board))) {
                     return true;
                 }
             }
             return false;
         } else {
-            return ChessBoardUtil.makeMoveAndEvaluate(b, m, board -> kingIsAttacked(color, board));
+            return makeMoveAndEvaluate(b, m, board -> kingIsAttacked(color, board));
         }
+    }
+
+    private static boolean makeMoveAndEvaluate(
+            @NotNull MoveAwareBoard b, @NotNull Move m,
+            @NotNull Function<MoveAwareBoard, Boolean> op) {
+        b = b.copy();
+        b.makeMove(m);
+        return op.apply(b);
     }
 
     @NotNull

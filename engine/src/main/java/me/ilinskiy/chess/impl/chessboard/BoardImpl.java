@@ -1,16 +1,24 @@
 package me.ilinskiy.chess.impl.chessboard;
 
-import me.ilinskiy.chess.api.chessboard.Board;
-import me.ilinskiy.chess.api.chessboard.ChessElement;
-import me.ilinskiy.chess.api.chessboard.Coordinates;
-import me.ilinskiy.chess.api.chessboard.PieceColor;
+import me.ilinskiy.chess.api.chessboard.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-import static me.ilinskiy.chess.api.chessboard.PieceType.Pawn;
+import static me.ilinskiy.chess.api.chessboard.PieceType.*;
 
 public final class BoardImpl implements Board {
+    private static final PieceType[] backRowPieceTypes = new PieceType[]{
+            Rook,
+            Knight,
+            Bishop,
+            Queen,
+            King,
+            Bishop,
+            Knight,
+            Rook,
+    };
+
     private ChessElement[][] board;
 
     public BoardImpl() {
@@ -20,7 +28,7 @@ public final class BoardImpl implements Board {
     private void putPiecesOnBoard() {
         board = new ChessElement[BOARD_SIZE][BOARD_SIZE];
         int currRow = 0;
-        assert ChessBoardUtil.backRowPieceTypes.length == BOARD_SIZE;
+        assert backRowPieceTypes.length == BOARD_SIZE;
         PieceColor topPieceColor;
         PieceColor bottomPieceColor;
         if (BLACK_DIRECTION == 1) {
@@ -35,7 +43,7 @@ public final class BoardImpl implements Board {
             bottomPieceColor = PieceColor.White;
         }
         for (int i = 0; i < board[0].length; i++) {
-            board[currRow][i] = Piece.createPiece(topPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
+            board[currRow][i] = Piece.createPiece(topPieceColor, backRowPieceTypes[i]);
         }
         currRow++;
         Arrays.fill(board[currRow], Piece.createPiece(topPieceColor, Pawn));
@@ -49,7 +57,7 @@ public final class BoardImpl implements Board {
         currRow++;
         assert (currRow == (BOARD_SIZE - 1)) : "Wrong current row: " + currRow;
         for (int i = 0; i < board[currRow].length; i++) {
-            board[currRow][i] = Piece.createPiece(bottomPieceColor, ChessBoardUtil.backRowPieceTypes[i]);
+            board[currRow][i] = Piece.createPiece(bottomPieceColor, backRowPieceTypes[i]);
         }
     }
 
