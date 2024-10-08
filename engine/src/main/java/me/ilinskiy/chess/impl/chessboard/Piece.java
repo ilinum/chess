@@ -22,9 +22,11 @@ public final class Piece implements ChessElement {
     static {
         whitePieces = new HashMap<>();
         blackPieces = new HashMap<>();
-        for (PieceType pt : ChessBoardUtil.backRowPieceTypes) {
-            whitePieces.put(pt, new Piece(PieceColor.White, pt));
-            blackPieces.put(pt, new Piece(PieceColor.Black, pt));
+        for (PieceType pt : PieceType.values()) {
+            if (!pt.equals(PieceType.Empty)) {
+                whitePieces.put(pt, new Piece(PieceColor.White, pt));
+                blackPieces.put(pt, new Piece(PieceColor.Black, pt));
+            }
         }
         blackPieces.put(PieceType.Pawn, new Piece(PieceColor.Black, PieceType.Pawn));
         whitePieces.put(PieceType.Pawn, new Piece(PieceColor.White, PieceType.Pawn));
@@ -32,17 +34,11 @@ public final class Piece implements ChessElement {
 
     @NotNull
     public static Piece createPiece(@NotNull PieceColor pColor, @NotNull PieceType pType) {
-        Piece res = null;
-        switch (pColor) {
-            case Black:
-                res = blackPieces.get(pType);
-                break;
-            case White:
-                res = whitePieces.get(pType);
-                break;
-            case Empty:
-                throw new IllegalArgumentException("Color cannot be empty!");
-        }
+        Piece res = switch (pColor) {
+            case Black -> blackPieces.get(pType);
+            case White -> whitePieces.get(pType);
+            case Empty -> throw new IllegalArgumentException("Color cannot be empty!");
+        };
         if (res == null) {
             throw new IllegalArgumentException("There's no piece type: " + pType);
         }
@@ -79,46 +75,20 @@ public final class Piece implements ChessElement {
 
     @Override
     public int hashCode() {
-        int colorMultiplier;
-        switch (color) {
-            case White:
-                colorMultiplier = 1;
-                break;
-            case Black:
-                colorMultiplier = -1;
-                break;
-            case Empty:
-                colorMultiplier = 0;
-                break;
-            default:
-                throw new RuntimeException("Unknown color!");
-        }
-        int pieceTypeMultiplier;
-        switch (type) { //could I use Enum.ordinal here?
-            case Pawn:
-                pieceTypeMultiplier = 1;
-                break;
-            case Knight:
-                pieceTypeMultiplier = 2;
-                break;
-            case Bishop:
-                pieceTypeMultiplier = 3;
-                break;
-            case Rook:
-                pieceTypeMultiplier = 4;
-                break;
-            case Queen:
-                pieceTypeMultiplier = 5;
-                break;
-            case King:
-                pieceTypeMultiplier = 6;
-                break;
-            case Empty:
-                pieceTypeMultiplier = 7;
-                break;
-            default:
-                throw new RuntimeException("Unknown type!");
-        }
+        int colorMultiplier = switch (color) {
+            case White -> 1;
+            case Black -> -1;
+            case Empty -> 0;
+        };
+        int pieceTypeMultiplier = switch (type) { //could I use Enum.ordinal here?
+            case Pawn -> 1;
+            case Knight -> 2;
+            case Bishop -> 3;
+            case Rook -> 4;
+            case Queen -> 5;
+            case King -> 6;
+            case Empty -> 7;
+        };
         return colorMultiplier * pieceTypeMultiplier;
     }
 }

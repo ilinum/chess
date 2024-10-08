@@ -146,16 +146,11 @@ public final class JSwingChessPainter {
 
     @NotNull
     private static String getWinPhrase(@NotNull PieceColor winner) {
-        switch (winner) {
-            case Black:
-                return "Black won!";
-            case White:
-                return "White won!";
-            case Empty:
-                return "It's a draw!";
-            default:
-                throw new IllegalArgumentException("Something went wrong");
-        }
+        return switch (winner) {
+            case Black -> "Black won!";
+            case White -> "White won!";
+            case Empty -> "It's a draw!";
+        };
     }
 
     BoardPanel getPanel() {
