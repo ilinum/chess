@@ -21,8 +21,7 @@ import static me.ilinskiy.chess.api.chessboard.PieceType.*;
  * Date: 9/27/15.
  */
 public final class JSwingChessPainter {
-    @SuppressWarnings("WeakerAccess")
-    public static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
+    private static final int INIT_HEIGHT_AND_WIDTH = 62 * Board.BOARD_SIZE; //approx 500
     private JFrame myFrame;
 
     @Nullable
