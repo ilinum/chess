@@ -3,12 +3,9 @@ package me.ilinskiy.chess.impl.game;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
-import me.ilinskiy.chess.api.chessboard.PieceType;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Author: Svyatoslav Ilinskiy

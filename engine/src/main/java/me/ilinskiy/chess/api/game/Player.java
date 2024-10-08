@@ -4,8 +4,6 @@ import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
  * Author: Svyatoslav Ilinskiy
  * Date: 7/17/15

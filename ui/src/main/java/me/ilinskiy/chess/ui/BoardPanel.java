@@ -5,8 +5,8 @@ import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.chessboard.Piece;
-import me.ilinskiy.chess.impl.game.EnPassant;
 import me.ilinskiy.chess.impl.game.BoardAnalyzer;
+import me.ilinskiy.chess.impl.game.EnPassant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

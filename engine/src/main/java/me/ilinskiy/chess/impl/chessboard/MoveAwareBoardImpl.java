@@ -1,6 +1,9 @@
 package me.ilinskiy.chess.impl.chessboard;
 
-import me.ilinskiy.chess.api.chessboard.*;
+import me.ilinskiy.chess.api.chessboard.Board;
+import me.ilinskiy.chess.api.chessboard.ChessElement;
+import me.ilinskiy.chess.api.chessboard.Coordinates;
+import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.game.Castling;
 import me.ilinskiy.chess.impl.game.EnPassant;

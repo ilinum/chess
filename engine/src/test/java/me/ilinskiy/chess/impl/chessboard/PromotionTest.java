@@ -17,7 +17,7 @@ public class PromotionTest {
         pp = new PawnPromotion(c1, c2, PieceType.Bishop);
         pp = new PawnPromotion(c1, c2, PieceType.Knight);
         assertThrows(IllegalArgumentException.class, () -> {
-           new PawnPromotion(c1, c2, PieceType.Pawn);
+            new PawnPromotion(c1, c2, PieceType.Pawn);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             new PawnPromotion(c1, c2, PieceType.King);
