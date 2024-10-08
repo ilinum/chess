@@ -3,7 +3,6 @@ package me.ilinskiy.chess.impl.game;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.chessboard.MoveAwareBoardImpl;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import org.jetbrains.annotations.NotNull;
@@ -68,7 +67,7 @@ public final class GameImpl implements Game {
             if (piece.getType() == PieceType.Pawn) {
                 int x = newPosition.getX();
                 int y = newPosition.getY();
-                Coordinates nextAdvance = new CoordinatesImpl(x, y + GameUtil.getDirectionForPlayer(madeLastMove));
+                Coordinates nextAdvance = new Coordinates(x, y + GameUtil.getDirectionForPlayer(madeLastMove));
                 if (nextAdvance.isOutOfBounds()) {
                     ArrayList<PieceType> canBePromotedTo = new ArrayList<>(4);
                     canBePromotedTo.add(PieceType.Queen);

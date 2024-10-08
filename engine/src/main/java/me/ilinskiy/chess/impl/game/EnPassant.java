@@ -2,7 +2,6 @@ package me.ilinskiy.chess.impl.game;
 
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.game.Copyable;
-import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,7 +31,7 @@ public final class EnPassant extends MoveAdapter {
 
     @NotNull
     public Coordinates eatenPiece() {
-        return new CoordinatesImpl(getNewPositions()[0].getX(), getInitialPositions()[0].getY());
+        return new Coordinates(getNewPositions()[0].getX(), getInitialPositions()[0].getY());
     }
 
     @Override

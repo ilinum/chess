@@ -4,7 +4,6 @@ import me.ilinskiy.chess.api.chessboard.ChessElement;
 import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.chessboard.Piece;
 import me.ilinskiy.chess.impl.game.EnPassant;
 import me.ilinskiy.chess.impl.game.GameUtil;
@@ -50,7 +49,7 @@ final class BoardPanel extends JPanel {
 
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                Coordinates c = new CoordinatesImpl(col, row);
+                Coordinates c = new Coordinates(col, row);
                 graphics.setColor(getBGForCell(c, getSelected(), board));
                 drawCell(c, graphics, heightAndWidth);
             }
@@ -58,7 +57,7 @@ final class BoardPanel extends JPanel {
 
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                drawImageForCell(new CoordinatesImpl(col, row), graphics, board, heightAndWidth);
+                drawImageForCell(new Coordinates(col, row), graphics, board, heightAndWidth);
             }
         }
     }

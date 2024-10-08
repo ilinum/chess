@@ -1,11 +1,11 @@
 package me.ilinskiy.chess.game;
 
+import me.ilinskiy.chess.api.chessboard.Coordinates;
 import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
 import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.game.Game;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
-import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.game.GameImpl;
 import me.ilinskiy.chess.impl.game.PlayerMock;
 import me.ilinskiy.chess.impl.game.RegularMove;
@@ -39,7 +39,7 @@ public class GameTest {
     @Test
     @Timeout(value = 1)
     public void testMakeMove() {
-        Move move = new RegularMove(new CoordinatesImpl(1, BOARD_SIZE - 1), new CoordinatesImpl(2, BOARD_SIZE - 3));
+        Move move = new RegularMove(new Coordinates(1, BOARD_SIZE - 1), new Coordinates(2, BOARD_SIZE - 3));
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
@@ -61,7 +61,7 @@ public class GameTest {
     @Test
     @Timeout(value = 1)
     public void testMakeMoveWrongPlayer() {
-        Move move = new RegularMove(new CoordinatesImpl(1, 1), new CoordinatesImpl(1, 3));
+        Move move = new RegularMove(new Coordinates(1, 1), new Coordinates(1, 3));
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
@@ -83,7 +83,7 @@ public class GameTest {
             @NotNull
             @Override
             public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
-                return new RegularMove(new CoordinatesImpl(8, 8), new CoordinatesImpl(1, 1));
+                return new RegularMove(new Coordinates(8, 8), new Coordinates(1, 1));
             }
         };
         Game g = new GameImpl(p1.getPlayerColor());

@@ -6,7 +6,6 @@ import me.ilinskiy.chess.api.chessboard.PieceColor;
 import me.ilinskiy.chess.api.chessboard.PieceType;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
-import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class PlayerMock implements Player {
     @Override
     @NotNull
     public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
-        Coordinates c = new CoordinatesImpl(0, 0);
+        Coordinates c = new Coordinates(0, 0);
         return new RegularMove(c, c);
     }
 

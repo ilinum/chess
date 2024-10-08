@@ -3,24 +3,61 @@ package me.ilinskiy.chess.api.chessboard;
 import me.ilinskiy.chess.api.game.Copyable;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Author: Svyatoslav Ilinskiy
- * Date: 3/8/16
- */
-public interface Coordinates extends Copyable, Comparable<Coordinates> {
-    int getX();
+import java.util.Arrays;
 
-    int getY();
+public final class Coordinates implements Copyable, Comparable<Coordinates> {
+    private final int myX;
+    private final int myY;
 
+    public Coordinates(int x, int y) {
+        this.myX = x;
+        this.myY = y;
+    }
+
+    public int getX() {
+        return myX;
+    }
+
+    public int getY() {
+        return myY;
+    }
+
+    public boolean isOutOfBounds() {
+        return this.getX() < 0 || this.getX() >= Board.BOARD_SIZE || this.getY() < 0 || this.getY() >= Board.BOARD_SIZE;
+    }
+
+    @Override
     @NotNull
-    int[] toArray();
+    public String toString() {
+        return "(" + myX + ", " + myY + ")";
+    }
 
+    /**
+     * @return a deep copy of this coordinates
+     */
     @NotNull
     @Override
-    Coordinates copy();
+    public Coordinates copy() {
+        return new Coordinates(myX, myY);
+    }
 
     @Override
-    int compareTo(@NotNull Coordinates coordinates);
+    public boolean equals(Object o) {
+        return o instanceof Coordinates && getX() == ((Coordinates) o).getX() && getY() == ((Coordinates) o).getY();
+    }
 
-    boolean isOutOfBounds();
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new int[]{myX, myY});
+    }
+
+    @Override
+    public int compareTo(@NotNull Coordinates coordinates) {
+        int xDiff = myX - coordinates.getX();
+        if (xDiff != 0) {
+            return xDiff;
+        } else {
+            return myY - coordinates.getY();
+        }
+    }
 }

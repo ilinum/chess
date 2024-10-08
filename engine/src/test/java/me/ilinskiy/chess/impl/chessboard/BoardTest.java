@@ -20,7 +20,7 @@ public class BoardTest {
         Board b = new BoardImpl();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                Coordinates c = new CoordinatesImpl(i, j);
+                Coordinates c = new Coordinates(i, j);
                 assertNotNull(b.get(c), "Element at (" + c + ") is null!");
             }
         }
@@ -32,7 +32,7 @@ public class BoardTest {
         List<Coordinates> allElements = new ArrayList<>();
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                Coordinates coordinates = new CoordinatesImpl(col, row);
+                Coordinates coordinates = new Coordinates(col, row);
                 if (row == 1 || row == (BOARD_SIZE - 2)) {
                     String message = "A pawn should be here: " + coordinates;
                     allElements.add(coordinates);
@@ -96,8 +96,8 @@ public class BoardTest {
     @Test
     public void testPieceMove() {
         MoveAwareBoard b = new MoveAwareBoardImpl();
-        CoordinatesImpl knightPos = new CoordinatesImpl(1, 0);
-        CoordinatesImpl newPos = new CoordinatesImpl(3, 4);
+        Coordinates knightPos = new Coordinates(1, 0);
+        Coordinates newPos = new Coordinates(3, 4);
         ChessElement element = b.getPiece(knightPos);
         assertSame(element.getType(), Knight, "Should be a knight " + knightPos);
         assertSame(element.getColor(), PieceColor.Black, "Should be black " + knightPos);
@@ -109,8 +109,8 @@ public class BoardTest {
     @Test
     public void testMoveEmptyCell() {
         MoveAwareBoard b = new MoveAwareBoardImpl();
-        CoordinatesImpl initPos = new CoordinatesImpl(4, 4);
-        CoordinatesImpl newPos = new CoordinatesImpl(0, 0);
+        Coordinates initPos = new Coordinates(4, 4);
+        Coordinates newPos = new Coordinates(0, 0);
         assertThrows(IllegalStateException.class, () -> {
             b.makeMove(new RegularMove(initPos, newPos));
         });

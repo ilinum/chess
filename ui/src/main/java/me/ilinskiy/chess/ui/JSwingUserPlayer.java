@@ -3,7 +3,6 @@ package me.ilinskiy.chess.ui;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
-import me.ilinskiy.chess.impl.chessboard.CoordinatesImpl;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,7 +65,7 @@ public final class JSwingUserPlayer implements Player {
                 double y = mouseEvent.getY();
                 int size = panel.getSize().width;
                 int cellSize = size / Board.BOARD_SIZE;
-                Coordinates location = new CoordinatesImpl((int) x / cellSize, (int) y / cellSize);
+                Coordinates location = new Coordinates((int) x / cellSize, (int) y / cellSize);
                 Coordinates selected = painter.getSelected();
                 if (selected != null) {
                     Set<Move> availableMovesForPiece = getMovesStartingAt(availableMoves, selected);
