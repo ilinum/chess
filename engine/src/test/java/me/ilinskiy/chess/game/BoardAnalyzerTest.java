@@ -2,7 +2,10 @@ package me.ilinskiy.chess.game;
 
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
-import me.ilinskiy.chess.impl.chessboard.*;
+import me.ilinskiy.chess.impl.chessboard.BoardImpl;
+import me.ilinskiy.chess.impl.chessboard.EmptyCell;
+import me.ilinskiy.chess.impl.chessboard.MoveAwareBoardImpl;
+import me.ilinskiy.chess.impl.chessboard.Piece;
 import me.ilinskiy.chess.impl.game.BoardAnalyzer;
 import me.ilinskiy.chess.impl.game.Castling;
 import me.ilinskiy.chess.impl.game.PawnPromotion;
@@ -102,7 +105,7 @@ public class BoardAnalyzerTest {
                                                                               PieceColor.Black,
                                                                               new MoveAwareBoardImpl(b));
         assertEquals(1, blackKings.size());
-        Coordinates kingPos = blackKings.get(0);
+        Coordinates kingPos = blackKings.getFirst();
 
         assertEquals(BoardAnalyzer.getAvailableMovesForPiece(kingPos, new MoveAwareBoardImpl(b)), new HashSet<>());
 
