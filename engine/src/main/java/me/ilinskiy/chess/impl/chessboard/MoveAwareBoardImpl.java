@@ -89,7 +89,6 @@ public class MoveAwareBoardImpl implements MoveAwareBoard {
         board.set(initialPosition, EmptyCell.INSTANCE);
     }
 
-    // todo(stas): tests
     public static boolean pieceHasMovedSinceStartOfGame(@NotNull List<Move> moves, @NotNull Coordinates curPos) {
         for (Move move : moves) {
             for (Coordinates newPos : move.getNewPositions()) {
