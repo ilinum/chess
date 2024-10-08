@@ -3,7 +3,6 @@ package me.ilinskiy.chess.ui;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
-import me.ilinskiy.chess.impl.game.RegularMove;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,21 +24,12 @@ import static me.ilinskiy.chess.impl.game.GameUtil.println;
  * Date: 7/20/15
  */
 public final class JSwingUserPlayer implements Player {
-    @Nullable
-    private Move moveMade;
-    @NotNull
-    private final Lock mouseLock;
-    @NotNull
-    private final Condition moveIsMade;
     private final PieceColor myColor;
     private final JSwingChessPainter painter;
 
     public JSwingUserPlayer(PieceColor color, JSwingChessPainter painter) {
-        moveMade = null;
         myColor = color;
         this.painter = painter;
-        mouseLock = new ReentrantLock();
-        moveIsMade = mouseLock.newCondition();
     }
 
     @NotNull
@@ -49,75 +39,45 @@ public final class JSwingUserPlayer implements Player {
         BoardPanel panel = painter.getPanel();
         panel.setBoard(board);
         this.painter.repaint();
-        MouseListener mouseListener = new MouseListener() {
-            @Override
-            public void mouseClicked(@NotNull MouseEvent mouseEvent) {
-            }
 
-            @Override
-            public void mousePressed(@NotNull MouseEvent mouseEvent) {
-            }
-
-            @Override
-            public void mouseReleased(@NotNull MouseEvent mouseEvent) {
-                mouseLock.lock();
-                double x = mouseEvent.getX();
-                double y = mouseEvent.getY();
-                int size = panel.getSize().width;
-                int cellSize = size / Board.BOARD_SIZE;
-                Coordinates location = new Coordinates((int) x / cellSize, (int) y / cellSize);
+        CellSelectListener mouseListener = new CellSelectListener(panel);
+        panel.addMouseListener(mouseListener);
+        Move move = null;
+        try {
+            while (move == null) {
                 Coordinates selected = painter.getSelected();
+                Coordinates location = mouseListener.waitForSelection();
+                if (location == null) {
+                    // Try getting location again.
+                    continue;
+                }
                 if (selected != null) {
                     Set<Move> availableMovesForPiece = getMovesStartingAt(availableMoves, selected);
-                    Move m = new RegularMove(selected, location);
-                    Optional<Move> res = Optional.empty();
-                    for (Move move : availableMovesForPiece) {
-                        if (move.equals(m)) {
-                            res = Optional.of(move);
+                    List<Move> possibleMoves = new ArrayList<>();
+                    for (Move availableMove : availableMovesForPiece) {
+                        if (availableMove.getInitialPositions()[0].equals(selected) &&
+                                availableMove.getNewPositions()[0].equals(location)) {
+                            possibleMoves.add(availableMove);
                         }
                     }
-                    if (res.isPresent()) {
-                        moveMade = res.get();
-                        moveIsMade.signal();
+                    if (!possibleMoves.isEmpty()) {
+                        assert possibleMoves.size() == 1;
+                        move = possibleMoves.getFirst();
                     } else if (board.getPiece(location).getColor() == myColor) {
                         painter.setSelected(location);
                     }
                 } else if (board.getPiece(location).getColor() == myColor) {
                     painter.setSelected(location);
                 }
-                mouseLock.unlock();
-            }
 
-            @Override
-            public void mouseEntered(@NotNull MouseEvent mouseEvent) {
             }
-
-            @Override
-            public void mouseExited(@NotNull MouseEvent mouseEvent) {
-            }
-        };
-        panel.addMouseListener(mouseListener);
-
-        try {
-            mouseLock.lock();
-            while (moveMade == null) { //"You shall always wait in a while loop," - Alison Norman
-                try {
-                    moveIsMade.await();
-                } catch (InterruptedException ignored) {
-
-                }
-            }
-            Move move = moveMade;
-            assert move != null;
-            moveMade = null;
             panel.setSelected(null);
+            painter.moveFinished();
             return move;
         } finally {
             assert panel.getMouseListeners().length > 0;
             panel.removeMouseListener(mouseListener);
             assert panel.getMouseListeners().length == 0;
-            mouseLock.unlock();
-            painter.moveFinished();
         }
     }
 
@@ -137,6 +97,70 @@ public final class JSwingUserPlayer implements Player {
         Stream<Move> availableMoves = moves.stream().filter((move) -> Arrays.asList(move.getInitialPositions()).contains(
                 start));
         return new HashSet<>(availableMoves.toList());
+    }
+}
+
+class CellSelectListener implements MouseListener {
+    @NotNull
+    private final Lock mouseLock;
+    @NotNull
+    private final Condition selectionIsMade;
+    @NotNull
+    private final BoardPanel panel;
+    @Nullable
+    private Coordinates selection;
+
+    CellSelectListener(@NotNull BoardPanel panel) {
+        mouseLock = new ReentrantLock();
+        selectionIsMade = mouseLock.newCondition();
+        this.panel = panel;
+    }
+
+    @Nullable
+    Coordinates waitForSelection() {
+        mouseLock.lock();
+        try {
+            while (selection == null) {
+                selectionIsMade.await();
+            }
+            return selection;
+        } catch (InterruptedException e) {
+            // The caller will try again.
+            return null;
+        } finally {
+            mouseLock.unlock();
+        }
+    }
+
+    @Override
+    public void mouseClicked(@NotNull MouseEvent mouseEvent) {
+    }
+
+    @Override
+    public void mousePressed(@NotNull MouseEvent mouseEvent) {
+    }
+
+    @Override
+    public void mouseReleased(@NotNull MouseEvent mouseEvent) {
+        mouseLock.lock();
+        try {
+            double x = mouseEvent.getX();
+            double y = mouseEvent.getY();
+            int size = panel.getSize().width;
+            int cellSize = size / Board.BOARD_SIZE;
+            selection = new Coordinates((int) x / cellSize, (int) y / cellSize);
+            selectionIsMade.signal();
+        } finally {
+            mouseLock.unlock();
+        }
+    }
+
+    @Override
+    public void mouseEntered(@NotNull MouseEvent mouseEvent) {
+    }
+
+    @Override
+    public void mouseExited(@NotNull MouseEvent mouseEvent) {
     }
 }
 
