@@ -23,5 +23,6 @@ public class JSwingMain {
             painter.gameOver(winner);
         } while (painter.askToPlayAgain());
         painter.dispose();
+        System.exit(0);
     }
 }
