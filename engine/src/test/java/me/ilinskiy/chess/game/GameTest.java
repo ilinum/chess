@@ -28,12 +28,12 @@ public class GameTest {
     @Test
     public void testGameInit() {
         Player p1 = new PlayerMock(PieceColor.White);
-        Game g = new GameImpl(p1.getPlayerColor());
+        Game g = new GameImpl(p1.getColor());
         assertFalse(g.isGameOver());
         assertFalse(g.getWinner().isPresent());
         assertTrue(g.getMovesMade().isEmpty());
         assertEquals(0, g.numberOfMovesMade());
-        assertSame(g.whoseTurnIsIt(), p1.getPlayerColor());
+        assertSame(g.whoseTurnIsIt(), p1.getColor());
     }
 
     @Test
@@ -43,19 +43,19 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
+            public Move getMove(@NotNull MoveAwareBoard b) {
                 return move;
             }
         };
         Player p2 = new PlayerMock(PieceColor.Black);
-        Game g = new GameImpl(p1.getPlayerColor());
-        g.makeMove(p1.getMove(g.getBoard(), new ArrayList<>()));
+        Game g = new GameImpl(p1.getColor());
+        g.makeMove(p1.getMove(g.getBoard()));
         assertFalse(g.isGameOver());
         assertFalse(g.getWinner().isPresent());
         assertEquals(1, g.getMovesMade().size());
         assertEquals(g.getMovesMade().get(0), move);
         assertEquals(1, g.numberOfMovesMade());
-        assertSame(g.whoseTurnIsIt(), p2.getPlayerColor());
+        assertSame(g.whoseTurnIsIt(), p2.getColor());
     }
 
     @Test
@@ -65,14 +65,14 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
+            public Move getMove(@NotNull MoveAwareBoard b) {
                 return move;
             }
         };
         Exception exc = assertThrows(RuntimeException.class, () -> {
             // Moving wrong player.
-            Game g = new GameImpl(p1.getPlayerColor());
-            g.makeMove(p1.getMove(g.getBoard(), new ArrayList<>()));
+            Game g = new GameImpl(p1.getColor());
+            g.makeMove(p1.getMove(g.getBoard()));
         });
         assertEquals(exc.getMessage(), "You can only move pieces of your color!");
     }
@@ -82,13 +82,13 @@ public class GameTest {
         Player p1 = new PlayerMock(PieceColor.White) {
             @NotNull
             @Override
-            public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
+            public Move getMove(@NotNull MoveAwareBoard b) {
                 return new RegularMove(new Coordinates(8, 8), new Coordinates(1, 1));
             }
         };
-        Game g = new GameImpl(p1.getPlayerColor());
+        Game g = new GameImpl(p1.getColor());
         assertThrows(RuntimeException.class, () -> {
-            g.makeMove(p1.getMove(g.getBoard(), new ArrayList<>()));
+            g.makeMove(p1.getMove(g.getBoard()));
         });
 
     }

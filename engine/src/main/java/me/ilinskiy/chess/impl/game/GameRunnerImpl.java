@@ -35,7 +35,7 @@ public class GameRunnerImpl implements GameRunner {
     @Override
     @NotNull
     public PieceColor runGame(@NotNull Player p1, @NotNull Player p2) {
-        Game g = new GameImpl(p1.getPlayerColor());
+        Game g = new GameImpl(p1.getColor());
         PieceColor winner = null;
         Player current = p1;
         while (winner == null) {
@@ -46,14 +46,14 @@ public class GameRunnerImpl implements GameRunner {
                     winner = g.whoseTurnIsIt().inverse();
                     println("Timed out!");
                 } else {
-                    assert current.getPlayerColor() == g.whoseTurnIsIt();
+                    assert current.getColor() == g.whoseTurnIsIt();
                     g.makeMove(move);
                     if (g.isGameOver()) {
                         winner = g.getWinner().orElse(null);
                         assert winner != null;
                     } else {
                         current = current.inverse(p1, p2);
-                        assert current.getPlayerColor() == g.whoseTurnIsIt();
+                        assert current.getColor() == g.whoseTurnIsIt();
                     }
                 }
             } catch (Exception e) {
@@ -68,7 +68,7 @@ public class GameRunnerImpl implements GameRunner {
         Future<Move> future = executorService.submit(() -> {
             Move m = null;
             while (m == null) {
-                m = p.getMove(b, GameUtil.getAvailableMoves(p.getPlayerColor(), b));
+                m = p.getMove(b);
             }
             return m;
         });

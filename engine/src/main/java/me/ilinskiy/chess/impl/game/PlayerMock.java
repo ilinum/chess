@@ -24,14 +24,14 @@ public class PlayerMock implements Player {
 
     @Override
     @NotNull
-    public Move getMove(@NotNull MoveAwareBoard b, @NotNull List<Move> availableMoves) {
+    public Move getMove(@NotNull MoveAwareBoard b) {
         Coordinates c = new Coordinates(0, 0);
         return new RegularMove(c, c);
     }
 
     @Override
     @NotNull
-    public PieceColor getPlayerColor() {
+    public PieceColor getColor() {
         return myColor;
     }
 }

@@ -3,6 +3,7 @@ package me.ilinskiy.chess.ui;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
+import me.ilinskiy.chess.impl.game.GameUtil;
 import me.ilinskiy.chess.impl.game.PawnPromotion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +36,7 @@ public final class JSwingUserPlayer implements Player {
 
     @NotNull
     @Override
-    public Move getMove(@NotNull MoveAwareBoard board, @NotNull List<Move> availableMoves) {
+    public Move getMove(@NotNull MoveAwareBoard board) {
         painter.moveStarted();
         BoardPanel panel = painter.getPanel();
         panel.setBoard(board);
@@ -53,6 +54,7 @@ public final class JSwingUserPlayer implements Player {
                     continue;
                 }
                 if (selected != null) {
+                    Set<Move> availableMoves = GameUtil.getAvailableMovesForPiece(selected, board);
                     move = getMoveFromSelection(selected, location, availableMoves);
                     if (move == null && board.getPiece(location).getColor() == myColor) {
                         painter.setSelected(location);
@@ -75,8 +77,7 @@ public final class JSwingUserPlayer implements Player {
     private static Move getMoveFromSelection(
             @NotNull Coordinates moveStart,
             @NotNull Coordinates moveEnd,
-            @NotNull List<Move> availableMoves) {
-        Set<Move> availableMovesForPiece = getMovesStartingAt(availableMoves, moveStart);
+            @NotNull Set<Move> availableMovesForPiece) {
         List<Move> possibleMoves = new ArrayList<>();
         for (Move availableMove : availableMovesForPiece) {
             if (availableMove.getInitialPositions()[0].equals(moveStart) &&
@@ -101,7 +102,7 @@ public final class JSwingUserPlayer implements Player {
 
     @NotNull
     @Override
-    public PieceColor getPlayerColor() {
+    public PieceColor getColor() {
         return myColor;
     }
 
