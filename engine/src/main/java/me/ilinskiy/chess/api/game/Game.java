@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
  * Date: 3/10/16
  */
 public interface Game {
-    void makeMove(@NotNull Move m, @NotNull Callable<PieceType> pieceTypeForPromotedPawn);
+    void makeMove(@NotNull Move m);
 
     @NotNull
     PieceColor whoseTurnIsIt();

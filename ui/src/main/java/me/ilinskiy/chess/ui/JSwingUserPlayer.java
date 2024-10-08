@@ -3,6 +3,7 @@ package me.ilinskiy.chess.ui;
 import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
+import me.ilinskiy.chess.impl.game.PawnPromotion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,24 +53,13 @@ public final class JSwingUserPlayer implements Player {
                     continue;
                 }
                 if (selected != null) {
-                    Set<Move> availableMovesForPiece = getMovesStartingAt(availableMoves, selected);
-                    List<Move> possibleMoves = new ArrayList<>();
-                    for (Move availableMove : availableMovesForPiece) {
-                        if (availableMove.getInitialPositions()[0].equals(selected) &&
-                                availableMove.getNewPositions()[0].equals(location)) {
-                            possibleMoves.add(availableMove);
-                        }
-                    }
-                    if (!possibleMoves.isEmpty()) {
-                        assert possibleMoves.size() == 1;
-                        move = possibleMoves.getFirst();
-                    } else if (board.getPiece(location).getColor() == myColor) {
+                    move = getMoveFromSelection(selected, location, availableMoves);
+                    if (move == null && board.getPiece(location).getColor() == myColor) {
                         painter.setSelected(location);
                     }
                 } else if (board.getPiece(location).getColor() == myColor) {
                     painter.setSelected(location);
                 }
-
             }
             panel.setSelected(null);
             painter.moveFinished();
@@ -81,16 +71,38 @@ public final class JSwingUserPlayer implements Player {
         }
     }
 
+    @Nullable
+    private static Move getMoveFromSelection(
+            @NotNull Coordinates moveStart,
+            @NotNull Coordinates moveEnd,
+            @NotNull List<Move> availableMoves) {
+        Set<Move> availableMovesForPiece = getMovesStartingAt(availableMoves, moveStart);
+        List<Move> possibleMoves = new ArrayList<>();
+        for (Move availableMove : availableMovesForPiece) {
+            if (availableMove.getInitialPositions()[0].equals(moveStart) &&
+                    availableMove.getNewPositions()[0].equals(moveEnd)) {
+                possibleMoves.add(availableMove);
+            }
+        }
+        if (possibleMoves.isEmpty()) {
+            return null;
+        }
+        if (possibleMoves.size() > 1) {
+            // Must be promotion!
+            PieceType piece = new ChoosePieceTypeForPromotedPawn().getChosenPiece();
+            for (Move possibleMove : possibleMoves) {
+                if (possibleMove instanceof PawnPromotion pp && pp.promoteTo == piece) {
+                    return possibleMove;
+                }
+            }
+        }
+        return possibleMoves.getFirst();
+    }
+
     @NotNull
     @Override
     public PieceColor getPlayerColor() {
         return myColor;
-    }
-
-    @Override
-    @NotNull
-    public PieceType getPieceTypeForPromotedPawn() {
-        return new ChoosePieceTypeForPromotedPawn().getChosenPiece();
     }
 
     private static Set<Move> getMovesStartingAt(List<Move> moves, Coordinates start) {

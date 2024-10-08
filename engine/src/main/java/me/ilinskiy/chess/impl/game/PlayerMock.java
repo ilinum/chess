@@ -34,10 +34,4 @@ public class PlayerMock implements Player {
     public PieceColor getPlayerColor() {
         return myColor;
     }
-
-    @Override
-    @NotNull
-    public PieceType getPieceTypeForPromotedPawn() {
-        return PieceType.Empty;
-    }
 }

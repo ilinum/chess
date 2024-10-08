@@ -5,6 +5,7 @@ import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.chessboard.*;
 import me.ilinskiy.chess.impl.game.Castling;
 import me.ilinskiy.chess.impl.game.GameUtil;
+import me.ilinskiy.chess.impl.game.PawnPromotion;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -118,5 +119,27 @@ public class GameUtilTest {
         Collections.sort(actual);
         Collections.sort(expected);
         assertEquals(actual, expected);
+    }
+
+    @Test
+    public void testPromotion() {
+        // Set up.
+        Board b = new BoardImpl();
+        Coordinates c = new Coordinates(0, 1);
+        b.set(c, Piece.createPiece(PieceColor.White, PieceType.Pawn));
+        b.set(new Coordinates(0, 0), EmptyCell.INSTANCE);
+
+        // Execute.
+        List<Move> moves = new ArrayList<>(GameUtil.getAvailableMovesForPiece(c, new MoveAwareBoardImpl(b)));
+
+        // Verify.
+        List<Move> expected = new ArrayList<>();
+        for (PieceType pt : PawnPromotion.PROMOTION_ALLOWED_TO) {
+            expected.add(new PawnPromotion(c, new Coordinates(1, 0), pt));
+            expected.add(new PawnPromotion(c, new Coordinates(0, 0), pt));
+        }
+        Collections.sort(moves);
+        Collections.sort(expected);
+        assertEquals(expected, moves);
     }
 }

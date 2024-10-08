@@ -1,12 +1,10 @@
 package me.ilinskiy.chess.impl.chessboard;
 
-import me.ilinskiy.chess.api.chessboard.Board;
-import me.ilinskiy.chess.api.chessboard.ChessElement;
-import me.ilinskiy.chess.api.chessboard.Coordinates;
-import me.ilinskiy.chess.api.chessboard.MoveAwareBoard;
+import me.ilinskiy.chess.api.chessboard.*;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.impl.game.Castling;
 import me.ilinskiy.chess.impl.game.EnPassant;
+import me.ilinskiy.chess.impl.game.PawnPromotion;
 import me.ilinskiy.chess.impl.game.RegularMove;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,6 +65,10 @@ public class MoveAwareBoardImpl implements MoveAwareBoard {
             }
             case RegularMove rm -> {
                 makeActualMove(rm.initialPosition, rm.newPosition);
+            }
+            case PawnPromotion pp -> {
+                makeActualMove(pp.initialPosition, pp.newPosition);
+                board.set(pp.newPosition, Piece.createPiece(board.get(pp.newPosition).getColor(), pp.promoteTo));
             }
             default -> {
                 throw new RuntimeException("Unknown Move type: " + move);

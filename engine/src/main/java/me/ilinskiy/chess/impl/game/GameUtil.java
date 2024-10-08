@@ -96,7 +96,13 @@ public class GameUtil {
                 Coordinates newC = new Coordinates(pos.getX(), pos.getY() + dir);
                 if (!newC.isOutOfBounds()) { //should've been promoted
                     if (board.getPiece(newC) instanceof EmptyCell) {
-                        result.add(new RegularMove(pos, newC));
+                        if (newC.getY() == 0 || newC.getY() == BOARD_SIZE-1) {
+                            for (PieceType pt : PawnPromotion.PROMOTION_ALLOWED_TO) {
+                                result.add(new PawnPromotion(pos, newC, pt));
+                            }
+                        } else {
+                            result.add(new RegularMove(pos, newC));
+                        }
                         boolean hasNotMoved = new Coordinates(pos.getX(), pos.getY() - 2 * dir).isOutOfBounds();
                         Coordinates longMove = new Coordinates(pos.getX(), pos.getY() + 2 * dir);
                         if (hasNotMoved && (board.getPiece(longMove) instanceof EmptyCell)) {
@@ -110,7 +116,13 @@ public class GameUtil {
                         boolean outOfBounds = eatLocation.isOutOfBounds();
                         PieceColor enemyColor = color.inverse();
                         if (!outOfBounds && board.getPiece(eatLocation).getColor() == enemyColor) {
-                            result.add(new RegularMove(pos, eatLocation));
+                            if (eatLocation.getY() == 0 || eatLocation.getY() == BOARD_SIZE-1) {
+                                for (PieceType pt : PawnPromotion.PROMOTION_ALLOWED_TO) {
+                                    result.add(new PawnPromotion(pos, eatLocation, pt));
+                                }
+                            } else {
+                                result.add(new RegularMove(pos, eatLocation));
+                            }
                         } else {
                             List<Move> moves = board.getMoves();
                             Move lastMove = null;

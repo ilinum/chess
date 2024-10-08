@@ -18,7 +18,7 @@ import java.util.concurrent.Callable;
 @SuppressWarnings("WeakerAccess")
 public final class GameImpl implements Game {
     @NotNull
-    private MoveAwareBoard board;
+    private final MoveAwareBoard board;
     private PieceColor turn;
     @Nullable
     private PieceColor winner;
@@ -31,7 +31,7 @@ public final class GameImpl implements Game {
     }
 
     @Override
-    public void makeMove(@NotNull Move m, @NotNull Callable<PieceType> pieceTypeForPromotedPawn) {
+    public void makeMove(@NotNull Move m) {
         if (isGameOver()) {
             throw new RuntimeException("Game is over! Cannot make more moves!");
         }
@@ -48,48 +48,8 @@ public final class GameImpl implements Game {
             throw new RuntimeException("Illegal move: " + m);
         }
         board.makeMove(m);
-        checkPawnPromoted(m, turn, pieceTypeForPromotedPawn);
         turn = turn.inverse();
         checkGameOver(turn);
-    }
-
-    /**
-     * NOTE: THIS METHOD MUST BE CALLED AFTER BOARD IS UPDATED!!!
-     *
-     * @param move that has been made
-     */
-    private void checkPawnPromoted(
-            @NotNull Move move,
-            @NotNull PieceColor madeLastMove,
-            @NotNull Callable<PieceType> pieceTypeForPromotedPawn) {
-        for (Coordinates newPosition : move.getNewPositions()) {
-            ChessElement piece = board.getPiece(newPosition);
-            if (piece.getType() == PieceType.Pawn) {
-                int x = newPosition.getX();
-                int y = newPosition.getY();
-                Coordinates nextAdvance = new Coordinates(x, y + GameUtil.getDirectionForPlayer(madeLastMove));
-                if (nextAdvance.isOutOfBounds()) {
-                    ArrayList<PieceType> canBePromotedTo = new ArrayList<>(4);
-                    canBePromotedTo.add(PieceType.Queen);
-                    canBePromotedTo.add(PieceType.Rook);
-                    canBePromotedTo.add(PieceType.Bishop);
-                    canBePromotedTo.add(PieceType.Knight);
-                    PieceType promotedTo = PieceType.Empty;
-                    while (!canBePromotedTo.contains(promotedTo)) {
-                        try {
-                            promotedTo = pieceTypeForPromotedPawn.call();
-                        } catch (Exception ignored) {
-
-                        }
-                    }
-                    Piece promoted = Piece.createPiece(madeLastMove, promotedTo);
-                    Board board = this.board.getBoardCopy();
-                    board.set(newPosition, promoted);
-                    // todo(stas): make this less hacky
-                    this.board = new MoveAwareBoardImpl(board, this.board.getMoves());
-                }
-            }
-        }
     }
 
     @Override

@@ -47,7 +47,7 @@ public class GameRunnerImpl implements GameRunner {
                     println("Timed out!");
                 } else {
                     assert current.getPlayerColor() == g.whoseTurnIsIt();
-                    g.makeMove(move, current::getPieceTypeForPromotedPawn);
+                    g.makeMove(move);
                     if (g.isGameOver()) {
                         winner = g.getWinner().orElse(null);
                         assert winner != null;
