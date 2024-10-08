@@ -60,7 +60,10 @@ public final class JSwingChessPainter {
     }
 
     public boolean askToPlayAgain() {
-        return JOptionPane.showConfirmDialog(myFrame, "Would you like to play again?") == 0;
+        return JOptionPane.showConfirmDialog(myFrame,
+                                             "Would you like to play again?",
+                                             "",
+                                             JOptionPane.YES_NO_OPTION) == 0;
     }
 
     public void dispose() {
