@@ -59,6 +59,9 @@ public final class JSwingUserPlayer implements Player {
                 }
             }
             panel.setSelected(null);
+            board.makeMove(move);
+            panel.setBoard(board);
+            painter.repaint();
             painter.moveFinished();
             return move;
         } finally {
