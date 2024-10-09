@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":engine"))
+    implementation(project(":core"))
     implementation("info.picocli:picocli:4.7.6")
     implementation("org.jetbrains:annotations:25.0.0")
 
