@@ -7,7 +7,7 @@ tasks.register<Exec>("buildGo") {
     commandLine("go", "build", "-o", "${layout.buildDirectory.get().toString()}/engine", "cmd/engine/main.go")
 }
 
-tasks.register<Exec>("runGo") {
+tasks.register<Exec>("runEngine") {
     dependsOn("buildGo")
     commandLine(layout.buildDirectory.dir("engine").get().toString())
 }
