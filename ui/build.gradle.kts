@@ -25,7 +25,7 @@ java {
 
 
 application {
-    mainClass.set("me.ilinskiy.chess.JSwingMain")
+    mainClass.set("me.ilinskiy.chess.UIMain")
 }
 
 tasks.named<Test>("test") {

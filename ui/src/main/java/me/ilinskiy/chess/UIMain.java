@@ -16,7 +16,7 @@ import picocli.CommandLine.Option;
 import java.io.IOException;
 
 @Command(name = "chess-ui", mixinStandardHelpOptions = true)
-public class JSwingMain implements Runnable {
+public class UIMain implements Runnable {
 
     @Option(
             names = {"--pipe-prefix", "-p"},
@@ -68,7 +68,7 @@ public class JSwingMain implements Runnable {
     }
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new JSwingMain()).execute(args);
+        int exitCode = new CommandLine(new UIMain()).execute(args);
         System.exit(exitCode);
     }
 }
