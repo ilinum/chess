@@ -36,7 +36,7 @@ tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = application.mainClass
     }
-    archiveBaseName.set("chess")
+    archiveBaseName.set("chess-ui")
 }
 
-version = "1.3"
+version = "1.4"
