@@ -71,4 +71,9 @@ public class PawnPromotion extends MoveAdapter {
         }
         return 1;
     }
+
+    @Override
+    public String getUCIString() {
+        return super.getUCIString() + promoteTo.symbol().toLowerCase();
+    }
 }

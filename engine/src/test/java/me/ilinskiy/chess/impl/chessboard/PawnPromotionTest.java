@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PromotionTest {
+public class PawnPromotionTest {
     @Test
     public void testCreatePromotion() {
         Coordinates c1 = new Coordinates(1, 1);

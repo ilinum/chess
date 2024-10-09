@@ -60,4 +60,20 @@ public final class Coordinates implements Copyable, Comparable<Coordinates> {
             return myY - coordinates.getY();
         }
     }
+
+    public String toUCINotation() {
+        char col = (char) ('a' + getX());
+        int row = Board.BOARD_SIZE - getY();
+        return "%c%d".formatted(col, row);
+    }
+
+
+    public static Coordinates fromUCINotation(String uci) {
+        if (uci.length() != 2) {
+            throw new IllegalArgumentException("unexpected UCI coordinates length: " + uci);
+        }
+        int x = uci.charAt(0) - 'a';
+        int y = Board.BOARD_SIZE - Integer.parseInt("" + uci.charAt(1));
+        return new Coordinates(x, y);
+    }
 }
