@@ -10,9 +10,11 @@ repositories {
 
 dependencies {
     implementation(project(":engine"))
+    implementation("info.picocli:picocli:4.7.6")
+    implementation("org.jetbrains:annotations:25.0.0")
+
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation("org.jetbrains:annotations:25.0.0")
 }
 
 java {
