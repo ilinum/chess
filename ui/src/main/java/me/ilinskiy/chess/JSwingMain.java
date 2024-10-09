@@ -32,6 +32,13 @@ public class JSwingMain implements Runnable {
     )
     private int timeoutSeconds = 0;
 
+    @Option(
+            names = {"--color", "-c"},
+            description = "The color of the human player. Only applies when playing against an engine. " +
+                    "Allowed values: White, Black."
+    )
+    private PieceColor color = PieceColor.White;
+
     @Override
     public void run() {
         JSwingChessPainter painter = null;
@@ -40,7 +47,7 @@ public class JSwingMain implements Runnable {
                 painter.dispose();
             }
             painter = new JSwingChessPainter(new MoveAwareBoardImpl(), timeoutSeconds);
-            Player p1 = new JSwingUserPlayer(PieceColor.White, painter);
+            Player p1 = new JSwingUserPlayer(color, painter);
             Player p2;
             if (!pipePrefix.isEmpty()) {
                 UCIClient uci;
@@ -49,9 +56,9 @@ public class JSwingMain implements Runnable {
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 }
-                p2 = new UCIPlayer(PieceColor.Black, uci);
+                p2 = new UCIPlayer(color.inverse(), uci);
             } else {
-                p2 = new JSwingUserPlayer(PieceColor.Black, painter);
+                p2 = new JSwingUserPlayer(color.inverse(), painter);
             }
             GameRunner gameRunner = new GameRunnerImpl(timeoutSeconds);
             PieceColor winner = gameRunner.runGame(p1, p2);

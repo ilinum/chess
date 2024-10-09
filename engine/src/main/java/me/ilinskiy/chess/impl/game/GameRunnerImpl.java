@@ -33,9 +33,9 @@ public class GameRunnerImpl implements GameRunner {
     @Override
     @NotNull
     public PieceColor runGame(@NotNull Player p1, @NotNull Player p2) {
-        Game g = new GameImpl(p1.getColor());
+        Player current = p1.getColor() == PieceColor.White ? p1 : p2;
+        Game g = new GameImpl(current.getColor());
         PieceColor winner = null;
-        Player current = p1;
         while (winner == null) {
             try {
                 Move move = getMove(current, g.getBoard());
