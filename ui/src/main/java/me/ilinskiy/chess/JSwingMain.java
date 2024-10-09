@@ -25,6 +25,13 @@ public class JSwingMain implements Runnable {
                     "plays with two players using the same GUI.")
     private String pipePrefix = "";
 
+    @Option(
+            names = {"--turn-timeout-secs", "-t"},
+            description = "The maximum number of seconds that a player can take on a turn. " +
+                    "Only applies to human players. Default is no timeout."
+    )
+    private int timeoutSeconds = 0;
+
     @Override
     public void run() {
         JSwingChessPainter painter = null;
@@ -32,7 +39,7 @@ public class JSwingMain implements Runnable {
             if (painter != null) {
                 painter.dispose();
             }
-            painter = new JSwingChessPainter(new MoveAwareBoardImpl());
+            painter = new JSwingChessPainter(new MoveAwareBoardImpl(), timeoutSeconds);
             Player p1 = new JSwingUserPlayer(PieceColor.White, painter);
             Player p2;
             if (!pipePrefix.isEmpty()) {
@@ -46,7 +53,7 @@ public class JSwingMain implements Runnable {
             } else {
                 p2 = new JSwingUserPlayer(PieceColor.Black, painter);
             }
-            GameRunner gameRunner = new GameRunnerImpl(painter.askTimeOut());
+            GameRunner gameRunner = new GameRunnerImpl(timeoutSeconds);
             PieceColor winner = gameRunner.runGame(p1, p2);
             painter.gameOver(winner);
         } while (painter.askToPlayAgain());

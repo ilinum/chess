@@ -28,9 +28,9 @@ public final class JSwingChessPainter {
     private Thread myUpdateTimeLeftThread = null;
 
     private final BoardPanel panel;
-    private int timeoutSeconds;
+    private final int timeoutSeconds;
 
-    public JSwingChessPainter(@NotNull MoveAwareBoard board) {
+    public JSwingChessPainter(@NotNull MoveAwareBoard board, int timeoutSeconds) {
         Image icon = icons.get(Piece.createPiece(PieceColor.White, PieceType.Pawn));
         try {
             SwingUtilities.invokeAndWait(() -> {
@@ -51,6 +51,7 @@ public final class JSwingChessPainter {
         myFrame.add(panel, BorderLayout.CENTER);
         myFrame.setLocationRelativeTo(null);
         myFrame.setVisible(true);
+        this.timeoutSeconds = timeoutSeconds;
         repaintBoard();
     }
 
@@ -78,25 +79,6 @@ public final class JSwingChessPainter {
     @Nullable
     public Coordinates getSelected() {
         return panel.getSelected();
-    }
-
-    public int askTimeOut() {
-        int newTimeout = -1;
-        while (newTimeout < 0) {
-            String input = JOptionPane.showInputDialog(myFrame, "Enter timeout in seconds \n(0 for no timeout)",
-                                                       "Timeout", JOptionPane.QUESTION_MESSAGE);
-            if (input == null) {
-                newTimeout = 0;
-            } else {
-                try {
-                    newTimeout = Integer.parseInt(input);
-                } catch (NumberFormatException ignored) {
-
-                }
-            }
-        }
-        timeoutSeconds = newTimeout;
-        return timeoutSeconds;
     }
 
     @Nullable
