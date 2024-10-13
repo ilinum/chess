@@ -1,9 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"github.com/ilinum/chess/pkg/bot"
+	"github.com/ilinum/chess/pkg/uci"
+	"os"
 )
 
 func main() {
-	fmt.Println("Hello world!")
+	server := uci.NewServer(os.Stdin, os.Stdout, bot.Bots["random"])
+	err := server.Serve()
+	if err != nil {
+		panic(err)
+	}
 }
