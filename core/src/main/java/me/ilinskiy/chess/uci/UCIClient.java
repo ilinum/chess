@@ -2,22 +2,21 @@ package me.ilinskiy.chess.uci;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
 import java.util.List;
 
 public class UCIClient {
     private final static int MOVE_TIMEOUT_MILLIS = 10;
     @NotNull
-    private final FileWriter out;
+    private final BufferedWriter out;
     @NotNull
     private final BufferedReader in;
 
-    public UCIClient(@NotNull String inPath, @NotNull String outPath) throws IOException {
-        out = new FileWriter(outPath);
-        in = new BufferedReader(new FileReader(inPath));
+    public UCIClient(int port) throws IOException {
+        var socket = new Socket("localhost", port);
+        out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         initialize();
     }
 

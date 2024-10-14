@@ -2,16 +2,16 @@ plugins {
     java
 }
 
-tasks.register<Exec>("buildGo") {
+tasks.register<Exec>("buildGoImage") {
     workingDir = file("$projectDir")
-    commandLine("go", "build", "-o", "${layout.buildDirectory.get().toString()}/engine", "cmd/engine/main.go")
+    commandLine("docker", "build", "-t", "engine", ".")
 }
 
 tasks.register<Exec>("runEngine") {
-    dependsOn("buildGo")
-    commandLine(layout.buildDirectory.dir("engine").get().toString())
+    dependsOn("buildGoImage")
+    commandLine("docker", "run", "-p", "8080:8080", "engine")
 }
 
 tasks.named("build") {
-    dependsOn("buildGo")
+    dependsOn("buildGoImage")
 }

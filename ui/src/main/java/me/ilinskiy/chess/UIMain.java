@@ -19,11 +19,10 @@ import java.io.IOException;
 public class UIMain implements Runnable {
 
     @Option(
-            names = {"--pipe-prefix", "-p"},
-            description = "The prefix of the pipe that the engine uses that this UI should communicate with. " +
-                    "The actual pipes will be <prefix>_in and <prefix>_out. If not specified, " +
-                    "plays with two players using the same GUI.")
-    private String pipePrefix = "";
+            names = {"--uci-engine-port", "-p"},
+            description = "The port of the UCI engine to talk to. " +
+                    "If not specified, plays with two players using the same GUI.")
+    private int uciEnginePort = 0;
 
     @Option(
             names = {"--turn-timeout-secs", "-t"},
@@ -49,10 +48,10 @@ public class UIMain implements Runnable {
             painter = new JSwingChessPainter(new MoveAwareBoardImpl(), timeoutSeconds);
             Player p1 = new JSwingUserPlayer(color, painter);
             Player p2;
-            if (!pipePrefix.isEmpty()) {
+            if (uciEnginePort != 0) {
                 UCIClient uci;
                 try {
-                    uci = new UCIClient(pipePrefix + "_out", pipePrefix + "_in");
+                    uci = new UCIClient(uciEnginePort);
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 }
