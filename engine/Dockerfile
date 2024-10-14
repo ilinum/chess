@@ -10,4 +10,4 @@ COPY . .
 RUN go build -o /app ./...
 
 # Run the Go server with input/output redirected to named pipes
-CMD ["./engine"]
+ENTRYPOINT ["./engine"]

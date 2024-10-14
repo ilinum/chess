@@ -7,8 +7,10 @@ import me.ilinskiy.chess.api.game.GameRunner;
 import me.ilinskiy.chess.api.game.Move;
 import me.ilinskiy.chess.api.game.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.*;
+import java.util.function.Function;
 
 
 /**
@@ -16,10 +18,18 @@ import java.util.concurrent.*;
  * Date: 8/5/15.
  */
 public class GameRunnerImpl implements GameRunner {
-    public static int timeoutInSeconds = 0; //if timeout is 0, the only limit is yourself
+    private static int timeoutInSeconds = 0; //if timeout is 0, the only limit is yourself
+
+    @Nullable
+    private Function<MoveAwareBoard, Void> moveMadeCallback;
 
     public GameRunnerImpl(int timeoutSeconds) {
+        this(timeoutSeconds, null);
+    }
+
+    public GameRunnerImpl(int timeoutSeconds, @Nullable Function<MoveAwareBoard, Void> moveMadeCallback) {
         timeoutInSeconds = timeoutSeconds;
+        this.moveMadeCallback = moveMadeCallback;
     }
 
     /**
@@ -45,6 +55,9 @@ public class GameRunnerImpl implements GameRunner {
                 } else {
                     assert current.getColor() == g.getTurn();
                     g.makeMove(move);
+                    if (moveMadeCallback != null) {
+                        moveMadeCallback.apply(g.getBoard());
+                    }
                     if (g.isGameOver()) {
                         winner = g.getWinner().orElse(null);
                         assert winner != null;

@@ -9,6 +9,7 @@ import me.ilinskiy.chess.uci.UCIClient;
 import me.ilinskiy.chess.uci.UCIPlayer;
 import me.ilinskiy.chess.ui.JSwingChessPainter;
 import me.ilinskiy.chess.ui.JSwingUserPlayer;
+import org.jetbrains.annotations.NotNull;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -19,10 +20,16 @@ import java.io.IOException;
 public class UIMain implements Runnable {
 
     @Option(
-            names = {"--uci-engine-port", "-p"},
-            description = "The port of the UCI engine to talk to. " +
-                    "If not specified, plays with two players using the same GUI.")
-    private int uciEnginePort = 0;
+            names = {"--engine-port-white", "-w"},
+            description = "The port of the UCI engine to talk to for the white player."
+    )
+    private int enginePortWhite = 0;
+
+    @Option(
+            names = {"--engine-port-black", "-b"},
+            description = "The port of the UCI engine to talk to for the black player."
+    )
+    private int enginePortBlack = 0;
 
     @Option(
             names = {"--turn-timeout-secs", "-t"},
@@ -30,13 +37,6 @@ public class UIMain implements Runnable {
                     "Only applies to human players. Default is no timeout."
     )
     private int timeoutSeconds = 0;
-
-    @Option(
-            names = {"--color", "-c"},
-            description = "The color of the human player. Only applies when playing against an engine. " +
-                    "Allowed values: White, Black."
-    )
-    private PieceColor color = PieceColor.White;
 
     @Override
     public void run() {
@@ -46,24 +46,43 @@ public class UIMain implements Runnable {
                 painter.dispose();
             }
             painter = new JSwingChessPainter(new MoveAwareBoardImpl(), timeoutSeconds);
-            Player p1 = new JSwingUserPlayer(color, painter);
-            Player p2;
-            if (uciEnginePort != 0) {
-                UCIClient uci;
-                try {
-                    uci = new UCIClient(uciEnginePort);
-                } catch (IOException exception) {
-                    throw new RuntimeException(exception);
-                }
-                p2 = new UCIPlayer(color.inverse(), uci);
-            } else {
-                p2 = new JSwingUserPlayer(color.inverse(), painter);
-            }
-            GameRunner gameRunner = new GameRunnerImpl(timeoutSeconds);
+            Player p1 = getPlayer(enginePortWhite, PieceColor.White, painter);
+            Player p2 = getPlayer(enginePortBlack, PieceColor.Black, painter);
+            GameRunner gameRunner = getGameRunner(painter);
             PieceColor winner = gameRunner.runGame(p1, p2);
             painter.gameOver(winner);
         } while (painter.askToPlayAgain());
         painter.dispose();
+    }
+
+    @NotNull
+    private GameRunner getGameRunner(@NotNull JSwingChessPainter painter) {
+        if (enginePortWhite != 0 && enginePortBlack != 0) {
+            // Provide a callback, so we can monitor a game between two engines on the UI.
+            return new GameRunnerImpl(timeoutSeconds, board -> {
+                painter.updateBoard(board);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {
+                }
+                return null;
+            });
+        }
+        return new GameRunnerImpl(timeoutSeconds);
+    }
+
+    private Player getPlayer(int enginePort, PieceColor color, @NotNull JSwingChessPainter painter) {
+        if (enginePort != 0) {
+            UCIClient uci;
+            try {
+                uci = new UCIClient(enginePort);
+            } catch (IOException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            return new UCIPlayer(color, uci);
+        }
+        return new JSwingUserPlayer(color, painter);
     }
 
     public static void main(String[] args) {

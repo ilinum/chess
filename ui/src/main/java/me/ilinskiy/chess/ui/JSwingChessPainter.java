@@ -141,6 +141,11 @@ public final class JSwingChessPainter {
         return panel;
     }
 
+    public void updateBoard(@NotNull MoveAwareBoard board) {
+        panel.setBoard(board);
+        repaintBoard();
+    }
+
     @NotNull
     static final HashMap<Piece, Image> icons = new HashMap<>();
 
