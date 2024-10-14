@@ -42,7 +42,7 @@ public class UCIPlayer implements Player {
         String promotionPiece = "";
         if (move.length() > 4) {
             // Promotion.
-            promotionPiece = move.substring(5, 6).toUpperCase();
+            promotionPiece = move.substring(4, 5).toUpperCase();
         }
         Set<Move> availableMoves = BoardAnalyzer.getAvailableMovesForPiece(start, b);
         for (Move availableMove : availableMoves) {
