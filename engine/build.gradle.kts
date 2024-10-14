@@ -7,9 +7,13 @@ tasks.register<Exec>("buildGoImage") {
     commandLine("docker", "build", "-t", "engine", ".")
 }
 
-tasks.register<Exec>("runEngine") {
+tasks.register<Exec>("stopEngine") {
+    commandLine("bash", "-c", "docker stop $(docker ps -q --filter ancestor=engine)")
+}
+
+tasks.register<Exec>("startEngine") {
     dependsOn("buildGoImage")
-    commandLine("docker", "run", "-p", "8080:8080", "engine")
+    commandLine("docker", "run", "-d", "-p", "8080:8080", "engine")
 }
 
 tasks.named("build") {

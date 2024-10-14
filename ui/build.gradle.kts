@@ -28,6 +28,13 @@ application {
     mainClass.set("me.ilinskiy.chess.UIMain")
 }
 
+tasks.register<JavaExec>("runUI") {
+    group = "application"
+    description = "Runs the Java application with the UI."
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set(application.mainClass)
+}
+
 tasks.named<Test>("test") {
     useJUnitPlatform()
 }
