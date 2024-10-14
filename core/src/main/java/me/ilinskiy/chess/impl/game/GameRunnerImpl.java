@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.*;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -20,8 +22,11 @@ import java.util.function.Function;
 public class GameRunnerImpl implements GameRunner {
     private static int timeoutInSeconds = 0; //if timeout is 0, the only limit is yourself
 
+    private static final Logger logger = Logger.getLogger(GameRunnerImpl.class.getName());
+
+
     @Nullable
-    private Function<MoveAwareBoard, Void> moveMadeCallback;
+    private final Function<MoveAwareBoard, Void> moveMadeCallback;
 
     public GameRunnerImpl(int timeoutSeconds) {
         this(timeoutSeconds, null);
@@ -66,8 +71,8 @@ public class GameRunnerImpl implements GameRunner {
                         assert current.getColor() == g.getTurn();
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception exc) {
+                logger.log(Level.SEVERE, "Got an error trying to run the game", exc);
             }
         }
         return winner;
@@ -90,9 +95,10 @@ public class GameRunnerImpl implements GameRunner {
             } else {
                 result = future.get();
             }
-        } catch (InterruptedException | ExecutionException ignored) {
-
-        } catch (TimeoutException e) {
+        } catch (ExecutionException exc) {
+            logger.log(Level.SEVERE, "Got an error trying to get the move", exc);
+        } catch (InterruptedException | TimeoutException e) {
+            logger.log(Level.WARNING, "Got a timeout or interrupted exception {0}", e.getMessage());
             future.cancel(true);
         }
         return result;

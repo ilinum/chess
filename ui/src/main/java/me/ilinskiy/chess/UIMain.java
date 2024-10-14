@@ -15,6 +15,8 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Command(name = "chess-ui", mixinStandardHelpOptions = true)
 public class UIMain implements Runnable {
@@ -38,8 +40,11 @@ public class UIMain implements Runnable {
     )
     private int timeoutSeconds = 0;
 
+    private static final Logger logger = Logger.getLogger(UIMain.class.getName());
+
     @Override
     public void run() {
+        logger.setLevel(Level.INFO);
         JSwingChessPainter painter = null;
         do {
             if (painter != null) {
@@ -73,6 +78,7 @@ public class UIMain implements Runnable {
 
     private Player getPlayer(int enginePort, PieceColor color, @NotNull JSwingChessPainter painter) {
         if (enginePort != 0) {
+            logger.info("%s player is a chess engine on port %d".formatted(color.toString(), enginePort));
             UCIClient uci;
             try {
                 uci = new UCIClient(enginePort);
@@ -82,6 +88,7 @@ public class UIMain implements Runnable {
 
             return new UCIPlayer(color, uci);
         }
+        logger.info("%s player is a human player".formatted(color.toString()));
         return new JSwingUserPlayer(color, painter);
     }
 

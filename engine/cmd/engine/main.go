@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/ilinum/chess/pkg/bot"
 	"github.com/ilinum/chess/pkg/uci"
+	"log"
 	"net"
 )
 
@@ -19,12 +20,12 @@ func main() {
 	}
 	defer listener.Close()
 
-	fmt.Printf("Server listening on port %d\n", port)
+	log.Printf("Server listening on port %d\n", port)
 
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			fmt.Println("Error accepting connection:", err)
+			log.Printf("Error accepting connection: %v\n", err)
 			continue
 		}
 
@@ -32,7 +33,7 @@ func main() {
 			server := uci.NewServer(conn, conn, bot.Bots["random"])
 			err := server.Serve()
 			if err != nil {
-				fmt.Println("Error serving request connection:", err)
+				log.Printf("Error serving request connection: %v\n", err)
 			}
 		}()
 	}
