@@ -10,5 +10,6 @@ type Bot interface {
 }
 
 var Bots = map[string]Bot{
-	"random": &Random{},
+	"random":  &Random{},
+	"minimax": &MiniMax{},
 }
