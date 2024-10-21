@@ -2,6 +2,7 @@ package bot
 
 import (
 	"context"
+	"github.com/ilinum/chess/pkg/claude"
 	"github.com/notnil/chess"
 )
 
@@ -10,6 +11,7 @@ type Bot interface {
 }
 
 var Bots = map[string]Bot{
+	"claude":  &LLM{ask: claude.Ask},
 	"random":  &Random{},
 	"minimax": &MiniMax{},
 }

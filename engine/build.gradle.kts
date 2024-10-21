@@ -13,7 +13,7 @@ tasks.register<Exec>("stopEngine") {
 
 tasks.register<Exec>("startEngine") {
     dependsOn("buildGoImage")
-    commandLine("docker", "run", "-d", "-p", "1337:1337", "engine", "--port", "1337")
+    commandLine("docker", "run", "-d", "-p", "1337:1337", "--env-file", "../.env", "engine", "--port", "1337")
 }
 
 tasks.named("build") {
